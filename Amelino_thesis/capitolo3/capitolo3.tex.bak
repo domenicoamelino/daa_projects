@@ -1,0 +1,380 @@
+\documentclass[../tesi.tex]{subfiles}
+\graphicspath{{../}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+\sloppy
+
+\begin{document}
+\chapter{Security Solutions Exploiting PUFs}
+%\chapter{Security Solutions for IP Protection Exploiting PUFs}
+\begin{quotation}
+\emph{Phyisically Unclonable Functions can be adopted to generate device-unique information used to address security related problems. In this Chapter we discuss mechanisms and protocols, based on PUF technology, capable of providing device authentication, used to protect software and hardware IP cores by exploiting both obfuscation and cryptography. Additionally, we discuss their benefits, their vulnerabilities, and the effort needed to address them.}
+\end{quotation}
+
+\section{Parties of IP Protection Protocols}
+Before discussing of PUFs applications, it is helpful to clearly define the various parties involved in IP protection mechanisms. In fact, depending on the PUF application, a specific protocol which involves various actors is designed and adopted. The goal of a IP protection mechanism is to create a right management scheme in which the actions of various parties can be defined in order to establish business models.\\
+\indent
+Typically, the following actors may be involved in a IP protection protocol:
+\begin{itemize}
+	\item \textbf{FPGA Vendor (FV)} -- designs and manufactures FPGA 
+chips, and sometimes coincides with the Trusted Third Party;
+
+	\item \textbf{Trusted Third Party (TTP)} -- is an organization which all parties involved in the protocol are willing to trust to behave fairly \cite{kean2002cryptographic}. Typically, the TTP maintain various secure databases, and interacts with other parties;
+	
+	\item \textbf{System Developer (SD)} -- creates a complete design or platform for an FPGA chip. The SD may make use of IP cores purchased from IP Core Vendors, and often coincides with the End User;
+	
+	\item \textbf{IP Core Vendor (IV or CV)} -- designs intellectual property cores and sells them to SDs for profits. IP cores may be either software or hardware;
+	
+	\item \textbf{End User (EU)} -- may purchase either the FPGA's platform sold by the SD or IP cores distributed by the CV. The EU may become a participant in the licensing process if the equipment allows downloading new designs into the FPGA
+after the equipment is delivered to the user products of the SDs or IP cores of IVs \cite{kean2002cryptographic}.
+\end{itemize}
+A protocol does not need to include all the parties listed above. Instead, involving fewer parties results in a simpler and more manageable protocol.
+
+\section{Device Identification and Authentication}
+Using PUFs it is possible to authenticate individual devices without
+the adoption of cryptographic primitives. Typically, the scheme (\figref{PUF-based-authentication})
+is composed of two distinct phases \cite{suh2007physical,maes2010physically}:
+\begin{enumerate}
+\item \textbf{enrollment:} a Trusted Third Party (TTP), in possession of
+the device containing the PUF, applies a significant number of randomly
+chosen challenges and stores the CRPs in a (secure) database for future
+authentication operations;
+\item \textbf{verification:} at a later time, the TTP (verifier) selects a
+challenge from the database that has never been used, and obtains
+a PUF response from the device. If the response \textit{closely} matches
+the previously recorded one, the device is authentic because only
+the owner of the authentic device and the TTP can know the CRPs.
+\end{enumerate}
+Challenges and responses can be sent in the clear during the verification
+phase, but to be protected against man-in-the-middle attacks challenges
+have to be never reused. Due to this restriction, few PUF responses
+for a device are not enough for authentication. Moreover, anyone who
+has access to the device could obtain the few PUF outputs and create
+another device containing them in its memory. Therefore, only strong
+PUFs, which present a huge number of CRPs, can be used for authentication
+purposes.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.80]{images/pufauthentication}
+\par\end{centering}
+
+\protect\caption{\label{fig:PUF-based-authentication}PUF-based authentication.}
+\end{figure}
+As stated above, an exact match between the responses is not required,
+and a certain level of noise in the responses can be tolerated \cite{ruhrmair2012security}.
+In particular, the threshold used to decide on a positive identification
+depends on the separation between the intra-distance and inter-distance
+histograms: if they do not overlap, an error-less identification can
+be obtained by placing the threshold in the empty interval between
+the histograms. However, this condition is unlikely to be satisfied.
+In reality, both histograms overlap and a trade-off between false-acceptance
+rate (FAR) and false-rejection rate (FRR) has to be determined. The
+global optimal choice is the one that minimizes the sum of FAR and
+FRR, which corresponds to setting the threshold in place of the intersection
+between both the histograms \cite{maes2010physically}, as shown in
+\figref{Determination-of-the}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.94]{images/tradeoff}
+\par\end{centering}
+
+\protect\caption{\label{fig:Determination-of-the}Determination of the identification
+threshold.}
+\end{figure}
+
+
+\section{\label{sec:Secret-key-generation}Secret Key Generation and Storage}
+
+Cryptographic primitives rely on a secret key that has to be securely
+stored somewhere. Traditional methods consist to store the secret
+key in the non-volatile memory of the device, such as EEPROM, or in
+a battery-backed RAM. However, these methods have many drawbacks,
+such as: (i) a momentary loss of contact or low battery voltage could
+cause the key to be lost; (ii) many battery vendors do not specify
+thermal wear-out or other failure modes \cite{trimberger2014fpga};
+(iii) increased manufacturing cost and selling price; (iv) vulnerability
+to tampering techniques. To address these drawbacks weak PUFs can
+be used, increasing physical security by generating volatile secrets
+that only exist in a digital form when a chip is powered on and running.\\
+\indent
+Unfortunately, PUF responses are usually noisy and contain only a
+limited amount of entropy, and, as stated above, cryptographic algorithms
+require uniformly random and perfectly reliable keys. Nevertheless,
+PUFs can still be used to generate volatile secret keys if they are
+paired with a noise-correction mechanism, such as the fuzzy extractor described in Chapter 2.
+
+
+\subsection{Hardware entangled cryptography}
+
+Hardware entangled cryptography is based on the concept that the secret
+key is fully integrated in the cryptographic primitives. No key is
+generated anymore nor it is stored in non-volatile/volatile memories.
+The secret key is now the response of a specific challenge embedded
+in the device. Basically, hardware entangled cryptographic primitives
+are key-less and offer more security than regular primitives \cite{maes2010physically}.
+
+
+\section{Software and Hardware IP Protection on FPGA}
+%\section{Intellectual Property protection}
+
+PUF-based mechanisms for IP protection on FPGA can be divided in two categories: encryption and non-encryption based.\\
+\indent
+Moreover, an IP core can be \textit{software} (SWIP) or \textit{hardware}
+(HWIP).\\
+\indent
+SWIPs are end-user applications that execute on a soft-core or hard-core processor in the FPGA. Therefore, SWIPs can be written with any high-level programming language, such as C, and they are compiled into binary
+files in order to be executed on a specific soft-core or hard-core
+processor. Consequently, compiled SWIPs are not part of the FPGA bitstream,
+but they are loaded into the storage memory that is read by the FPGA
+processor.
+
+On the other hand, HWIPs are written using Hardware Description
+Languages (HDLs), such as VHDL and Verilog, and they are synthesized
+as typical FPGA bitstreams. HWIPs do not require any underlying
+processor for their execution.
+
+
+\subsection{Encryption Based}
+\subsubsection*{\label{subsec:hwip}HWIP Protection}
+In the case of HWIP protection, the basic idea consists of encrypting
+the payload of a bitstream, containing some IP cores, using a random
+or a user-defined key, which must be configured earlier onto the FPGA
+devices, such that when the bitstream has to be loaded, the FPGA decrypts
+it using the same secret key. Clearly, the secrecy
+of the key is fundamental for the succeeding of this technique. However,
+keys are typically stored into volatile or non-volatile memories,
+which might represent a vulnerability, as described in \ref{sec:Secret-key-generation}.
+To address these drawbacks, a specific PUF response of a specific
+device can be used as encryption/decryption key, so as only a
+specific device is capable of decrypting the bitstream, thus running
+the IP core. Therefore, cloning the encrypted bitstream would be useless.
+However, the PUF response is unique for each device, hence each bitstream has
+to be uniquely encrypted on a per-device basis.\\
+\indent
+%\item such mechanism are area-efficient only on high-end FPGAs which allow to configure the FPGA with encrypted bitstreams, such as using triple-Data Encryption Standard (DES) or Advanced Encryption Standard (AES). Indeed, low-cost and old FPGAs, such as Xilinx Spartan-3, do not include any built-in cryptography primitives in the programming interface, hence they require an additional hardware-implemented cryptography engine;
+%\item during bitstream loading, the device decrypts the incoming bitstream, which can be cloned by \textit{wiretap} \cite{zhang2013design}.
+The basic scheme \cite{simpson2006offline} is shown in Figure~\ref{fig:dsprsimpson}, and it is based on the Dynamic Self Partial Reconfiguration (DSPR) functionality available on modern FPGAs.
+Partial Reconfiguration is the ability to dynamically modify blocks of the FPGA logic by downloading partial bitstream files while the remaining logic continues to operate without interruption. Furthermore, the FPGA can reconfigure itself while already programmed, hence the term \textit{self} in DSPR.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{images/dsprsimpson}
+\par\end{centering}
+
+\protect\caption{\label{fig:dsprsimpson}Dynamic Self Partial Reconfiguration scheme.}
+\end{figure}
+Basically, the idea is to program the FPGA with a Security Module (or Loader), which decrypts the incoming partial bitstream using a specific PUF response as a key, and then programs the FPGA with the decrypted bitstream. Indeed, if the initial bitstream containing the Loader is compromised (e.g. through reverse engineering), the security can not be guaranteed. Therefore, the Loader bitstream can be encrypted using the standard encryption mechanisms available on modern FPGAs.
+
+\subsubsection*{SWIP Protection}
+In the case of SWIP protection, the idea is to implement a trusted
+and secure boot procedure which loads the SWIP core and execute it
+on the FPGA processor. Authors in \cite{gora2010flexible} proposed
+a protection mechanism consisting of an \textit{Integrity Kernel}
+(IK), a \textit{Security Kernel} (SK), a soft core processor (Xilinx
+Microblaze), an external flash memory, and of course a PUF (Ring Oscillator).
+The SWIP core, the IK and SK are binary files written and compiled
+by the IP vendor for the soft core processor, but only the SWIP binary
+is encrypted by the IP vendor using the PUF response to a specific
+challenge. An overview of the trusted boot procedure is represented
+in \figref{Trusted-boot-procedure}, and more details are provided
+below.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{images/swipboot}
+\par\end{centering}
+
+\protect\caption{\label{fig:Trusted-boot-procedure}Trusted boot procedure through
+IK verification of the SK.}
+\end{figure}
+The SK is basically a boot loader. It includes the AES decryption
+primitive, and a routine which retrieves the PUF response, decrypts
+the SWIP binary with the response, and jumps to the first instruction
+of the SWIP. Both the SK binary and the encrypted SWIP binary are
+loaded into the external flash memory, but the decrypted SWIP is stored
+in the internal FPGA memory (not external RAM), since it is trivial
+to read the RAM content which contains the decrypted SWIP. It must
+be noted that the decryption is software-based, done through the processor.
+Furthermore, the SWIP is hashed after decryption to verify its integrity.\\
+\indent
+Since the SK is stored as \textit{plain-text}, its boot procedure
+cannot be trusted, since it could be modified in such a way that it
+could execute malicious code to extract the key. To address this issue,
+the system first boots the IK, which includes an hashing algorithm
+computed on the SK binary image to establish its validity by comparing
+the results of the hash with a reference value. If the integrity is
+validated, the execution can pass to the SK, and then it can begin
+decryption of the SWIP. However, even the IK has to be secured against
+attacks. In fact, an attacker could modify the hash reference used
+in the validation procedure in order to run a malicious SK. To this
+aim, the IK is stored inside an \textit{Obfuscated ROM}, which is
+implemented using multilevel logic in the FPGA avoiding direct storage
+in BRAMs (since their content can be easily read). Even though the
+required logic circuits are implemented using LUTs in an FPGA, the
+contents of the ROM cannot be extracted just by reading the contents
+of the LUTs. This is because the ROM circuit is formed by a combination
+of several LUTs which is spread over the FPGA, and interleaved with
+other circuit components. However, in order to avoid excessive resource
+utilization it is important to maintain a low footprint for the IK,
+hence the IK has to include a simple hashing algorithm, such as \textit{XXTea} \cite{wheeler1998correction}.
+The IK, the PUF and the processor are synthesized into the same non-encrypted
+bitstream.\\
+\indent
+However, the security of this scheme is guaranteed only if the reverse engineering of the bitstream is not possible.
+
+
+\subsubsection*{Protocols}
+
+A protocol for enrolling the hardware and software identities in the
+authentication scheme, and for distributing mutually authenticated
+IP to system developers, is presented in \cite{simpson2006offline}.
+It is composed of two phases: (i) enrollment; (ii) IP request and
+distribution.\\
+\indent
+The enrollment phase involves three parties (Figure~\ref{fig:Enrollment-phase}):
+the chip manufacturers, IP providers and a trusted third-party that
+is used to store and communicate identity information among the participants.
+In this phase, the manufacturer would like to distribute FPGAs with
+the ability to securely run third-party IP. To this aim, the FPGA
+manufacturers implement a security module containing a PUF and a Block
+Cipher used for symmetric encryption and software authentication.
+Afterwards, the manufacturer enrolls the PUF CRPs in the authentication
+scheme by sending each chip identification information to the trusted
+third-party. The identity is composed of \textit{HW\#}, a public and
+unique value that identifies the chip, and of a CRPs set. The identity
+is exchanged by using an authenticated and secure link between the
+TTP and the hardware manufacturer. Like the chip manufacturer, the
+IP provider sends to the trusted third-party identification information
+composed of \textit{IP\#}, a public and unique value that identifies
+the name and version of the intellectual property, and of \textit{Hash(SW,
+IP\#)}, the public hash of the \textit{IP\#} and software that the
+IP is composed of. The information is exchanged by using an authenticated
+and secure link.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.68]{images/enrollmentphase}
+\par\end{centering}
+
+\protect\caption{\label{fig:Enrollment-phase}Enrollment phase.}
+\end{figure}
+The IP request and distribution phase requires four messages per IP
+module. The first three messages, involving the TTP, form the online
+phase of the protocol. The fourth message does not require the TTP
+and forms the offline phase of the protocol. Only the messages of
+the online phase have to be exchanged over a standard secure and authenticated
+link. Figure~\ref{fig:Distribution-phase} shows the messages exchanged between
+the involved parties. The definitions of the symbols used in the protocol
+are explained as follows:
+\begin{itemize}
+\item Nonce: number used once, a unique token used to ensure the freshness
+of a message;
+\item $C_{ttp},R_{ttp}$: challenge-response pair used by the TTP to communicate
+the IP authentication and integrity data to the system developer;
+\item $R_{ip}$: response used by the IP provider to encrypt and package
+their software for the target hardware platform;
+\item $C_{ip}$: challenge that the target hardware can use to generate
+the $R_{ip}$ used to encrypt the software.
+\end{itemize}
+The messages involved are the following:
+\begin{enumerate}
+\item The system developer requests the IP \textit{IP\#} to the trusted third-party;
+\item The TTP sends to the system developer a message containing the requested
+IP identity and integrity information. The message is encrypted using
+a CRP ($C_{ttp},R_{ttp}$) that the security module can generate and
+use to decrypt the message. In this message is also contained the
+challenge ($C_{ip}$) that can be used by the security module to generate
+the response used by the IP provider to encrypt their software;
+\item The TTP forwards the system developer request for the IP identified
+by \textit{IP\#} to the IP provider. This message contains the response
+($R_{ip}$) that the IP provider will use as the key to encrypt their
+software;
+\item The IP provider sends to the system developer the identity information
+and the IP encrypted using $R_{ip}$.
+\end{enumerate}
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.70]{images/distributionphase}
+\par\end{centering}
+
+\protect\caption{\label{fig:Distribution-phase}Distribution phase.}
+\end{figure}
+At the end of the message exchange, the system developer has the necessary
+information to validate the authenticity and integrity of the software
+($C_{ttp},\\\{IP\#,Hash(SW,IP\#),C_{ip},Nonce\}_{R_{ttp}}$). Moreover,
+since the security module is the only one that can generate the required
+responses to decrypt the data, the software is assured that only the
+target hardware can decrypt the IP contained in the message \#4 ($\{length,Nonce,SW\}_{R_{ip}}$).
+The two information can be merged, and they can be saved to insecure
+storage by the system developer. This IP containing message can then
+be validated, loaded, and run by the offline FPGA indefinitely.\\
+~\\
+The protocol described in \cite{simpson2006offline} has been simplified
+in \cite{guajardo2007fpga}. In particular, two new protocols were
+proposed: the first provides partial privacy (only the TTP is able
+to learn the IP block) and integrity; the second provides total privacy,
+in the sense that not even the TTP has access to the IP block originating
+from the IP provider.\\
+\indent
+Moreover, in \cite{guajardo2007physical} a public-key protocol has
+been presented, which, in contrast with symmetric-key protocols, does
+not allow the private key to never leave the device, even during the
+enrollment phase.
+
+
+\subsection{Non-encryption Based}
+\label{subsec:zhang}
+
+Authors in \cite{zhang2013fpga} presented the first non-encryption
+based FPGA IP binding method to restrict HWIP execution on a specific
+FPGA. The PUF-based binding scheme (Figure~\ref{fig:FSM-architecture-for})
+consists of combining PUF responses with a Finite State Machine (FSM)
+embedded in an IP core to restrict FPGA designs to running only on
+authorized devices. The FSM is designed such that both its states
+and transitions are function of PUF responses. The FSM monitors its
+current state, and if the reached state is a \textit{lock} state,
+it means that the PUF response is incorrect and that the device is
+not authorized to run the IP, thus the IP core is disabled.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.98]{images/fmsip}
+\par\end{centering}
+
+\protect\caption{\label{fig:FSM-architecture-for}FSM architecture for IP protection.}
+\end{figure}
+Its implementation is based on the concept of \textit{Augmented
+FSM}, which is a regular FSM with an addition of an exponential number
+of states and transitions, such that extracting its \textit{State
+Transition Graph} representation is computationally intractable, making
+reverse engineering useless. Further details and its implementation are described in the next Chapter.
+The advantages of this scheme are the following:
+\begin{itemize}
+\item supports the pay-per-device licensing mechanisms (the bitstream containing the IP core is not produced on a per-device basis, and its activation depends on a valid license);
+\item experimental results showed that this method causes slight overhead,
+which is negligible in large designs \cite{zhang2013fpga};
+\item authors in \cite{zhang2013fpga} proposed a license distribution protocol
+that does not require the existence of a TTP.
+\end{itemize}
+However, since the bistream is not encrypted this is approach is vulnerable to reverse engineering attacks.
+
+
+
+\section{Instruction-Level Protection}
+Authors in \cite{zheng2014secure} presented a secure and unclonable embedded processor which is strictly bound to the executing environment. In particular, the machine code and the processor (OpenRISC OR1200) authenticate each other at a per-instruction basis using a delay PUF built into the system (Figure~\ref{fig:or1200}).
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{images/or1200}
+\par\end{centering}
+
+\protect\caption{\label{fig:or1200}Architecture of the instruction-level protection mechanism.}
+\end{figure}
+Each processor instruction is 32 bits long and is characterized by an initial 6 bits opcode. To minimize the impact to the system performance, only the opcode is obfuscated using the 6 bits PUF output. In particular, the PUF is delay-based with a latency of 4 clock cycles, and in order to produce 6 bits of output it has to be stimulated by 32 bits of challenge. Based on this scheme, each OR1200 instruction has a corresponding 32 bits PUF challenge that is used to unlock the true opcode. The corresponding challenges are memorized in a memory area with a fixed offset relative to the obfuscated instructions.\\
+\indent
+To achieve better performance, the instruction obfuscation/recoding is performed as the instructions enter the instruction cache. Therefore, if a software application is characterized by a strong spatial and temporal locality no performance slow down is involved. Conversely, when the instruction cache is disabled or when the above hypothesis are not true, the modified processor slows down two to three
+times.
+
+
+\end{document}

@@ -1,0 +1,49 @@
+! include "graphutils.gle"
+
+size 13.5 9
+set font texcmr hei 0.4
+
+set texlabels 1
+
+
+begin graph
+	scale auto
+	xtitle "Voltage (V)"
+	ytitle "Number of logic-1"
+	key pos tr hei 0.30 offset 0 2.2
+	
+	! xaxis nticks 11 nsubticks 1
+	xaxis min 0.70 max 2.0 dticks 0.1
+	xticks length 0.1
+	xsubticks length 0.05
+
+	yticks length 0.1
+	ysubticks length 0.05
+	
+	x2axis off
+	y2axis off
+	
+	yaxis min 0 max 60 dticks 6
+	
+	data "y1.txt"
+	d1 lstyle 1 lwidth 0.015 color magenta key "2"
+	
+	data "y2.txt"
+	d2 lstyle 1 lwidth 0.015 color cyan key "3"
+	
+	data "y3.txt"
+	d3 lstyle 1 lwidth 0.015 color red key "4"
+	
+	data "y4.txt"
+	d4 lstyle 2 lwidth 0.015 color blue key "5"
+	
+	data "y5.txt"
+	d5 lstyle 1 lwidth 0.015 color green key "6"
+	
+	data "y6.txt"
+	d6 lstyle 1 lwidth 0.015 color blue key "7"
+	
+	data "y7.txt"
+	d7 lstyle 1 lwidth 0.015 color black key "8"
+	
+end graph

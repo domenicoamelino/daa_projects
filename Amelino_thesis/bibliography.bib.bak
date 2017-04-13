@@ -1,0 +1,900 @@
+% This file was created with JabRef 2.10.
+% Encoding: Cp1252
+
+@inproceedings{oliveira1999robust,
+  title={Robust techniques for watermarking sequential circuit designs},
+  author={Oliveira, Arlindo L},
+  booktitle={Design Automation Conference, 1999. Proceedings. 36th},
+  pages={837--842},
+  year={1999},
+  organization={IEEE}
+}
+
+@article{cui2011robust,
+  title={A robust FSM watermarking scheme for IP protection of sequential circuit design},
+  author={Cui, Aijiao and Chang, Chip-Hong and Tahar, Sofi{\`e}ne and Abdel-Hamid, Amr T},
+  journal={Computer-Aided Design of Integrated Circuits and Systems, IEEE Transactions on},
+  volume={30},
+  number={5},
+  pages={678--690},
+  year={2011},
+  publisher={IEEE}
+}
+
+@article{zhang2015puf,
+  title={A PUF-FSM binding scheme for FPGA IP protection and pay-per-device licensing},
+  author={Zhang, Jiliang and Lin, Yaping and Lyu, Yongqiang and Qu, Gang},
+  journal={Information Forensics and Security, IEEE Transactions on},
+  volume={10},
+  number={6},
+  pages={1137--1150},
+  year={2015},
+  publisher={IEEE}
+}
+
+@article{wheeler1998correction,
+  title={Correction to xtea},
+  author={Wheeler, David J and Needham, Roger M},
+  journal={Unpublished manuscript, Computer Laboratory, Cambridge University, England},
+  year={1998}
+}
+
+@InProceedings{alkabani2008active,
+  Title                    = {Active control and digital rights management of integrated circuit IP cores},
+  Author                   = {Alkabani, Yousra and Koushanfar, Farinaz},
+  Booktitle                = {Proceedings of the 2008 international conference on Compilers, architectures and synthesis for embedded systems},
+  Year                     = {2008},
+  Organization             = {ACM},
+  Pages                    = {227--234}
+}
+
+@InProceedings{Alkabani2007,
+  Title                    = {Active Hardware Metering for Intellectual Property Protection and Security.},
+  Author                   = {Alkabani, Yousra and Koushanfar, Farinaz},
+  Booktitle                = {USENIX Security},
+  Year                     = {2007},
+  Pages                    = {291--306},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@InProceedings{anderson2010puf,
+  Title                    = {A PUF design for secure FPGA-based embedded systems},
+  Author                   = {Anderson, Jason H},
+  Booktitle                = {Proceedings of the 2010 Asia and South Pacific Design Automation Conference},
+  Year                     = {2010},
+  Organization             = {IEEE Press},
+  Pages                    = {1--6}
+}
+
+@InCollection{armknecht2010memory,
+  Title                    = {Memory leakage-resilient encryption based on physically unclonable functions},
+  Author                   = {Armknecht, Frederik and Maes, Roel and Sadeghi, Ahmad-Reza and Sunar, Berk and Tuyls, Pim},
+  Booktitle                = {Towards Hardware-Intrinsic Security},
+  Publisher                = {Springer},
+  Year                     = {2010},
+  Pages                    = {135--164}
+}
+
+@InCollection{bosch2008efficient,
+  Title                    = {Efficient helper data key extractor on FPGAs},
+  Author                   = {B{\"o}sch, Christoph and Guajardo, Jorge and Sadeghi, Ahmad-Reza and Shokrollahi, Jamshid and Tuyls, Pim},
+  Booktitle                = {Cryptographic Hardware and Embedded Systems--CHES 2008},
+  Publisher                = {Springer},
+  Year                     = {2008},
+  Pages                    = {181--197}
+}
+
+@InProceedings{Barbareschi2014,
+  Title                    = {Advancing WSN Physical Security Adopting TPM-based Architectures},
+  Author                   = {Barbareschi, Mario and Battista, Ermanno and Mazzeo, Antonino and Venkatesan, Sridhar},
+  Booktitle                = {Information Reuse and Integration (IRI), 2014 IEEE 15th International Conference on},
+  Year                     = {2014},
+  Month                    = {Aug},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@InProceedings{boemo1997thermal,
+  Title                    = {Thermal monitoring on FPGAs using ring-oscillators},
+  Author                   = {Boemo, Eduardo and L{\'o}pez-Buedo, Sergio},
+  Booktitle                = {Field-Programmable Logic and Applications},
+  Year                     = {1997},
+  Organization             = {Springer},
+  Pages                    = {69--78}
+}
+
+@Article{bossuet2013puf,
+  Title                    = {A PUF based on transient effect ring oscillator and insensitive to locking phenomenon},
+  Author                   = {Bossuet, Lilian and Ngo, XT and Cherif, Z and Fischer, Viktor},
+  Year                     = {2013},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{cherif2012easy,
+  Title                    = {An easy-to-design PUF based on a single oscillator: the loop PUF},
+  Author                   = {Cherif, Zouha and Danger, J-L and Guilley, Sylvain and Bossuet, Lilian},
+  Booktitle                = {Digital System Design (DSD), 2012 15th Euromicro Conference on},
+  Year                     = {2012},
+  Organization             = {IEEE},
+  Pages                    = {156--162}
+}
+
+@InProceedings{dai2009study,
+  Title                    = {A study of side-channel effects in reliability-enhancing techniques},
+  Author                   = {Dai, Jianwei and Wang, Lei},
+  Booktitle                = {Defect and Fault Tolerance in VLSI Systems, 2009. DFT'09. 24th IEEE International Symposium on},
+  Year                     = {2009},
+  Organization             = {IEEE},
+  Pages                    = {236--244}
+}
+
+@Article{delvaux2013fault,
+  Title                    = {Fault Injection Modeling Attacks on 65nm Arbiter and RO Sum PUFs via Environmental Changes.},
+  Author                   = {Delvaux, Jeroen and Verbauwhede, Ingrid},
+  Journal                  = {IACR Cryptology ePrint Archive},
+  Year                     = {2013},
+  Pages                    = {619},
+  Volume                   = {2013}
+}
+
+@Article{devadas1992synthesis,
+  Title                    = {Synthesis of robust delay-fault-testable circuits: Theory},
+  Author                   = {Devadas, Srinivas and Keutzer, Kurt},
+  Journal                  = {Computer-Aided Design of Integrated Circuits and Systems, IEEE Transactions on},
+  Year                     = {1992},
+  Number                   = {1},
+  Pages                    = {87--101},
+  Volume                   = {11},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{diaz2014puf,
+  Title                    = {PUF's performance evaluation among different Xilinx FPGAs families},
+  Author                   = {Diaz-Perez, Arturo},
+  Booktitle                = {Programmable Logic (SPL), 2014 IX Southern Conference on},
+  Year                     = {2014},
+  Organization             = {IEEE},
+  Pages                    = {1--6},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@InProceedings{dodis2004fuzzy,
+  Title                    = {Fuzzy extractors: How to generate strong keys from biometrics and other noisy data},
+  Author                   = {Dodis, Yevgeniy and Reyzin, Leonid and Smith, Adam},
+  Booktitle                = {Advances in cryptology-Eurocrypt 2004},
+  Year                     = {2004},
+  Organization             = {Springer},
+  Pages                    = {523--540}
+}
+
+@InProceedings{eiroa2011analysis,
+  Title                    = {An analysis of ring oscillator PUF behavior on FPGAs},
+  Author                   = {Eiroa, Susana and Baturone, Iluminada},
+  Booktitle                = {Field-Programmable Technology (FPT), 2011 International Conference on},
+  Year                     = {2011},
+  Organization             = {IEEE},
+  Pages                    = {1--4}
+}
+
+@Article{feitenanalysis,
+  Title                    = {Analysis of Ring Oscillator PUFs on 60nm FPGAs},
+  Author                   = {Feiten, Linus and Spilla, Andreas and Sauer, Matthias and Schubert, Tobias and Becker, Bernd},
+  Year                     = {2013}
+}
+
+@Article{goren2013partial,
+  Title                    = {Partial bitstream protection for low-cost FPGAs with physical unclonable function, obfuscation, and dynamic partial self reconfiguration},
+  Author                   = {G{\"o}ren, Sezer and Ozkurt, Ozgur and Yildiz, Abdullah and Ugurdag, H Fatih and Chakraborty, Rajat S and Mukhopadhyay, Debdeep},
+  Journal                  = {Computers \& Electrical Engineering},
+  Year                     = {2013},
+  Number                   = {2},
+  Pages                    = {386--397},
+  Volume                   = {39},
+
+  Publisher                = {Elsevier}
+}
+
+@InProceedings{gassend2002controlled,
+  Title                    = {Controlled physical random functions},
+  Author                   = {Gassend, Blaise and Clarke, Dwaine and Van Dijk, Marten and Devadas, Srinivas},
+  Booktitle                = {Computer Security Applications Conference, 2002. Proceedings. 18th Annual},
+  Year                     = {2002},
+  Organization             = {IEEE},
+  Pages                    = {149--160}
+}
+
+@InProceedings{gassend2002silicon,
+  Title                    = {Silicon physical random functions},
+  Author                   = {Gassend, Blaise and Clarke, Dwaine and Van Dijk, Marten and Devadas, Srinivas},
+  Booktitle                = {Proceedings of the 9th ACM conference on Computer and communications security},
+  Year                     = {2002},
+  Organization             = {ACM},
+  Pages                    = {148--160}
+}
+
+@Article{gassend2004identification,
+  Title                    = {Identification and authentication of integrated circuits},
+  Author                   = {Gassend, Blaise and Lim, Daihyun and Clarke, Dwaine and Van Dijk, Marten and Devadas, Srinivas},
+  Journal                  = {Concurrency and Computation: Practice and Experience},
+  Year                     = {2004},
+  Number                   = {11},
+  Pages                    = {1077--1098},
+  Volume                   = {16},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{gora2010flexible,
+  Title                    = {A flexible design flow for software IP binding in FPGA},
+  Author                   = {Gora, Michael A and Maiti, Abhranil and Schaumont, Patrick},
+  Journal                  = {Industrial Informatics, IEEE Transactions on},
+  Year                     = {2010},
+  Number                   = {4},
+  Pages                    = {719--728},
+  Volume                   = {6},
+
+  Publisher                = {IEEE}
+}
+
+@Article{grabher2013re,
+  Title                    = {On the (re) design of an FPGA-based PUF.},
+  Author                   = {Grabher, Philipp and Page, Dan and W{\'o}jcik, Marcin},
+  Journal                  = {IACR Cryptology ePrint Archive},
+  Year                     = {2013},
+  Pages                    = {195},
+  Volume                   = {2013},
+
+  Publisher                = {Citeseer}
+}
+
+@InProceedings{gu2014unique,
+  Title                    = {A unique and robust single slice FPGA identification generator},
+  Author                   = {Gu, Chongyan and Murphy, Julian and O'Neill, Maire},
+  Booktitle                = {Circuits and Systems (ISCAS), 2014 IEEE International Symposium on},
+  Year                     = {2014},
+  Organization             = {IEEE},
+  Pages                    = {1223--1226}
+}
+
+@Book{guajardo2007fpga,
+  Title                    = {FPGA intrinsic PUFs and their use for IP protection},
+  Author                   = {Guajardo, Jorge and Kumar, Sandeep S and Schrijen, Geert-Jan and Tuyls, Pim},
+  Publisher                = {Springer},
+  Year                     = {2007}
+}
+
+@InProceedings{guajardo2007physical,
+  Title                    = {Physical unclonable functions and public-key crypto for FPGA IP protection},
+  Author                   = {Guajardo, Jorge and Kumar, Sandeep S and Schrijen, G-J and Tuyls, Pim},
+  Booktitle                = {Field Programmable Logic and Applications, 2007. FPL 2007. International Conference on},
+  Year                     = {2007},
+  Organization             = {IEEE},
+  Pages                    = {189--195},
+
+  __markedentry            = {[Pierpaolo:6]},
+  Owner                    = {Pierpaolo},
+  Timestamp                = {2015.05.11}
+}
+
+@InProceedings{helfmeier2013cloning,
+  Title                    = {Cloning physically unclonable functions},
+  Author                   = {Helfmeier, Clemens and Boit, Christian and Nedospasov, Dmitry and Seifert, Jean-Pierre},
+  Booktitle                = {Hardware-Oriented Security and Trust (HOST), 2013 IEEE International Symposium on},
+  Year                     = {2013},
+  Organization             = {IEEE},
+  Pages                    = {1--6}
+}
+
+@Article{holcomb2009power,
+  Title                    = {Power-up SRAM state as an identifying fingerprint and source of true random numbers},
+  Author                   = {Holcomb, Daniel E and Burleson, Wayne P and Fu, Kevin},
+  Journal                  = {Computers, IEEE Transactions on},
+  Year                     = {2009},
+  Number                   = {9},
+  Pages                    = {1198--1210},
+  Volume                   = {58},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{Hori2010,
+  Title                    = {Quantitative and statistical performance evaluation of arbiter physical unclonable functions on FPGAs},
+  Author                   = {Hori, Yohei and Yoshida, Takahiro and Katashita, Toshihiro and Satoh, Akashi},
+  Booktitle                = {Reconfigurable Computing and FPGAs (ReConFig), 2010 International Conference on},
+  Year                     = {2010},
+  Organization             = {IEEE},
+  Pages                    = {298--303},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@InProceedings{hospodar2012machine,
+  Title                    = {Machine learning attacks on 65nm Arbiter PUFs: Accurate modeling poses strict bounds on usability.},
+  Author                   = {Hospodar, Gabriel and Maes, Roel and Verbauwhede, Ingrid},
+  Booktitle                = {WIFS},
+  Year                     = {2012},
+  Pages                    = {37--42}
+}
+
+@InProceedings{huang2013delay,
+  Title                    = {A Delay-based PUF Design Using Multiplexers on FPGA},
+  Author                   = {Huang, Miaoqing and Li, Shiming},
+  Booktitle                = {Field-Programmable Custom Computing Machines (FCCM), 2013 IEEE 21st Annual International Symposium on},
+  Year                     = {2013},
+  Organization             = {IEEE},
+  Pages                    = {226--226}
+}
+
+@Article{komurcu2013ring,
+  Title                    = {A RING OSCILLATOR BASED PUF IMPLEMENTATION ON FPGA},
+  Author                   = {K{\"o}m{\"u}rc{\"u}, Giray and Pusane, Ali Emre and D{\"u}ndar, G{\"u}nhan},
+  Journal                  = {IU-Journal of Electrical \& Electronics Engineering},
+  Year                     = {2013},
+  Number                   = {2},
+  Pages                    = {1647--1652},
+  Volume                   = {13}
+}
+
+@Article{kastensmidt2014voltage,
+  Title                    = {Voltage scaling and aging effects on soft error rate in SRAM-based FPGAs},
+  Author                   = {Kastensmidt, FL and Tonfat, J and Both, T and Rech, P and Wirth, G and Reis, R and Bruguier, F and Benoit, P and Torres, L and Frost, C},
+  Journal                  = {Microelectronics Reliability},
+  Year                     = {2014},
+
+  Publisher                = {Elsevier}
+}
+
+@InProceedings{Kumar2008,
+  Title                    = {The butterfly PUF protecting IP on every FPGA},
+  Author                   = {Kumar, Sandeep S and Guajardo, Jorge and Maes, Roel and Schrijen, G-J and Tuyls, Pim},
+  Booktitle                = {Hardware-Oriented Security and Trust, 2008. HOST 2008. IEEE International Workshop on},
+  Year                     = {2008},
+  Organization             = {IEEE},
+  Pages                    = {67--70}
+}
+
+@InProceedings{kumar2008butterfly,
+  Title                    = {The butterfly PUF protecting IP on every FPGA},
+  Author                   = {Kumar, Sandeep S and Guajardo, Jorge and Maes, Roel and Schrijen, G-J and Tuyls, Pim},
+  Booktitle                = {Hardware-Oriented Security and Trust, 2008. HOST 2008. IEEE International Workshop on},
+  Year                     = {2008},
+  Organization             = {IEEE},
+  Pages                    = {67--70}
+}
+
+@InProceedings{lee2004technique,
+  Title                    = {A technique to build a secret key in integrated circuits for identification and authentication applications},
+  Author                   = {Lee, Jae W and Lim, Daihyun and Gassend, Blaise and Suh, G Edward and Van Dijk, Marten and Devadas, Srinivas},
+  Booktitle                = {VLSI Circuits, 2004. Digest of Technical Papers. 2004 Symposium on},
+  Year                     = {2004},
+  Organization             = {IEEE},
+  Pages                    = {176--179}
+}
+
+@InProceedings{Leest2010,
+  Title                    = {Hardware intrinsic security from D flip-flops},
+  Author                   = {van der Leest, Vincent and Schrijen, Geert-Jan and Handschuh, Helena and Tuyls, Pim},
+  Booktitle                = {Proceedings of the fifth ACM workshop on Scalable trusted computing},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {53--62},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@Article{lim2005extracting,
+  Title                    = {Extracting secret keys from integrated circuits},
+  Author                   = {Lim, Daihyun and Lee, Jae W and Gassend, Blaise and Suh, G Edward and Van Dijk, Marten and Devadas, Srinivas},
+  Journal                  = {Very Large Scale Integration (VLSI) Systems, IEEE Transactions on},
+  Year                     = {2005},
+  Number                   = {10},
+  Pages                    = {1200--1205},
+  Volume                   = {13},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{lofstrom2000ic,
+  Title                    = {IC identification circuit using device mismatch},
+  Author                   = {Lofstrom, Keith and Daasch, W Robert and Taylor, Donald},
+  Booktitle                = {Solid-State Circuits Conference, 2000. Digest of Technical Papers. ISSCC. 2000 IEEE International},
+  Year                     = {2000},
+  Organization             = {IEEE},
+  Pages                    = {372--373}
+}
+
+@Article{lopez2002dynamically,
+  Title                    = {Dynamically inserting, operating, and eliminating thermal sensors of FPGA-based systems},
+  Author                   = {Lopez-Buedo, Sergio and Garrido, Javier and Boemo, Eduardo I},
+  Journal                  = {Components and Packaging Technologies, IEEE Transactions on},
+  Year                     = {2002},
+  Number                   = {4},
+  Pages                    = {561--566},
+  Volume                   = {25},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{maes2008intrinsic,
+  Title                    = {Intrinsic PUFs from flip-flops on reconfigurable devices},
+  Author                   = {Maes, Roel and Tuyls, Pim and Verbauwhede, Ingrid},
+  Booktitle                = {3rd Benelux workshop on information and system security (WISSec 2008)},
+  Year                     = {2008},
+  Volume                   = {17}
+}
+
+@InCollection{maes2010physically,
+  Title                    = {Physically unclonable functions: A study on the state of the art and future research directions},
+  Author                   = {Maes, Roel and Verbauwhede, Ingrid},
+  Booktitle                = {Towards Hardware-Intrinsic Security},
+  Publisher                = {Springer},
+  Year                     = {2010},
+  Pages                    = {3--37}
+}
+
+@Article{mahmoud2013combined,
+  Title                    = {Combined Modeling and Side Channel Attacks on Strong PUFs.},
+  Author                   = {Mahmoud, Ahmed and R{\"u}hrmair, Ulrich and Majzoobi, Mehrdad and Koushanfar, Farinaz},
+  Journal                  = {IACR Cryptology ePrint Archive},
+  Year                     = {2013},
+  Pages                    = {632},
+  Volume                   = {2013}
+}
+
+@InProceedings{maiti2010large,
+  Title                    = {A large scale characterization of RO-PUF},
+  Author                   = {Maiti, Abhranil and Casarona, Jeff and McHale, Luke and Schaumont, Patrick},
+  Booktitle                = {Hardware-Oriented Security and Trust (HOST), 2010 IEEE International Symposium on},
+  Year                     = {2010},
+  Organization             = {IEEE},
+  Pages                    = {94--99}
+}
+
+@InProceedings{maiti2011impact,
+  Title                    = {The impact of aging on an FPGA-based physical unclonable function},
+  Author                   = {Maiti, Abhranil and McDougall, Logan and Schaumont, Patrick},
+  Booktitle                = {Field Programmable Logic and Applications (FPL), 2011 International Conference on},
+  Year                     = {2011},
+  Organization             = {IEEE},
+  Pages                    = {151--156}
+}
+
+@Article{Maiti2011,
+  Title                    = {Improved ring oscillator PUF: an FPGA-friendly secure primitive},
+  Author                   = {Maiti, Abhranil and Schaumont, Patrick},
+  Journal                  = {Journal of cryptology},
+  Year                     = {2011},
+  Number                   = {2},
+  Pages                    = {375--397},
+  Volume                   = {24},
+
+  Publisher                = {Springer}
+}
+
+@Article{maiti2011improved,
+  Title                    = {Improved ring oscillator PUF: an FPGA-friendly secure primitive},
+  Author                   = {Maiti, Abhranil and Schaumont, Patrick},
+  Journal                  = {Journal of cryptology},
+  Year                     = {2011},
+  Number                   = {2},
+  Pages                    = {375--397},
+  Volume                   = {24},
+
+  Publisher                = {Springer}
+}
+
+@Article{majzoobi2011time,
+  Title                    = {Time-bounded authentication of FPGAs},
+  Author                   = {Majzoobi, Mehrdad and Koushanfar, Farinaz},
+  Journal                  = {Information Forensics and Security, IEEE Transactions on},
+  Year                     = {2011},
+  Number                   = {3},
+  Pages                    = {1123--1135},
+  Volume                   = {6},
+
+  Publisher                = {IEEE}
+}
+
+@InProceedings{majzoobi2010fpga,
+  Title                    = {FPGA PUF using programmable delay lines},
+  Author                   = {Majzoobi, Mehrdad and Koushanfar, Farinaz and Devadas, Srinivas},
+  Booktitle                = {Information Forensics and Security (WIFS), 2010 IEEE International Workshop on},
+  Year                     = {2010},
+  Organization             = {IEEE},
+  Pages                    = {1--6}
+}
+
+@InProceedings{majzoobi2008lightweight,
+  Title                    = {Lightweight secure pufs},
+  Author                   = {Majzoobi, Mehrdad and Koushanfar, Farinaz and Potkonjak, Miodrag},
+  Booktitle                = {Proceedings of the 2008 IEEE/ACM International Conference on Computer-Aided Design},
+  Year                     = {2008},
+  Organization             = {IEEE Press},
+  Pages                    = {670--673}
+}
+
+@InProceedings{majzoobi2008testing,
+  Title                    = {Testing techniques for hardware security},
+  Author                   = {Majzoobi, Mehrdad and Koushanfar, Farinaz and Potkonjak, Miodrag},
+  Booktitle                = {Test Conference, 2008. ITC 2008. IEEE International},
+  Year                     = {2008},
+  Organization             = {IEEE},
+  Pages                    = {1--10}
+}
+
+@InProceedings{merli2011semi,
+  Title                    = {Semi-invasive EM attack on FPGA RO PUFs and countermeasures},
+  Author                   = {Merli, Dominik and Schuster, Dieter and Stumpf, Frederic and Sigl, Georg},
+  Booktitle                = {Proceedings of the Workshop on Embedded Systems Security},
+  Year                     = {2011},
+  Organization             = {ACM},
+  Pages                    = {2}
+}
+
+@InCollection{merli2011side,
+  Title                    = {Side-channel analysis of PUFs and fuzzy extractors},
+  Author                   = {Merli, Dominik and Schuster, Dieter and Stumpf, Frederic and Sigl, Georg},
+  Booktitle                = {Trust and Trustworthy Computing},
+  Publisher                = {Springer},
+  Year                     = {2011},
+  Pages                    = {33--47}
+}
+
+@InProceedings{merli2010improving,
+  Title                    = {Improving the quality of ring oscillator PUFs on FPGAs},
+  Author                   = {Merli, Dominik and Stumpf, Frederic and Eckert, Claudia},
+  Booktitle                = {Proceedings of the 5th Workshop on Embedded Systems Security},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {9}
+}
+
+@Article{merli2013protecting,
+  Title                    = {Protecting PUF Error Correction by Codeword Masking.},
+  Author                   = {Merli, Dominik and Stumpf, Frederic and Sigl, Georg},
+  Journal                  = {IACR Cryptology ePrint Archive},
+  Year                     = {2013},
+  Pages                    = {334},
+  Volume                   = {2013}
+}
+
+@InCollection{morozov2010analysis,
+  Title                    = {An analysis of delay based PUF implementations on FPGA},
+  Author                   = {Morozov, Sergey and Maiti, Abhranil and Schaumont, Patrick},
+  Booktitle                = {Reconfigurable Computing: Architectures, Tools and Applications},
+  Publisher                = {Springer},
+  Year                     = {2010},
+  Pages                    = {382--387}
+}
+
+@Misc{Naccache1995,
+  Title                    = {Unforgeable identification device, identification device reader and method of identification},
+
+  Author                   = {Naccache, D. and Fremanteau, P.},
+  Month                    = jul # {~18},
+  Note                     = {US Patent 5,434,917},
+  Year                     = {1995},
+
+  Owner                    = {HyperText},
+  Publisher                = {Google Patents},
+  Timestamp                = {2015.05.09},
+  Url                      = {http://www.google.com/patents/US5434917}
+}
+
+@Misc{Naccache1995a,
+  Title                    = {Unforgeable identification device, identification device reader and method of identification},
+
+  Author                   = {Naccache, D. and Fremanteau, P.},
+  Month                    = jul # {~18},
+  Note                     = {US Patent 5,434,917},
+  Year                     = {1995},
+
+  Owner                    = {HyperText},
+  Publisher                = {Google Patents},
+  Timestamp                = {2015.05.09},
+  Url                      = {http://www.google.com/patents/US5434917}
+}
+
+@Article{pappu2002physical,
+  Title                    = {Physical one-way functions},
+  Author                   = {Pappu, Ravikanth and Recht, Ben and Taylor, Jason and Gershenfeld, Neil},
+  Journal                  = {Science},
+  Year                     = {2002},
+  Number                   = {5589},
+  Pages                    = {2026--2030},
+  Volume                   = {297},
+
+  Publisher                = {American Association for the Advancement of Science}
+}
+
+@InProceedings{qu2009temperature,
+  Title                    = {Temperature-aware cooperative ring oscillator PUF},
+  Author                   = {Qu, Gang and Yin, Chi-En},
+  Booktitle                = {Hardware-Oriented Security and Trust, 2009. HOST'09. IEEE International Workshop on},
+  Year                     = {2009},
+  Organization             = {IEEE},
+  Pages                    = {36--42}
+}
+
+@InCollection{ruhrmair2012security,
+  Title                    = {Security based on physical unclonability and disorder},
+  Author                   = {R{\"u}hrmair, Ulrich and Devadas, Srinivas and Koushanfar, Farinaz},
+  Booktitle                = {Introduction to Hardware Security and Trust},
+  Publisher                = {Springer},
+  Year                     = {2012},
+  Pages                    = {65--102}
+}
+
+@Article{ruhrmair2009foundations,
+  Title                    = {On the Foundations of Physical Unclonable Functions.},
+  Author                   = {R{\"u}hrmair, Ulrich and S{\"o}lter, Jan and Sehnke, Frank},
+  Journal                  = {IACR Cryptology ePrint Archive},
+  Year                     = {2009},
+  Pages                    = {277},
+  Volume                   = {2009}
+}
+
+@InProceedings{ruhrmair2010modeling,
+  Title                    = {Modeling attacks on physical unclonable functions},
+  Author                   = {R{\"u}hrmair, Ulrich and Sehnke, Frank and S{\"o}lter, Jan and Dror, Gideon and Devadas, Srinivas and Schmidhuber, J{\"u}rgen},
+  Booktitle                = {Proceedings of the 17th ACM conference on Computer and communications security},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {237--249}
+}
+
+@PhdThesis{Ravikanth2001,
+  Title                    = {Physical one-way functions},
+  Author                   = {Ravikanth, Pappu Srinivasa},
+  School                   = {Massachusetts Institute of Technology},
+  Year                     = {2001},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@Article{ruhrmair2013puf,
+  Title                    = {Puf modeling attacks on simulated and silicon data},
+  Author                   = {Ruhrmair, Ulrich and Solter, Jan and Sehnke, Frank and Xu, Xiaolin and Mahmoud, Ahmed and Stoyanova, Vera and Dror, Gideon and Schmidhuber, J{\"u}rgen and Burleson, Wayne and Devadas, Srinivas},
+  Year                     = {2013},
+
+  Publisher                = {IEEE}
+}
+
+@Article{russell1995modern,
+  Title                    = {A modern approach},
+  Author                   = {Russell, Stuart and Norvig, Peter and Intelligence, Artificial},
+  Journal                  = {Artificial Intelligence. Prentice-Hall, Egnlewood Cliffs},
+  Year                     = {1995},
+  Volume                   = {25},
+
+  Publisher                = {Citeseer}
+}
+
+@InProceedings{sahoo2014composite,
+  Title                    = {Composite PUF: A new design paradigm for Physically Unclonable Functions on FPGA},
+  Author                   = {Sahoo, Durga Prasad and Saha, Sayandeep and Mukhopadhyay, Debdeep and Chakraborty, Rajat Subhra and Kapoor, Hitesh},
+  Booktitle                = {Hardware-Oriented Security and Trust (HOST), 2014 IEEE International Symposium on},
+  Year                     = {2014},
+  Organization             = {IEEE},
+  Pages                    = {50--55}
+}
+
+@Article{saleh2000clock,
+  Title                    = {Clock skew verification in the presence of IR-drop in the power distribution network},
+  Author                   = {Saleh, Resve and Hussain, Syed Zakir and Rochel, Steffen and Overhauser, David},
+  Journal                  = {Computer-Aided Design of Integrated Circuits and Systems, IEEE Transactions on},
+  Year                     = {2000},
+  Number                   = {6},
+  Pages                    = {635--644},
+  Volume                   = {19},
+
+  Publisher                = {IEEE}
+}
+
+@InCollection{schlosser2012simple,
+  Title                    = {Simple photonic emission analysis of AES},
+  Author                   = {Schl{\"o}sser, Alexander and Nedospasov, Dmitry and Kr{\"a}mer, Juliane and Orlic, Susanna and Seifert, Jean-Pierre},
+  Booktitle                = {Cryptographic Hardware and Embedded Systems--CHES 2012},
+  Publisher                = {Springer},
+  Year                     = {2012},
+  Pages                    = {41--57}
+}
+
+@InCollection{simpson2006offline,
+  Title                    = {Offline hardware/software authentication for reconfigurable platforms},
+  Author                   = {Simpson, Eric and Schaumont, Patrick},
+  Booktitle                = {Cryptographic Hardware and Embedded Systems-CHES 2006},
+  Publisher                = {Springer},
+  Year                     = {2006},
+  Pages                    = {311--323},
+
+  __markedentry            = {[Pierpaolo:6]},
+  Owner                    = {Pierpaolo},
+  Timestamp                = {2015.05.11}
+}
+
+@Article{su2007isscc,
+  Title                    = {ISSCC 2007/SESSION 22/DIGITAL CIRCUIT INNOVATIONS/22.5},
+  Author                   = {Su, Y and Holleman, J and Otis, B},
+  Year                     = {2007}
+}
+
+@InProceedings{suh2007physical,
+  Title                    = {Physical unclonable functions for device authentication and secret key generation},
+  Author                   = {Suh, G Edward and Devadas, Srinivas},
+  Booktitle                = {Proceedings of the 44th annual Design Automation Conference},
+  Year                     = {2007},
+  Organization             = {ACM},
+  Pages                    = {9--14}
+}
+
+@InCollection{suzuki2010glitch,
+  Title                    = {The glitch PUF: A new delay-PUF architecture exploiting glitch shapes},
+  Author                   = {Suzuki, Daisuke and Shimizu, Koichi},
+  Booktitle                = {Cryptographic Hardware and Embedded Systems, CHES 2010},
+  Publisher                = {Springer},
+  Year                     = {2010},
+  Pages                    = {366--382}
+}
+
+@Article{tang2002simultaneous,
+  Title                    = {Simultaneous switching noise in on-chip CMOS power distribution networks},
+  Author                   = {Tang, TK and Friedman, Eby G},
+  Journal                  = {Very Large Scale Integration (VLSI) Systems, IEEE Transactions on},
+  Year                     = {2002},
+  Number                   = {4},
+  Pages                    = {487--493},
+  Volume                   = {10},
+
+  Publisher                = {IEEE}
+}
+
+@Article{trimberger2014fpga,
+  Title                    = {FPGA Security: Motivations, Features, and Applications},
+  Author                   = {Trimberger, Stephen M and Moore, Jason J},
+  Year                     = {2014},
+
+  Publisher                = {IEEE}
+}
+
+@InCollection{tuyls2005information,
+  Title                    = {Information-theoretic security analysis of physical uncloneable functions},
+  Author                   = {Tuyls, Pim and {\v{S}}kori{\'c}, B and Stallinga, Sjoerd and Akkermans, Anton HM and Ophey, Wil},
+  Booktitle                = {Financial Cryptography and Data Security},
+  Publisher                = {Springer},
+  Year                     = {2005},
+  Pages                    = {141--155}
+}
+
+@InCollection{varchola2010new,
+  Title                    = {New high entropy element for FPGA based true random number generators},
+  Author                   = {Varchola, Michal and Drutarovsky, Milos},
+  Booktitle                = {Cryptographic Hardware and Embedded Systems, CHES 2010},
+  Publisher                = {Springer},
+  Year                     = {2010},
+  Pages                    = {351--365}
+}
+
+@InProceedings{vivekraja2009circuit,
+  Title                    = {Circuit-level techniques for reliable Physically Uncloneable Functions},
+  Author                   = {Vivekraja, Vignesh and Nazhandali, Leyla},
+  Booktitle                = {Hardware-Oriented Security and Trust, 2009. HOST'09. IEEE International Workshop on},
+  Year                     = {2009},
+  Organization             = {IEEE},
+  Pages                    = {30--35}
+}
+
+@Article{wildenabling,
+  Title                    = {Enabling SRAM-PUFs on Xilinx FPGAs},
+  Author                   = {Wild, Alexander and G{\"u}neysu, Tim}
+}
+
+@InProceedings{yin2013improving,
+  Title                    = {Improving PUF security with regression-based distiller},
+  Author                   = {Yin, Chi-En and Qu, Gang},
+  Booktitle                = {Proceedings of the 50th Annual Design Automation Conference},
+  Year                     = {2013},
+  Organization             = {ACM},
+  Pages                    = {184}
+}
+
+@InProceedings{yin2010lisa,
+  Title                    = {LISA: Maximizing RO PUF's secret extraction},
+  Author                   = {Yin, C-ED and Qu, Gang},
+  Booktitle                = {Hardware-Oriented Security and Trust (HOST), 2010 IEEE International Symposium on},
+  Year                     = {2010},
+  Organization             = {IEEE},
+  Pages                    = {100--105}
+}
+
+@Article{yu2010recombination,
+  Title                    = {Recombination of physical unclonable functions},
+  Author                   = {Yu, Meng-Day Mandel and Devadas, Srinivas},
+  Year                     = {2010},
+
+  Publisher                = {United States. Dept. of Defense}
+}
+
+@InProceedings{zhang2013fpga,
+  Title                    = {FPGA IP protection by binding finite state machine to physical unclonable function},
+  Author                   = {Zhang, Jiliang and Lin, Yaping and Lyu, Yongqiang and Qu, Gang and Cheung, Ray CC and Che, Wenjie and Zhou, Qiang and Bian, Jinian},
+  Booktitle                = {Field Programmable Logic and Applications (FPL), 2013 23rd International Conference on},
+  Year                     = {2013},
+  Organization             = {IEEE},
+  Pages                    = {1--4}
+}
+
+@Article{Zhang2012,
+  Title                    = {Watermarking FPGA bitfile for intellectual property protection},
+  Author                   = {Zhang, Jiliang and Lin, Yaping and Wu, Qiang and Che, Wenjie},
+  Journal                  = {Radioengineering},
+  Year                     = {2012},
+  Number                   = {2},
+  Volume                   = {21},
+
+  Owner                    = {HyperText},
+  Publisher                = {Spole{\v{c}}nost pro radioelektronick{\'e} in{\v{z}}en{\`y}rstv{\'\i}},
+  Timestamp                = {2015.05.09}
+}
+
+@InProceedings{zhang2013design,
+  Title                    = {Design and Implementation of a Delay-Based PUF for FPGA IP Protection},
+  Author                   = {Zhang, Jiliang and Wu, Qiang and Lyu, Yongqiang and Zhou, Qiang and Cai, Yici and Lin, Yaping and Qu, Gang},
+  Booktitle                = {Computer-Aided Design and Computer Graphics (CAD/Graphics), 2013 International Conference on},
+  Year                     = {2013},
+  Organization             = {IEEE},
+  Pages                    = {107--114}
+}
+
+@Article{zhang2014survey,
+  Title                    = {A Survey on Silicon PUFs and Recent Advances in Ring Oscillator PUFs},
+  Author                   = {Zhang, Ji-Liang and Qu, Gang and Lv, Yong-Qiang and Zhou, Qiang},
+  Journal                  = {Journal of Computer Science and Technology},
+  Year                     = {2014},
+  Number                   = {4},
+  Pages                    = {664--678},
+  Volume                   = {29},
+
+  Publisher                = {Springer}
+}
+
+@Manual{2013,
+  Title                    = {Technical Data Sheet STM32F407xx},
+  Month                    = {06},
+  Note                     = {Available at \url{http://goo.gl/XgTx0d}},
+  Organization             = {STMicroelectronics},
+  Year                     = {2013},
+
+  Number                   = {DocID022152 Rev 4},
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.09}
+}
+
+@Manual{xilinxds312,
+  Title                    = {Spartan-3E FPGA Family Data Sheet, DS312 (v4.1)},
+  Month                    = {July},
+  Organization             = {Xilinx, Inc.},
+  Year                     = {2013},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.23}
+}
+
+@Manual{eaps303220b,
+  Title                    = {EA-PS 3032-20 B, 35320177},
+  Organization             = {EA Elektro-Automatik GmbH \& Co. KG},
+
+  Owner                    = {HyperText},
+  Timestamp                = {2015.05.23}
+}
+

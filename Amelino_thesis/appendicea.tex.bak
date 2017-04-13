@@ -1,0 +1,754 @@
+\documentclass[tesi.tex]{subfiles}
+\graphicspath{{images/}{images/noChallenge/}{images/withChallenge/}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+\begin{document}
+\chapter*{\addcontentsline{toc}{chapter}{A: Adapting Anderson PUF for Xilinx Spartan-3E FPGA}Appendix A: Adapting Anderson PUF for Xilinx Spartan-3E FPGA}
+Xilinx Spartan-3 were the first FPGAs produced with the 90nm process technology and have resulted in the industry's lowest cost FPGAs. Because of their low cost and their high density, they are ideally suited to a wide range of consumer electronics applications. Nowadays, Xilinx offers a choice of five Spartan-3 platforms, each delivering a cost-optimized balance of programmable logic, connectivity, and dedicated hard IP cores.\\
+\indent
+A Spartan-3 FPGA is composed of many Configurable Logic Block (CLBs), slices, Input/Output Block (IOBs), Block RAM (BRAM), multiplier blocks and Digital Clock Manager (DCM) blocks. Their amount strongly depends on the specific device of the Spartan-3 platform. In this work we used Xilinx Spartan-3E XC3S1200E devices, which have 2168 CLBs, hence 8672 slices, 304 IOBs, 504K BRAM bits, 28 dedicated multipliers and 8 DCMs.\\
+\indent
+
+Further, we outline the porting process of the Anderson PUF for Spartan-3E FPGAs, devising two different architectures \cite{barbareschi2015implementing}. In this work we address the Anderson PUF introduced in \cite{huang2013delay} as Enhanced Anderson PUF.\\
+\indent
+Additionally, we present experimental results of reliability tests conducted on the proposed PUF implementations, resulting from the variation of the FPGA voltage supply and from the logic surrounding the PUF.
+
+
+\section{Anderson PUF Implemented on Spartan-3E}
+Spartan-3E architecture (Figure~\ref{fig:spartan3e}) is different from the Virtex-5 structure (Figure~\ref{fig:virtex5}) for which the Anderson PUF was originally designed. Each CLB is formed of four slices grouped in pairs, and each pair is organized as a column with an independent carry chain. Each slice is mainly composed of two 4-input LUTs, namely \textit{F-LUT} and \textit{G-LUT}, and two flip-flops, namely \textit{FFX} and \textit{FFY}. Right pairs slices belong to the \textit{SLICEL} type, while left pairs belong to the \textit{SLICEM} type.\\
+\indent
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.55\columnwidth]{spartan3estructure.pdf}
+			\caption{Xilinx Spartan-3E architecture.}
+			\label{fig:spartan3e}
+\end{figure}
+Implementing the Anderson PUF (Figure~\ref{fig:simpleanderson}) on Spartan-3E involves the testing of different PUF cell architectures, since it is possible to act on several design parameters, which represent the degrees of freedom of the PUF cell design process.\\
+\indent
+Indeed, the flip-flop can be either implemented using the \textit{FFX} or the \textit{FFY} storage element, and it can also be placed into the same or into a different slice of the one used for the others PUF cell elements. Similarly, it is possible to vary the multiplexers slices locations, but having them on the same column, such that they can use the same carry chain. By varying the multiplexers and the flip-flop locations, it is possible to modulate the glitch pulse width.\\
+\indent
+Furthermore, shift-registers can be either implemented by \textit{F-LUT} or \textit{G-LUT} of \textit{SLICEM}s. However, from experimental measurements, this parameter resulted to be a non-influencing factor as long as the \textit{symmetry constraint} is met, meant both shift-registers should be mapped in the homologous LUTs. Additionally, it is possible to vary both the number of shifting bits and the initialization values of the two shift-registers, originally configured as 16-bit shifting \textit{0x5555} and \textit{0xAAAA} values. Indeed, Huang et al. claimed that these values are not suitable for generating an unbiased PUF response, because there is a good chance that a positive glitch will appear independently by which shift-register/multiplexer pair is faster \cite{huang2013delay}. Hence, they proposed \textit{0x8888} and \textit{0x4444} values, and they showed that using this configuration better results could be obtained. Nevertheless, we tried to use these values with all the implementations that we tested, but the obtained PUF response has been always equal to 0. Hence, we will not consider this configuration in the further discussions.\\
+\indent
+After testing several different PUF cell implementations, we identified the best PUF cell architecture (Figure~\ref{fig:cellimplementation}), which requires 5 slices and 2 CLBs. Shift-registers are implemented using \textit{G-LUT}s, and their output is fed back to their input in order to allow the same output sequence to continue beyond the initial 16 cycles. Moreover, shift-registers \textit{A} and \textit{B} are configured to shift the 16-bit values of \textit{0x5555} and \textit{0xAAAA}, respectively. Multiplexers are implemented using the \textit{SLICEL} carry chain, resulting in a cascade of 5 multiplexers. The D flip-flop is located into the same slice of multiplexer \textit{A}, and it uses the \textit{FFY} storage element.
+\begin{figure}[H]
+	\centering
+			\includegraphics[width=0.55\columnwidth]{implementation1.pdf}
+			\caption{Basic Anderson PUF cell.}
+			\label{fig:cellimplementation}
+\end{figure}
+
+
+\subsection{Enhanced Anderson PUF\label{subsec:enhanced}}
+The Anderson PUF cannot work in a challenge-response paradigm, but only as unique signature generator, since input (challenge) signals are not involved. To address this issue, authors in \cite{huang2013delay} proposed the PUF cell structure shown in Figure~\ref{fig:huang}.
+Basically, one multiplexer is added on the carry chain, and two additional multiplexers, addressed by the challenge \textit{x}, drive the select input of the original multiplexer and of the new one.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.70\columnwidth]{huang.png}
+	\caption{Logic schematics of the Enhanced Anderson PUF cell.}
+	\label{fig:huang}
+\end{figure}
+%
+While the logical PUF structure is the one just described, its physical implementation is bit different and is shown in Figure~\ref{fig:enhancedcell}, which depicts the original PUF cell elements (represented with solid lines) and additional ones (represented with dotted lines). The difference between the two designs is due to the only physical symmetry constraint required by the Anderson PUF: the route that connects the shift-register's output to the multiplexer selection input has to be of the same length for each multiplexer/shift-register pair.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.90\columnwidth]{anderson_cell.pdf}
+	\caption{Logic schematics of the implementation of the Enhanced Anderson PUF cell.}
+	\label{fig:enhancedcell}
+\end{figure}
+Going more in detail, one extra multiplexer \textit{C} is located between the \textit{A} and the \textit{B} one, and two additional multiplexers ($D_1$ and $D_2$), accordingly with the value of the challenge \textit{x}, drive the output of the extra shift-register \textit{E} into the input of the shift-registers \textit{B} and the \textit{C}.
+Shift-registers \textit{E} and \textit{A} are configured to output an alternating and complementary sequence of logic-0s and logic-1s. If $x=1$, the multiplexer $D_1$ feeds the input of  the shift-register \textit{C} with the output of the shift-register \textit{E}, while the multiplexer $D_2$ feeds the input of shift-register \textit{B} with a constant logic-1 value. Therefore, the multiplexer \textit{C} outputs depend on the shift-register \textit{E} output, and the multiplexer \textit{B} forwards its output. Conversely, if $x=0$, the multiplexer $D_1$ feeds the input of the shift-register \textit{C} with a constant logic-1 value, while the multiplexer $D_2$ feeds the input of the shift-register \textit{B} with the output of the shift-register \textit{E}. In this case, the multiplexer \textit{C} outputs a constant logic-1, and the multiplexer \textit{B} can either output a logic-0 or a logic-1 accordingly to the output of the shift-register \textit{E}. Therefore, the purpose of the challenge signal is to pick two multiplexers in order to compare their delays.\\
+\indent
+Following this procedure, signal \textit{x} for each PUF is one challenge bit, and considering \textit{N} PUF cells, the PUF is able to generate $2^{N}$ responses. However, since the Anderson PUF is a concatenation of elementary cells which outputs are not dependent on other challenge inputs, the output of the PUF is easy to predict. Indeed, a simple attack is trivial to be successfully accomplished, considering two responses from challenges which all bits are fixed to logic-0s and logic-1s. Thus, compounding bits from the two previous responses, which rely on given challenge bits, it is easy to exactly emulate all the $2^{N}$ possible PUF outputs. To address this issue, more challenge bits have to be integrated into the PUF cell design by following the procedure described above, or hash-function can be used to produce responses hard to predict.\\
+\indent
+
+The degrees of freedom of the Enhanced Anderson PUF cell are the same of the Anderson PUF cell. However, since more logical elements are required, there are fewer possible implementations in order to fit the Enhanced PUF cell into 2 CLBs.\\
+\indent
+Among all possible implementations, which are in number less than the porting of the previous architecture, we have identified the best PUF cell architecture (Figure~\ref{fig:cellenhancedimplementation}), which requires 7 slices and 2 CLBs. The flip-flop is positioned into the \textit{SLICEM} slice above the shift-register \textit{A} one, and it is implemented using the \textit{FFX} storage element. The external shift-register \textit{E} is configured to output \textit{0xAAAA}, and the \textit{A} one with \textit{0x5555} value. Both shift-registers have their output connected to their input in order to allow the same output sequence to continue beyond the initial 16 cycles. Moreover, the output of the shift-register \textit{E} drives the input of the two additional multiplexers $D_1$ and $D_2$, which, according to the challenge signal value, generate the configurations for the shift-registers \textit{B} and \textit{C}. Therefore, one of the two shift-registers outputs \textit{0xAAAA}, and the other all logic-1s. In particular, multiplexers $D_1$ and $D_2$ are implemented using \textit{G-LUT}s of the same slices where multiplexers \textit{B} and \textit{C} are implemented. As for the basic Anderson PUF, the optimal carry chain length turned out to be composed of 5 multiplexers.
+\begin{figure}[H]
+	\centering
+			\includegraphics[width=0.55\columnwidth]{implementation2.pdf}
+			\caption{Enhanced Anderson PUF cell.}
+			\label{fig:cellenhancedimplementation}
+\end{figure}
+
+
+\section{Experimental validation}
+This Section presents the experimental results obtained from the PUF architectures described above. In particular, we used 15 Xilinx Spartan-3E FPGAs (\textit{XC3S1200E}) on Digilent Nexys 2 boards. Since the \textit{XC3S1200E} FPGA has 60 CLB rows for each CLB column and each Anderson PUF cell requires 2 CLB rows, it is possible to instantiate 30 PUF cells on a single CLB column, thus achieving a 30-bit PUF response per CLB column. We chose to obtain a 60-bit PUF response, hence 2 entire CLB columns are required. Furthermore, we logically split the FPGA in 11 vertical regions (Table~\ref{tab:regions}), resulting in 11 different 60-bit PUF implementations per FPGA, thus $11\times15=165$ different PUFs. Using a 16-bit counter driven by a 50MHz clock, PUFs responses were sampled at a fixed time from the FPGA start-up (about 1.3 ms), using Xilinx ChipScope Pro Tools. However, the Enhanced Anderson PUF involves a different procedure since it requires challenge inputs. Therefore, we used two challenges, one composed of all logic-0s and one composed of all logic-1s, and a different ChipScope instance in order to set the challenge bits and to clear the value held by the flip-flops. The following procedure has been applied for each challenge:
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+	\item[$\bullet$] the signal \textit{clear} is set to logic-1 in order to reset the values held by the flip-flops;
+	\item[$\bullet$] the challenge is applied;
+	\item[$\bullet$] the signal \textit{clear} is set to logic-0, hence the flip-flops are free to latch any positive glitch appearing on their preset input ports;
+	\item[$\bullet$] the response is sampled (after 1.3 ms).
+\end{itemize}
+\begin{table}[h]
+\centering
+\begin{tabular}{c|c|c|c|c|}
+\cline{2-5}
+                                         & \textbf{CLBs X} & \textbf{CLBs Y} & \textbf{Slices X} & \textbf{Slices Y} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 1}}  & 1-2             & 1-60            & 0-3               & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 2}}  & 7-8             & 1-60            & 12-15             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 3}}  & 13-14           & 1-60            & 24-27             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 4}}  & 15-16           & 1-60            & 28-31             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 5}}  & 17-18           & 1-60            & 32-35             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 6}}  & 28-29           & 1-60            & 54-57             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 7}}  & 29-30           & 1-60            & 56-59             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 8}}  & 31-32           & 1-60            & 60-63             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 9}}  & 33-34           & 1-60            & 64-67             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 10}} & 39-40           & 1-60            & 76-79             & 0-119             \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 11}} & 45-56           & 1-60            & 88-91             & 0-119             \\ \hline
+\end{tabular}
+\caption{FGPA's vertical regions.}
+\label{tab:regions}
+\end{table}
+
+Further results are briefly summarized in Table~\ref{tab:pufsummary}, along with others delay-based PUFs.
+\begin{table}[h]
+\begin{tabular}{l|c|c|}
+\cline{2-3}
+\multicolumn{1}{c|}{}                                          & {\bf Uniqueness} & {\bf Reliability} \\ \hline
+\multicolumn{1}{|l|}{{\bf Arbiter PUF \cite{lim2005extracting}}}                        & 23\%             & 99.70\%           \\ \hline
+\multicolumn{1}{|l|}{{\bf RO PUF \cite{suh2007physical}}}                             & 46.15\%          & 99.52\%           \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Virtex-5 \cite{anderson2010puf}}}              & 48\%             & 96.40\%           \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Zynq-7000 \cite{zhang2013design}}}             & 49.6\%           & 96.3\%            \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Virtex-6 \cite{huang2013delay}}}              & N/A              & 92.97\%           \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Spartan-6 \cite{goren2013partial}}}             & N/A              & N/A               \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Spartan-3E}}            & 47.18\%          & 90.79\%           \\ \hline
+\multicolumn{1}{|l|}{{\bf Anderson PUF Spartan-3E (Enhanced)}} & 49.37\%          & 98.14\%           \\ \hline
+\end{tabular}
+\caption{Uniqueness and Reliability estimated for delay-based PUFs.}
+\label{tab:pufsummary}
+\end{table}
+
+
+\subsection{Uniqueness}
+Since we used 165 different PUFs instances, the global uniqueness of the Anderson PUF can be evaluated by calculating $\frac{165\times164}{2}=13530$ Hamming Distances. Their average yield to a global uniqueness of 47.18\%, and Figure~\ref{fig:interpuf} shows the distribution of the Hamming Distances, which can be assumed to be Gaussian with a mean of 28.30 and a standard deviation of 6.68. It follows that the average response distance is equal to 28.30, which is really close to the ideal value of 30.\\
+\indent
+Based on the same procedure, we calculated the global uniqueness of the Enhanced Anderson PUF. However, since there are 2 challenges per PUF, the number of Hamming Distances is equal to $\frac{\left(165\times2\right)\times\left[\left(165\times2\right)-1\right]}{2}=54285$. Their average yield to a uniqueness of 49.37\%, and their distribution (Figure~\ref{fig:interpufenhanced}) can be assumed to be Gaussian with with a mean of 29.62 and a standard deviation of 4.82.
+\begin{figure}[H]
+	\centering
+        \begin{subfigure}[b]{0.75\columnwidth}
+			\includegraphics[width=1\columnwidth]{interpuf.pdf}
+			\caption{Basic Anderson PUF.}
+			\label{fig:interpuf}
+		\end{subfigure}
+		\\
+        \begin{subfigure}[b]{0.75\columnwidth}
+			\includegraphics[width=1\columnwidth]{interpufenhanced.pdf}
+			\caption{Enhanced Anderson PUF.}
+			\label{fig:interpufenhanced}
+		\end{subfigure}
+	\caption{Uniqueness: Hamming Distances distributions.}
+\end{figure}
+Furthermore, in Table~\ref{tab:regionsuniqueness} the uniqueness average values for each individual region are shown, while Figures~\ref{fig:regionspuf}, \ref{fig:regionsenhancedpuf} show the uniqueness distributions of the Anderson PUF and of its Enhanced version, respectively.\\
+\indent
+With this analysis it is possible to detect which region has the worst average behavior on all the devices.
+%
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+                                         & \textbf{Basic Anderson PUF} & \textbf{Enhanced Anderson PUF} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 1}}  & 47.69\%                     & 47.87\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 2}}  & 43.41\%                     & 46.89\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 3}}  & 46.70\%                     & 47.13\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 4}}  & 46.19\%                     & 47.28\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 5}}  & 49.23\%                     & 47.92\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 6}}  & 43.71\%                     & 47.48\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 7}}  & 43.88\%                     & 47.61\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 8}}  & 45.55\%                     & 47.08\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 9}}  & 43.80\%                     & 47.95\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 10}} & 45.81\%                     & 48.11\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 11}} & 39.52\%                     & 48.04\%                        \\ \hline
+\end{tabular}
+\caption{Uniqueness average values of each FPGA region.}
+\label{tab:regionsuniqueness}
+\end{table}
+%
+\begin{figure}[H]
+	\centering
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region0.png}
+			\caption{Region 1}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region1.png}
+			\caption{Region 2}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region2.png}
+			\caption{Region 3}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region3.png}
+			\caption{Region 4}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region4.png}
+			\caption{Region 5}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region5.png}
+			\caption{Region 6}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region6.png}
+			\caption{Region 7}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region7.png}
+			\caption{Region 8}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region8.png}
+			\caption{Region 9}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region9.png}
+			\caption{Region 10}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{noChallenge/region10.png}
+			\caption{Region 11}
+		\end{subfigure}
+	\caption{Regions' uniqueness distribution of the Anderson PUF.}
+	\label{fig:regionspuf}
+\end{figure}
+%
+\begin{figure}[H]
+	\centering
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region0.png}
+			\caption{Region 1}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region1.png}
+			\caption{Region 2}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region2.png}
+			\caption{Region 3}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region3.png}
+			\caption{Region 4}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region4.png}
+			\caption{Region 5}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region5.png}
+			\caption{Region 6}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region6.png}
+			\caption{Region 7}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region7.png}
+			\caption{Region 8}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region8.png}
+			\caption{Region 9}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region9.png}
+			\caption{Region 10}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.49\columnwidth}
+			\includegraphics[width=1\columnwidth]{withChallenge/region10.png}
+			\caption{Region 11}
+		\end{subfigure}
+	\caption{Regions' uniqueness distribution of the Enhanced Anderson PUF.}
+	\label{fig:regionsenhancedpuf}
+\end{figure}
+
+
+\subsection{Reliability}
+We have calculated the reliability value of the proposed implementations both under stable and variable temperature, while applying a fixed voltage of 1.20V. Each PUF response has been sampled 37 times per PUF instance (and with the same applied challenge for the Enhanced PUF), and a temporal majority vote has been applied to determine the most frequent response.\\
+\indent
+However, we do not know the temperature on chip due to the lack of sensors on board, but since the experiments have been conducted in a short time we can approximate the temperature as stable and equal to the room temperature of about 24\textcelsius{}. In this scenario, we have estimated $HD_{intra}$ (Equation~\ref{eq:hdintra}) considering as baseline reference response the most frequent one, and by calculating its Hamming Distance with the other 36 responses. By averaging the $HD_{intra}$ of each of the 165 PUF instances, we have estimated the average reliability value, which turned to be of 99.85\% and 99.91\% for the Anderson PUF and the Enhanced architecture, respectively.\\
+\indent
+Applying the same methodology, we have estimated the average reliability value under a different and higher temperature, by heating the chip for at least 5 minutes with a warm air flow. By exploiting a temperature sensor next to the FPGA die, we have observed a temperature around 70\textcelsius{}. In this scenario, we have considered as baseline reference response the most frequent one obtained in the previous scenario, and we have calculated its Hamming Distance with the other majority responses under the higher temperature value. Experimental measurements yield to average reliability values of 90.79\%, while the Enhanced architecture achieved a higher value of 98.14\%.
+
+
+\subsection{Uniformity}
+Experimental measurements yield to average uniformity values of 50.59\% and 50.99\% for the Anderson PUF and the Enhanced architecture, respectively. Furthermore, Table~\ref{tab:regionsuniformity} shows the uniformity average values for each individual region.\\
+\indent
+Being really close to the 50\% ideal value, these results confirm once again the good properties of the proposed designs.
+%
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+                                         & \textbf{Basic Anderson PUF} & \textbf{Enhanced Anderson PUF} \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 1}}  & 46.15\%                     & 48.76\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 2}}  & 42.82\%                     & 54.97\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 3}}  & 46.32\%                     & 52.98\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 4}}  & 48.85\%                     & 54.22\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 5}}  & 49.67\%                     & 51.67\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 6}}  & 50.81\%                     & 50.90\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 7}}  & 52.03\%                     & 51.27\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 8}}  & 52.18\%                     & 49.48\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 9}}  & 52.11\%                     & 50.35\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 10}} & 52.24\%                     & 50.55\%                        \\ \hline
+\multicolumn{1}{|c|}{\textbf{Region 11}} & 50.59\%                     & 45.76\%                        \\ \hline
+\end{tabular}
+\caption{Uniformity average values of each FPGA region.}
+\label{tab:regionsuniformity}
+\end{table}
+
+
+\subsection{Saturation Phenomenon}
+The value held by the flip-flop may be changed to 1 from 0 by a glitch on its preset input, but there is no complementary operation. Therefore, even if glitches are filtered, one will eventually reach the preset input, setting permanently the flip-flop output to logic-1 instead of logic-0. \cite{grabher2013re} called this phenomenon \textit{saturation}, and demonstrated that, as time progresses, the number of output bits switching to 1 increases.
+It is easy to notice that this is an harmful phenomenon that lowers the PUF reliability over the time. However, each time a PUF response is required, it can be avoided by clearing the flip-flops memorized values and then sampling the PUF response instantaneously or at a later, but fixed, time.\\
+\indent
+
+To study this phenomenon we decided to sample each PUF response after 20 seconds from the FPGA start-up, and to analyze how many bits are \textit{flipped} (bits that have transitioned from logic-0 to logic-1) in respect to the PUF response sampled at the FPGA start-up. The 20 seconds interval was chosen by noticing that the average \textit{bit flips ratio} ($\frac{number\;of\;bit\;flips}{time\;interval}$) assumed its highest values before this point. In particular, this metric points out how many bit flips are likely to occur over the considered time interval.
+
+\subsubsection*{Basic Anderson PUF}
+Since there are 11 regions and 15 devices, $11\times15=165$ total comparisons were done. On average, 4.33 response bits will flip after 20 seconds from the FPGA start-up. Their distribution is illustrated in Figure~\ref{fig:bitflips}, showing that only 7.21\% of the PUF response will change after 20 seconds from the FPGA start-up.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{noChallenge/difference.png}
+			\caption{Bit-flips distribution (after 20 seconds) for the Basic Anderson PUF.}
+			\label{fig:bitflips}
+\end{figure}
+Considering only PUF responses sampled after 20 seconds, a uniqueness of 45.87\% and a uniformity of 57.52\% was reached, with a uniqueness distribution illustrated in Figure~\ref{fig:uniquenessafter}. Even in this case the distribution can be assumed to be Gaussian with a mean of 27.52 and a standard deviation of 7.43.\\
+\indent
+Additionally, Figure~\ref{fig:comparison} shows the comparison between the two uniqueness distributions; the red solid line represents the uniqueness distribution of the PUF responses sampled at the start-up, while the blue dotted one represents the uniqueness distribution of the PUF responses sampled after 20 seconds from the start-up.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{noChallenge/after.png}
+			\caption{Uniqueness distribution (after 20 seconds) for the Basic Anderson PUF.}
+			\label{fig:uniquenessafter}
+\end{figure}
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{noChallenge/comparison.png}
+			\caption{Comparison of the two uniqueness distributions for the Basic Anderson PUF.}
+			\label{fig:comparison}
+\end{figure}
+
+\subsubsection*{Enhanced Anderson PUF}
+Since there are 11 regions, 15 devices, and 2 challenges per PUF, $11\times15\times2=330$ total comparisons were done. On average, 3.80 response bits will flip after 20 seconds from the FPGA start-up. Their distribution is illustrated in Figure~\ref{fig:bitflipsenhanced}, showing that only 6.33\% of the PUF response will change after 20 seconds from the FPGA start-up.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{withChallenge/difference.png}
+			\caption{Bit-flips distribution (after 20 seconds) for the Enhanced Anderson PUF.}
+			\label{fig:bitflipsenhanced}
+\end{figure}
+Considering only PUF responses sampled after 20 seconds, a uniqueness of 48.71\% and a uniformity of 56.46\% was reached, with a uniqueness distribution illustrated in Figure~\ref{fig:uniquenessafterenhanced}. Even in this case the distribution can be assumed to be Gaussian with a mean of 29.23 and a standard deviation of 7.87.\\
+\indent
+Additionally, in Figure~\ref{fig:comparisonenhanced} is shown the comparison between the two uniqueness distributions of the Enhanced Anderson PUF; the red solid line represents the uniqueness distribution of the PUF responses sampled at the start-up, while the blue dotted one represents the uniqueness distribution of the PUF responses sampled after 20 seconds from the start-up.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{withChallenge/after.png}
+			\caption{Uniqueness distribution (after 20 seconds) for the Enhanced Anderson PUF.}
+			\label{fig:uniquenessafterenhanced}
+\end{figure}
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.80\columnwidth]{withChallenge/comparison.png}
+			\caption{Comparison of the two uniqueness distributions for the Enhanced Anderson PUF.}
+			\label{fig:comparisonenhanced}
+\end{figure}
+
+
+\subsection{Extended Saturation Phenomenon}
+An interesting question is in how much time and how many PUF response's bits will flip due to the saturation phenomenon. A first answer was given in the previous Section, but we decided to investigate further.
+Therefore, PUF responses were sampled each second for about 7 days. The device, the region and the challenge, were chosen such that their combination produced a PUF response sampled at the FPGA start-up with a uniformity close to the ideal value of 50\%.
+
+\subsubsection*{Basic Anderson PUF}
+For the basic Anderson PUF, the region \#11 was chosen.
+As shown in Figure~\ref{fig:numberofbit}, the maximum number of bit flips was 12, reached after less than one day from the FPGA start-up. It is also easy to notice that after this time interval the PUF response remained stable for over 6 days. Indeed, it suggests that the Anderson PUF is strongly reliable after one day from the FPGA start-up, and quite unstable before this time interval. Therefore, Figure~\ref{fig:numberofbit2} provides a closer look to the number of bit flips happened over the first day.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.70\columnwidth]{noChallenge/bitflips.png}
+			\caption{Number of bit flips over the time for the Basic Anderson PUF.}
+			\label{fig:numberofbit}
+\end{figure}
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.70\columnwidth]{noChallenge/bitflips_detailed.png}
+			\caption{Number of bit flips over 1 day for the Basic Anderson PUF.}
+			\label{fig:numberofbit2}
+\end{figure}
+Additionally, Figure~\ref{fig:bitflipratio} shows the bit flips ratio of the first 3 minutes. In particular, the PUF response changed by 2 bits after only one second from the FPGA start-up, while the next bit flip happened after two minutes. Indeed, it is easy to notice that the flip ratio was very high during the first seconds, then it decreased very quickly converging to zero.
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.60]{noChallenge/flipratio.png}
+  \figcaption{Bit flips ratio for the Basic Anderson PUF.}
+  \label{fig:bitflipratio}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+
+\subsubsection*{Enhanced Anderson PUF}
+For the Enhanced Anderson PUF, the region \#1 and the challenge with all logic-0 was chosen.
+Figure~\ref{fig:numberofbitenhanced} shows that the maximum number of bit flips was of 14, reached after about only one hour. After this time interval the PUF response remained stable for close to 7 days. Therefore, Figure~\ref{fig:numberofbit2enhanced} provides a closer look to the number of bit flips happened over the first 70 minutes. It is easy notice that the Enhanced Anderson PUF is strongly reliable after only one hour from the FPGA start-up.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.75\columnwidth]{withChallenge/bitflips.png}
+			\caption{Number of bit flips over the time for the Enhanced Anderson PUF.}
+			\label{fig:numberofbitenhanced}
+\end{figure}
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.75\columnwidth]{withChallenge/bitflips_detailed.png}
+			\caption{Number of bit flips over 1 day for the Enhanced Anderson PUF.}
+			\label{fig:numberofbit2enhanced}
+\end{figure}
+Additionally, Figure~\ref{fig:bitflipratioenhanced} shows the bit flips ratio of the first 3 minutes. In particular, the PUF response changed by 2 bits after only one second from the FPGA start-up, and after two seconds the PUF response changed by further 2 bits, while the next bit flip happened after further 60 seconds. Again, the flip ratio was very high during the first seconds, then it decreased very quickly converging to zero.
+\begin{figure}[h]
+	\centering
+			\includegraphics[width=0.70\columnwidth]{withChallenge/flipratio.png}
+			\caption{Bit flips ratio for the Enhanced Anderson PUF.}
+			\label{fig:bitflipratioenhanced}
+\end{figure}
+
+\section{Impact of Supply Voltage Variation}
+In this Section we analyze the impact of the voltage
+variation on the Anderson PUF, implemented on the Xilinx
+Spartan-3E family. In particular, through experimental results \cite{barbareschi2015supply},
+we show that the supplied voltage value is able to dramatically
+change the quality of Anderson PUF responses.\\
+\indent
+Tests were conducted varying the supply voltage of the FPGA in a specific interval. The datasheet of Spartan-3E \cite{xilinxds312} states that
+the XC3S1200E chip is able to work in general recommended
+operating conditions when the voltage values range between
+1.14V and 1.26V, while the nominal voltage level is of 1.20V.
+However, the real Spartan-3E voltage range is from -0.5V to 1.32V.\\
+\indent
+We used only one FPGA board, properly modified to externally receive the power supply (from \textit{EA-PS 3032-20 B} \cite{eaps303220b}), such that we were able to control the voltage and vary it in the range between 0.70V and 1.70V ($\pm$41.67\% from 1.20V), with a step of 0.01V. To avoid other sources of uncertainty, we allocated the 60-bit Anderson PUF in two vertical columns in the left part of the FPGA, while the other logic, such as ChipScope logic, is placed far away on the right.\\
+\indent
+To reach better sampling accuracy, each PUF response was sampled at a fixed time from the FPGA start-up (about 1.3 ms).
+Furthermore, since PUF responses are noisy, each response is sampled 37 times for each voltage level, and a \textit{Temporal Majority Voting} (TMV) is applied to select the most frequent response.
+
+\subsection{Uniformity}
+Figure~\ref{fig:numberones} shows the number of logic-1 of PUF responses for each voltage value. The maximum value of uniformity is of 98.33\%, so 59 of 60 cells give as logic-1 as response, localized in 0.70V and 1.70V voltage values, and its minimum value is of 36.67\% (22 logic-1s) under 1.41V voltage value.
+In the range $\left[1.0, 1.2\right]$ the uniformity value is quite stable with a value of ~66\%.
+\begin{figure}[h]
+        \centering
+			\includegraphics[width=0.80\columnwidth]{numberofones.pdf}
+			\caption{Number of logic-1s and uniformity of PUF responses for different voltage values.}
+			\label{fig:numberones}
+\end{figure}
+
+
+\subsection{Reliability}
+We calculated the reliability of each voltage level by considering the most frequent response under the 1.20V nominal voltage as baseline reference response. Figure~\ref{fig:reliability} shows the reliability over different supplied voltages. The minimum reliability value of 68.29\% is reached with voltage values greater than 1.60V or less than 0.73; the maximum value is 98.51\%, reached with 1.13V. The average reliability value is equal to 85.41\%.\\
+\indent
+Anderson tested its PUF on the Virtex-5 FPGA by heating the die to a temperature of 70\textcelsius{}, and calculating a reliability of 96.4\% \cite{anderson2010puf}. Therefore, it is possible to assume that the supplied voltage variations has a stronger influence than the temperature on the PUF reliability.
+\begin{figure}[h]
+        \centering
+			\includegraphics[width=0.75\columnwidth]{reliability.pdf}
+			\caption{Reliability values varying the supplied voltage.}
+			\label{fig:reliability}
+\end{figure}
+
+
+\subsection{Analysis}
+The two parameters discussed in the previous Section put in evidence a relation between the voltage and the PUF value which needs for further analysis.
+Considering the uniformity parameter (Figure~\ref{fig:numberones}) varying the voltage, it is almost a decreasing function until 1.41V, meaning that the number of logic-1s in the PUF response decreases when the supplied voltage grows. Conversely, after 1.41V the number of logic-1s increases as the voltage grows.
+Furthermore, Figure~\ref{fig:reliability} shows that before the value of 1.20V, which corresponds to the baseline value, the reliability is mostly an increasing function. After 1.20V, the reliability is a combination of increasing and decreasing functions.\\
+\indent
+In the next Section we try to give additional analysis in order to clarify these behaviors.
+
+\subsection{Voltage Thresholds and Stability}
+First of all, in our experiments we have observed that 23 of 60 cells (38.33\%) do not depend on the voltage level applied, hence they are steady fixed to logic-0 or to logic-1 for all the sampled responses. In particular, only 1 of the 23 cells always outputs logic-0, while the other 22 output logic-1.
+Conversely, the other 37 cells change their output values from logic-1 to logic-0 and/or from logic-0 to logic-1 when the applied voltage level crosses specific thresholds, which are different among the cells.
+To this aim, we define as \textit{transition} the change from one PUF output value to another under a different increased voltage.
+For instance, a PUF cell that outputs logic-0 until 1.00V and with greater values it outputs logic-1, is characterized by the 0$\rightarrow$1 transition.
+As said before, 23 PUF cells output a steady logic-1 or a steady logic-0, hence they do not exhibit any  transition.
+As for the other 37 cells, experimental measurements evidenced that 30 of them are characterized by 2 transitions, 1$\rightarrow$0$\rightarrow$1, while the remaining 7 cells are each characterized by 4 transitions, 1$\rightarrow$0$\rightarrow$1$\rightarrow$0$\rightarrow$1, over the 0.70V-1.70V considered range.\\
+\indent
+To determine the transitions threshold values for each PUF cell, first of all we calculated the PUF cell \textit{stability} for different voltage values.
+Let \textit{b} be the \textit{b}-th PUF cell that generates the \textit{b}-th output bit, and \textit{M} the number of response samples for each voltage \textit{V}.
+%, which is equal to 37.
+Let $r_{i,b,V}$ be the value (1 or 0) of the \textit{b}-th bit of the \textit{i}-th response when the voltage \textit{V} is applied.
+The percentage measure of the PUF cell stability is calculated as:
+\begin{equation}
+	\nonumber
+	S(b,V)=\sum_{i=1}^{M}\frac{r_{i,b,V}}{M}\times100
+\end{equation}
+If $S(b,V) > 50\%$, the $b$-th of the PUF at $V$ voltage gives logic-1 as response, otherwise logic-0.
+Additionally, if $S(b,V) = 100\%$ $\forall V$, the $b$-th PUF cell output is a steady logic-1, vice versa a value of 0\% is related to a steady logic-0 output.
+It follows that the highest value of instability is around 50\%.\\
+% however this is a theoretic limit since, in our case, M is an odd number.\\
+\indent
+Using the stability metric we calculate the voltage thresholds for each PUF cell transition. In particular, for the transition 1$\rightarrow$0, we assumed as voltage threshold the lowest voltage value that determines the PUF cell stability to be less than or equal to 50\%, so when the measured number of logic-1s for the considered bit crosses the value of $\frac{M}{2}$. For the 0$\rightarrow$1 transitions, we assume as voltage threshold the lowest voltage value that determines the PUF cell stability to be greater than or equal to 50\%.
+Figure~\ref{fig:sogliedistribution10} shows the voltage thresholds distribution for the 1$\rightarrow$0 transitions, while Figure~\ref{fig:sogliedistribution01} shows the distribution for the 0$\rightarrow$1 transitions; no particular probability distribution can be appreciated.
+\begin{figure}[h]
+	\centering
+        \begin{subfigure}[b]{0.75\textwidth}
+			\includegraphics[width=1\columnwidth]{sogliedistribution10.pdf}
+			\caption{1$\rightarrow$0 transitions.}
+			\label{fig:sogliedistribution10}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.75\textwidth}
+			\includegraphics[width=1\columnwidth]{sogliedistribution01.pdf}
+			\caption{0$\rightarrow$1 transitions.}
+			\label{fig:sogliedistribution01}
+		\end{subfigure}
+	\caption{The distributions of voltage thresholds for cell output transitions.}
+	\label{fig:sogliedistribution}
+\end{figure}
+For the sake of clarity, we reported only two PUF cells stability in the Figure~\ref{fig:soglie}, obtained by varying the supplied voltage in the working range; the vertical dotted lines indicate their voltage thresholds.
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.99]{soglie.pdf}
+  \figcaption{Stability of two PUF cells for different voltage values.}
+  \label{fig:soglie}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+Near the thresholds, the stability value heavily degrades and the voltage ranges required to restore it from 100\% to 0\% or from 0\% to 100\% are not the same.
+To estimate the voltage range around each threshold required to completely switch the stability value from 100\% to 0\% (1$\rightarrow$0 transition), we assume the two voltage values such that, before and after them, the stability value for the $b$-th PUF bit is greater than or equal to 90\%, and less than or equal to 10\%, respectively. Similarly, to estimate the voltage range around each threshold required to completely switch the stability value from 0\% to 100\% (0$\rightarrow$1 transition), we assume the two voltage values such that, before and after them, the stability value for the $b$-th PUF bit is greater than or equal to 10\%, and less than or equal to 90\%, respectively.
+\\
+\indent
+Figure~\ref{fig:stability90_10} illustrates the distribution of the voltage ranges widths for the 90\%$\rightarrow$10\% stability switch: they are mainly localized in the region before 40mV, and there are some isolated values, such as the one localized in 110mV.
+Similarly, Figure~\ref{fig:stability10_90} reports the distribution of the voltage ranges widths for the 10\%$\rightarrow$90\% stability switch. In this case, the voltage range required to complete the switch is localized around 20mV, which is smaller than the one required to complete the 90\%$\rightarrow$10\% switch. It follows that, on average, 0$\rightarrow$1 transitions are faster than 1$\rightarrow$0 transitions, implying that 0$\rightarrow$1 transitions require a small voltage variation to complete the output switch.\\
+\begin{figure}[h]
+	\centering
+        \begin{subfigure}[b]{0.75\textwidth}
+			\includegraphics[width=1\columnwidth]{stability90_10.pdf}
+			\caption{90\%$\rightarrow$10\% stability switch.}
+			\label{fig:stability90_10}
+		\end{subfigure}
+        \begin{subfigure}[b]{0.75\textwidth}
+			\includegraphics[width=1\columnwidth]{stability10_90.pdf}
+			\caption{10\%$\rightarrow$90\% stability switch.}
+			\label{fig:stability10_90}
+		\end{subfigure}
+	\caption{The distributions of the estimated voltage ranges required to switch the stability value.}
+\end{figure}
+\indent
+Therefore, each voltage value determines the stability of each bit and, consequently, the overall reliability of responses, because the PUF might not output the same response under the same applied voltage.
+Let \textit{M} be the number of samples for each voltage value \textit{V}, $r_{V}$ be the most probable \textit{N}-bit response obtained supplying the voltage value $V$ and $r_{i,V}$ be the responses sampled under the same voltage value $V$, the percentage measure for PUF response reliability can be calculated as:
+\begin{equation}
+	\nonumber
+	R\left(V\right)=100-\left(\frac{1}{M-1}\sum_{i=0}^{M-1}\frac{HD\left(r_{V},r_{i,V}\right)}{N}\right)\times100
+	\end{equation}
+The difference with the reliability definition given in Chapter 2 stands in the baseline reference. Indeed, the aim of the formula given in in Chapter 2 is to evaluate how reliable the PUF is considering the reference response at nominal voltage.
+Here we want to evaluate the reliability considering that the PUF is working with a given voltage value and, hence, picking for each voltage a different reference response.
+Figure~\ref{fig:stability} shows the reliability of PUF responses for each different voltage level.
+No particular trends emerge from the graph, since voltage thresholds values are different for several PUF cells. But there is a direct correlation between the thresholds distributions and the reliability: in fact, the voltage values in which there are accumulations of stability thresholds (Figures~\ref{fig:sogliedistribution10} and~\ref{fig:sogliedistribution01}), the reliability has low peaks, and the thickness around these values is determined by the voltage range width needed to complete the stability switch.
+\begin{figure}
+        \centering
+			\includegraphics[width=0.75\columnwidth]{stability.pdf}
+			\caption{Stability of PUF responses for different voltage values.}
+			\label{fig:stability}
+\end{figure}
+
+
+\subsection{Carry Chain Length}
+Based on the architecture of the Anderson PUF (Figure~\ref{fig:cellimplementation}), which comprises 5 carry chain multiplexers, we tested it with different carry chain lengths and voltage levels. In particular, we measured the number of logic-1 of 60 bit PUF responses by varying the number of carry chain multiplexers from 2 (1 CLB) to 8 (2 CLBs). Figure~\ref{fig:carrychain} shows the trend of the responses with different carry chain lengths and voltage levels.
+\begin{figure}[h]
+        \centering
+			\includegraphics[width=0.90\columnwidth]{carrychain}
+			\caption{Number of logic-1 varying the carry chain length.}
+			\label{fig:carrychain}
+\end{figure}
+At first glance it seems that the number of logic-1 grows as the carry chain length increases. However, this trend is interrupted when 6 carry chain multiplexers are involved. In fact, the architecture with 6 multiplexers produces PUF responses with a lower number of logic-1 compared to the ones resulting from using 5 multiplexers. These results suggest that a potential glitch model of the Anderson PUF is not a simple linear equation, but it might involve polynomial terms. Additionally, it is clear that there is a correlation between PUF uniformity and carry chain length, but this correlation is not linear. In fact, increasing the carry chain length does not necessarily translates in a higher number of logic-1 in PUF responses.
+
+
+
+\section{Impact of Surrounding Logic\label{sec:surrounding}}
+External sources
+of noise, such as temperature variations, voltage oscillations,
+devices aging, Simultaneous Switching Noise (SSN) and IR-drop, might influence the values of the quality factors described
+above. Uniqueness, uniformity and bit-aliasing values might
+change under different operating conditions, but they will not
+be necessarily worse than the values obtained under nominal
+conditions. The reliability is the factor that is actually able to
+quantify the effects of these phenomena.
+As for the SSN and IR-drop, they are main concerns for
+the design of an on-chip power distribution network.\\
+\indent
+
+In order to properly analyze the effect of a surrounding logic on PUF responses, we need a generic logic able to generate a pseudo-random switching activity, in order to avoid spurious frequencies that might induce periodic effects, and to be instantiated in different sizes.
+Moreover, to avoid idle periods, the logic has to continuously work without any interruption.
+Tests require different workloads, hence the surround logic must be synchronous such that it can be fed with different clock speed. 
+Also the density of the circuit should be very high, in order to restrict the effect only in a specific part of the device.\\
+\indent Some of these properties are also required by cryptography primitives, as their aim is to \textit{confuse} and \textit{diffuse} the inputs.
+Indeed, we define a \prwg{} (\acr{}) as a composition of elementary Workload Units (WUs).
+Each WU computes a \textit{xor} compression of $N$ bits, storing the 1-bit result in a flip-flop.
+Different type of \textit{xor} compression and different initial values for flip-flops can be defined, so that different types of WU are defined. We also define the Workload Stage (WS), that is a $K$ parallel WU component, such that it has $K$ outputs.
+A \acr{} can be defined compounding $W$ WSs in some rounds and closing them in a ring structure.
+Thus, $N$ inputs of each WU are a permutation of outputs, taken from previous WSs allocated before or after each WU, such that they appear confused and diffused.
+The ring structure, together with the feedback mechanism generated by such signals assignments, activates a permanent switching activity.\\
+\indent In order to obtain a pseudo-random behavior, the structure can also exploit co-prime numbers: the different types of WU, $N$, $W$ and $K$.
+Furthermore, the disposition for WSs in the ring can adopt the modular arithmetic to achieve a good confusion. Indeed, let $T$ be the number of different available WUs and P a number co-prime with W; a WU in i-th position may be picked as: $WU\left(i\right) = P^{i} mod\; W$.
+
+\subsection{PRWG Implementation and Experimental Setup}
+The \acr{} design is able to perfectly fit the FPGA structure, indeed $N$ could match the Look-Up Table (LUT) fan-in and $K$ the number of LUTs per slice.
+$W$ determines the area occupied by the \acr{}, hence it corresponds to the generated workload.\\
+\indent
+Spartan-3E FPGAs have two 4-input LUTs and two flip-flops per slice, thus $N=4$ and $K=2$. Due to the ring structure, each WS of the \textit{i}-th stage is connected to the one of the \textit{i+1}-th stage by connecting the $K$ outputs to the $N$ inputs. However, due to the mismatch between $N$ and $K$, each WS has 4 inputs and 2 outputs, meaning that 2 additional signals are required in order to connect the WSs to one another. At the \textit{i}-th stage, the 2 signals can be obtained using the outputs of different WSs from the \textit{j}-th ($j\neq i$) stage. In order to generate a feedback mechanism, at least one signal should be picked from a \textit{j}-th stage such that $j>i$. Constraining the $W$ WSs to be synthesized in a specific FPGA area, it should result in an area occupation value of 100\%. However, due to the resources used for the routing of the WSs, different connections schemes can turn out in different area occupations. Therefore, while an area density value of 100\% is desired, the actual implementations could achieve lower values. Indeed, experimental implementations with $W=220$ in 192 slices and $W=660$ in 576 slices resulted in density values of 82\% and 80\%, respectively.\\
+\indent
+
+Before testing the influence that the \acr{} might have on PUF reliability, we first need a baseline reference PUF response taken at nominal operating conditions, meaning that there must be no noise sources during the sampling of the PUF response.\\
+\indent
+To this aim, we were able to place the 60-bit Anderson PUF along two CLB columns, because every PUF cell requires 2 CLBs and each column has 60 CLBs. Since the exploited ChipScope core used for sampling PUF response is the \textit{Virtual Input Output}, which generates a slight workload only when a sampling request is made, the obtained PUF response can be considered as baseline reference. In order to maximize the distance between the Anderson PUF and the ChipScope logic position, and consequently minimize the impact on the responses, we placed the PUF on the left side of the FPGA. Indeed, moving the ChipScope logic near and far from the PUF influences its stability by varying only 0.4\% of all response bits.\\
+\indent
+By exploiting ChipScope cores and the previous 60-bit Anderson PUF, both placed in fixed positions of the FPGA, we instantiated the \acr{} block moving it over all the available free positions of the FPGA. Thus, for each location we obtained a different bitstream. However, moving the \acr{} block in different positions implies a new synthesis of the component, so that even if any two blocks in different positions are the same, they might be internally placed and routed in different ways, which might generate different workloads. In order to preserve the \acr{} internal design over all positions, its primitives have been fixed in location using Xilinx \textit{PlanAhead Design and Analysis Tool} and the \textit{BEL/LOC} individual constraints.\\
+\indent
+According to the \acr{} block size, two architectures can be defined:
+\begin{enumerate}
+	\item \textbf{Small \acr{}}: the block is composed of 6x8 CLBs, and it requires 312 LUTs and flip-flops. Moving the \acr{} block along the entire FPGA, 1065 different positions, hence bitstreams, are generated;
+	\item \textbf{Big \acr{}}: the block is composed of 9x16 CLBs, and it requires 920 LUTs and flip-flops. Due to less available positions, only 660 different bitstreams can be generated.
+\end{enumerate}
+
+In order to obtain a different workload, defined \acr{}s can be fed with two clock speeds, one at 50MHz and the other at 100MHz. Furthermore, each Anderson PUF response has to be sampled 22 times for each different \acr{} position, due to the noise introduced by the surrounding logic, resulting in a total of 11385 samples of PUF responses. All the samples have been collected at the FPGA power-up. Both test campaigns have been conducted under a controlled ambient temperature of 24\textcelsius{}.
+
+
+\subsection{Reliability}
+Considering the baseline reference response, reliability can be calculated using Equation \ref{eq:reliability}. Since there are 22 PUF responses for each \acr{} position, a \textit{Temporal Majority Voting} has been applied to choose the most frequent response for each position. Reliability measurements are listed in Table \ref{table:reliability}.
+\begin{table}[h]
+	\renewcommand{\arraystretch}{1.3}
+	\centering
+	\begin{tabular}{c|c|c|}
+		\cline{2-3}
+		& \multicolumn{1}{ |c }{\textbf{Small \acr{}}} & \multicolumn{1}{ |c| }{\textbf{Big \acr{}}} \\
+		\hline
+		\multicolumn{1}{ |c  }{\textit{Disabled} } & \multicolumn{1}{ |c| }{99.25\%} & \multicolumn{1}{ |c| }{94.50\%} \\ \hline
+		\multicolumn{1}{ |c  }{\textit{Enabled} } &
+		\multicolumn{1}{ |c| }{99.19\%} & 94.41\% \\ \hline
+	\end{tabular}
+	\caption{Reliability measurements}
+	\label{table:reliability}
+\end{table}
+The small \acr{} is responsible for a reliability loss of about 0.81\%, while the bigger \acr{} decreases the reliability value of about 5.59\%. Moreover, the \acr{} operating condition (\textit{disabled/enabled}) is responsible for further reliability reductions.\\
+\indent
+Similar values of reliability, between 93-97\%, were obtained in other works by varying temperature and voltage operating conditions of the Anderson PUF \cite{anderson2010puf,zhang2013fpga} or of different PUFs \cite{holcomb2009power,maiti2011impact} on various FPGAs, suggesting that the surrounding logic, which determined a 94.41\% of reliability, constitutes an additional issue that must be considered during the test of a PUF.
+
+
+\subsection{Impact of \acr{} Distance on PUF Responses Values}
+In Figure \ref{fig:map} is represented the number of logic-1 of the 22 PUF responses calculated for each different \acr{} position, while the PUF (depicted with the black color) is fixed in the same position. For each \acr{} size and operating condition (\textit{disabled/enabled}) there are different trends. In particular, by increasing the distance between the PUF and the disabled small \acr{}, the number of logic-1 produced by the PUF responses decreases (Figure \ref{fig:small}). Conversely, by enabling the small \acr{}, the number of logic-1 increases as the distance between the PUF and the \acr{} grows (Figure \ref{fig:smallen}). 
+The trends are different when the bigger \acr{} is considered. Indeed, by increasing the distance between the PUF and the disabled big \acr{}, the number of logic-1 of PUF responses slightly increases as the distance grows, but, as shown in Figure \ref{fig:big}, there is no particular pattern over the several PUF responses. In the other case, by enabling the big \acr{}, the number of logic-1 is strongly dependent on the distance between the PUF and the \acr{} (Figure \ref{fig:bigen}). Moreover, as one can notice, the number of logic-1 has no trend with the distance when the clock speed is increased (Figures \ref{fig:big100}, \ref{fig:small100}).\\
+\indent
+Since the 60-bit Anderson PUF is placed along two CLB columns on the left side of the FPGA, a more accurate analysis can be done by averaging the number of logic-1 of the 22 PUF responses for each CLB column distance between the PUF and the \acr{} block. Let \textit{X} be the maximum distance between the PUF and the \acr{} block, in terms of CLB columns, and \textit{$Y$} be the maximum number of FPGA CLB rows. Let $r_{i,j}^{k}$ be the \textit{k}-th sample of the PUF response produced when the \acr{} is distant \textit{j} CLB columns and \textit{i} CLB rows from the PUF, the \horiz{} of the \acr{} can be calculated as
+\begin{equation}
+	H_j=\frac{1}{Y}\sum_{i=1}^{Y}\sum_{k=1}^{22}r_{i,j}^{k}\;\;\;\;\;\;\;(j=1,...,X)
+	\label{eq:hj}
+\end{equation}
+Figure \ref{fig:horiz_spatial} plots $H_j$ for $j=1,...,26$, showing the trends described above; in particular, considering the enabled big \acr{}, the number of logic-1 of PUF responses significantly increases as the horizontal distance grows.\\
+\indent
+To evaluate the \horiz{} of the \acr{} on reliability values, a formula analogous to \ref{eq:hj} has been applied. Figure \ref{fig:horiz_reliab} shows the impact that the distance between the \acr{} block and the PUF has on reliability. There is no particular trend for the small \acr{}, which achieves good reliability values. However, enabling the big \acr{} implies a reliability drop that on average is proportional to the horizontal distance.
+\begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.5\columnwidth}
+                \includegraphics[width=\columnwidth]{ets/figure1.pdf}
+                \caption{Small \acr{}.}
+                \label{fig:small}
+                \includegraphics[width=\columnwidth]{ets/figure2.pdf}
+                \caption{Small \acr{} at 50 MHz.}
+                \label{fig:smallen}
+				\includegraphics[width=\columnwidth]{ets/figure5.pdf}
+                \caption{Small \acr{} at 100 MHz.}
+                \label{fig:small100}
+        \end{subfigure}%
+        ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc.
+          %(or a blank line to force the subfigure onto a new line)
+        \begin{subfigure}[b]{0.5\columnwidth}
+                \includegraphics[width=\columnwidth]{ets/figure3.pdf}
+                \caption{Big \acr{}.}
+                \label{fig:big}
+				\includegraphics[width=\columnwidth]{ets/figure4.pdf}
+                \caption{Big \acr{} at 50 MHz.}
+                \label{fig:bigen}
+                \includegraphics[width=\columnwidth]{ets/figure6.pdf}
+                \caption{Big \acr{} at 100 MHz.}
+                \label{fig:big100}
+        \end{subfigure}
+        \caption{Number of logic-1 of PUF responses varying the \acr{} distance from the PUF place (black rectangle).}
+        \label{fig:map}
+\end{figure}
+
+In particular, experimental results showed opposite trends and patterns with two different
+workloads. Identifying their causes involves the resolution of
+the gap between the FPGA logical elements and their physical
+implementations. Nevertheless, this information surely is not
+publicly-released from any FPGA vendor.
+
+
+\subsection{Pattern and Bits Stability}
+Testing the PUF with the small \acr{} shows a regular pattern. When the \acr{} block is placed in particular positions, the average number of logic-1 of PUF responses decreases, as shown in Figures \ref{fig:small}, \ref{fig:smallen}, \ref{fig:small100}, by the dark-blue colored \acr{} positions on the right-half of the FPGA. Further analysis determines that, on some FPGAs, the 21-th PUF response bit flips its value from a stable logic-1 to a stable logic-0 when the \acr{} is placed in specific positions. On others FPGAs, some of them did not present any \textit{flip effect}, while other FPGAs showed the same behavior, but involving the 20-th PUF response bit.\\
+\indent
+As for the stability, experimental measurements highlighted that 33 of the 60 response bits (55\%) were 100\% stable regardless of the \acr{} position and size, meaning that their value has been always either logic-0 or logic-1 over all the \acr{} configurations. Instead, the 39-th and the 6-th response bits achieved a stability value of about 86\% and 50\%, respectively. The remaining response bits achieved a stability value between 97.0\% and 99.9\%.
+\begin{figure}
+        \centering
+                \includegraphics[width=0.98\columnwidth]{ets/horizontal_spatial.pdf}
+                \caption{Average number of logic-1.}
+                \label{fig:horiz_spatial}
+\end{figure}
+
+\begin{figure}
+                \includegraphics[width=0.98\columnwidth]{ets/horizontal_reliability.pdf}
+                \caption{Average reliability.}
+                \label{fig:horiz_reliab}
+\end{figure}
+
+Therefore, the surrounding logic effect plays a crucial role in PUFs
+test, in particular in the evaluation of the stability and reliability parameters. In this work, we demonstrated that different workloads at different speeds and positions affect the
+PUF stability and consequently its reliability.\\
+\indent
+Furthermore, we can figure out that on ASIC devices these effects might be
+stronger than on FPGAs, because on the latter the dynamic
+power consumed by the surrounding logic is a very small part
+of the global amount of power consumption.
+
+
+
+\section{Implementing a Strong PUF\label{sec:strongpuf}}
+As described in Section~\ref{subsec:enhanced}, the Enhanced Anderson PUF implements a challenge-response paradigm, but with some security concerns. Therefore, to enable the PUF to work in a secure challenge-response paradigm, we propose and implemented the scheme described below.\\
+\indent
+To counter the trivial attack which is able to predict all PUF responses, a simple hash function can be applied to the \textit{i}-th response, as following:
+\begin{equation}
+	Response^{'}_{i}=Hash(Response_i)
+	\label{eq:hashsimple}
+\end{equation}
+However, Equation~\ref{eq:hashsimple} does not consider that a variation of the challenge might not be reflected in a variation of the response. Indeed, not every PUF cell changes its response as the challenge varies. To address this issue, we propose the following scheme:
+\begin{equation}
+	Response^{'}_{i}=Hash\left(Response_i\mathbin{\oplus}Hash\left(Challenge_i\right)\right)
+	\label{eq:hashcomplex}
+\end{equation}
+The first step consists of hashing the challenge value with a secure hash algorithm. The resulting digest is XOR'd with the PUF response, and a further hash operation is applied to the XOR'd value. The final generated digest represents the response of the \textit{Strong PUF}, which can be used in any security application.\\
+\indent
+It must be noted that the hash of the challenge is mandatory, because hashing the XOR of the PUF response directly with the challenge value might produce the same digest of hashing the sole response. For instance, if the response of a PUF cell is logic-0 when the challenge is equal to logic-0, the XOR between the response and the challenge produces a logic-0 output. At the same time, if the response is logic-1 when the challenge is equal to logic-1, the same XOR operation produces a logic-0 output again. It follows that using the scheme represented by Equation~\ref{eq:hashsimple}, the resulting responses might be the same, even if responses mutate as the challenges vary.\\
+\indent
+Consequently, Equation~\ref{eq:hashcomplex} addresses this issue by hashing the challenge before XORing its digest with the PUF response. Indeed, even if the challenge varies by only 1 bit, its digest changes significantly.\\
+\indent
+
+We implemented the scheme represented by Equation~\ref{eq:hashcomplex} using SHA-256 \cite{sha256rfc} as hash function. In particular, we adopted a third-party IP core distributed on \textit{OpenCores.org} \cite{sha256}. The resource utilization and the performances are summarized in Table~\ref{tab:sha256}.\\
+\indent
+Since performances are not a crucial requirement for this scheme, it is possible to adopt slower and smaller SHA-256 implementations, or to switch to simpler hash algorithms, such as MD5 \cite{md5rfc}. Indeed, typically only 128 or 256 bit of PUF response and of challenge have to be hashed.
+For instance, using the implementation of SHA-256 on the Spartan-3E, to hash 256 bit of PUF about 100 nanoseconds are required. Moreover, in case of SoPC devices, it is possible to minimize the resource utilization by implementing the hashing procedures as software algorithms executed on the Processing System.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|c|c|c|}
+\cline{2-4}
+\multicolumn{1}{c|}{}                                 & \textbf{MiB/s} & \textbf{LUTs} & \textbf{Flip-Flops} \\ \hline
+\multicolumn{1}{|l|}{\textbf{Xilinx Spartan-3E (XC3S1200E)}} & 293          & 11.05\%        & 6.55\%              \\ \hline
+\multicolumn{1}{|l|}{\textbf{Xilinx Zynq-7000 (XC7Z020)}}    & 799          & 3.70\%        & 1.37\%              \\ \hline
+\end{tabular}
+\caption{SHA-256 resource utilization.}
+\label{tab:sha256}
+\end{table}
+
+
+\end{document}

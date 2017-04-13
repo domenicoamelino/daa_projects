@@ -1,0 +1,409 @@
+PWD F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.tex
+OUTPUT capitolo2.log
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/subfiles/subfiles.cls
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/subfiles/subfiles.cls
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/tools/verbatim.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/tools/verbatim.sty
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/tesi.tex
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/tesi.tex
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/book.cls
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/book.cls
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/bk12.clo
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/bk12.clo
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/psnfss/helvet.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/psnfss/helvet.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/keyval.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/keyval.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/inputenc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/inputenc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/utf8x.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/utf8x.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/ucs.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/ucs.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/uni-global.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/uni-global.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/geometry/geometry.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/geometry/geometry.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifpdf.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifpdf.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifvtex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifvtex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/ifxetex/ifxetex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/ifxetex/ifxetex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/geometry/geometry.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/geometry/geometry.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/babel/babel.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/babel/babel.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/bblopts.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/bblopts.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/babel-english/english.ldf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/babel-english/english.ldf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/babel/babel.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/babel-italian/italian.ldf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/babel-italian/italian.ldf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/etoolbox/etoolbox.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/etoolbox/etoolbox.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/misc/etex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/misc/etex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/refstyle/refstyle.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/refstyle/refstyle.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/refstyle/refstyle.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/refstyle/refstyle.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/float/float.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/float/float.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/textcomp.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/textcomp.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ts1enc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ts1enc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdfpages/pdfpages.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdfpages/pdfpages.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ifthen.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ifthen.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/tools/calc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/tools/calc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/eso-pic/eso-pic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/eso-pic/eso-pic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/atbegshi.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/atbegshi.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/infwarerr.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/infwarerr.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ltxcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ltxcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/xcolor/xcolor.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/xcolor/xcolor.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/xcolor/xcolor.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/color.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/color.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdftex-def/pdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdftex-def/pdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/graphicx.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/graphicx.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/graphics.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/graphics.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/trig.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/graphics/trig.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/graphics.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/graphics.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdfpages/pppdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/pdfpages/pppdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amscls/amsthm.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amscls/amsthm.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsmath.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsmath.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amstext.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amstext.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsgen.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsgen.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsbsy.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsbsy.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsopn.sty
+INPUT C:/Users/HyperText/AppData/Roaming/MiKTeX/2.9/tex/latex/amsmath/amsopn.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/amssymb.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/amssymb.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/amsfonts.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/amsfonts.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/setspace/setspace.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/setspace/setspace.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/esint/esint.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/esint/esint.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/subfiles/subfiles.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/subfiles/subfiles.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/subcaption.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/subcaption.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/caption.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/caption.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/caption3.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/caption/caption3.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/overpic/overpic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/overpic/overpic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/eepic/epic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/eepic/epic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/captdef/captdef.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/captdef/captdef.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/epstopdf.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/epstopdf.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/epstopdf-base.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/epstopdf-base.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/grfext.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/grfext.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/kvdefinekeys.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/kvdefinekeys.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/kvoptions.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/kvoptions.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/kvsetkeys.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/kvsetkeys.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/etexcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/etexcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifluatex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/ifluatex.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/pdftexcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/pdftexcmds.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/hyperref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/hyperref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/hobsub-hyperref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/hobsub-hyperref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/hobsub-hyperref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/hobsub-generic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/hobsub-generic.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/pd1enc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/pd1enc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/hyperref.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/00miktex/hyperref.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/puenc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/puenc.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ltxmisc/url.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ltxmisc/url.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/hpdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/hpdftex.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/rerunfilecheck.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/oberdiek/rerunfilecheck.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/breakurl/breakurl.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/breakurl/breakurl.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/xkeyval/xkeyval.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/xkeyval/xkeyval.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/xkeyval/xkeyval.tex
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/fancyhdr/fancyhdr.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/fancyhdr/fancyhdr.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/multirow/multirow.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/multirow/multirow.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/appendix/appendix.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/appendix/appendix.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/listings.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/listings.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/lstmisc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/lstmisc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/listings.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/listings/listings.cfg
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/psnfss/courier.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/psnfss/courier.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/titlesec/titletoc.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/titlesec/titletoc.sty
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.aux
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.aux
+OUTPUT capitolo2.aux
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ts1cmr.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/base/ts1cmr.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/ucsencs.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/ucs/ucsencs.def
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/context/base/supp-pdf.mkii
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/context/base/supp-pdf.mkii
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/nameref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/hyperref/nameref.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/gettitlestring.sty
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/generic/oberdiek/gettitlestring.sty
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.out
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.out
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.out
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.out
+OUTPUT capitolo2.pdf
+OUTPUT capitolo2.out
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr17.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmbx12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmti12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr17.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmbx12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmbx12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr8.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr6.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmmi12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmmi8.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmmi6.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmsy10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmsy8.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmsy6.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmex10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/umsa.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/umsa.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/umsb.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/amsfonts/umsb.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/esint/uesint.fd
+INPUT C:/Program Files (x86)/MiKTeX 2.9/tex/latex/esint/uesint.fd
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msam5.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/tfm/public/esint/esint10.tfm
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/jknappen/ec/tcrm1200.tfm
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmr12.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmbx12.tfm
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmbx10.tfm
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/sram6t.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/sram6t.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/sram6t.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled-points.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled-points.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/cross-coupled-points.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/butterfly.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/butterfly.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/butterfly.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiter.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiter.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiter.png
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/public/cm/cmti10.tfm
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiterdelay.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiterdelay.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/arbiterdelay.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdl.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdl.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdl.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delaycharacterization.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delaycharacterization.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delaycharacterization.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delayabstraction.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delayabstraction.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delayabstraction.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdlsystem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdlsystem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/pdlsystem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillator.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillator.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillator.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rosum.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rosum.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rosum.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorfar.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorfar.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorfar.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorconfigurable.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorconfigurable.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorconfigurable.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorcro.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorcro.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/ringoscillatorcro.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rofrequency.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rofrequency.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/rofrequency.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/spatial_frequency_RO.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/spatial_frequency_RO.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/spatial_frequency_RO.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/jknappen/ec/tcrm0800.tfm
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/tfm/jknappen/ec/tcrm0600.tfm
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/temperatureaware.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/temperatureaware.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/temperatureaware.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero_bousset.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero_bousset.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/tero_bousset.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delay_elem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delay_elem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/delay_elem.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/lpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/lpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/lpuf.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/simple_anderson_cell.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/simple_anderson_cell.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/virtex5structure.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/virtex5structure.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/andersonpufdisposition.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/andersonpufdisposition.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/andersonpufdisposition.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/composite.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/composite.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/composite.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/feedforward.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/feedforward.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/images/feedforward.png
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/intestazione.pdf
+INPUT F:/Users/HyperText/Desktop/uni/Dropbox/Tesi/Tesi_Latex/capitolo2/capitolo2.aux
+INPUT C:/Users/HyperText/AppData/Local/MiKTeX/2.9/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1200.pk
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy6.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/esint/esint10.pfb
+INPUT C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msam10.pfb

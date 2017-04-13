@@ -1,0 +1,285 @@
+%% LyX 2.1.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[bibliography=totoc,12pt,oneside,english,italian,american]{book}
+\usepackage{helvet}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage[a4paper]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3.5cm,rmargin=2.5cm,headheight=2cm,headsep=0.5cm}
+\pagestyle{empty}
+\setcounter{tocdepth}{3}
+\setlength{\parskip}{\smallskipamount}
+\setlength{\parindent}{0pt}
+\usepackage[english,italian]{babel}
+\usepackage{refstyle}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{pdfpages}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{esint}
+\usepackage{subfiles}
+\usepackage{msg}
+%\usepackage[pdftex]{graphicx}
+\usepackage{subcaption}
+%\usepackage{float}
+\usepackage{overpic}
+\usepackage{captdef}
+\usepackage{epstopdf}
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+%\usepackage[nottoc,numbib]{tocbibind}
+\doublespacing
+
+
+\newcommand{\acronym}[2]{
+	\newboolean{acronym#1}
+	\setboolean{acronym#1}{true}
+	\expandafter\newcommand\expandafter{\csname acronym#1\endcsname}{#2}
+}
+\newcommand{\printlongacronym}[2]{\unskip #2 (#1)\ignorespaces}
+\newcommand{\printshortacronym}[1]{\unskip #1\ignorespaces}
+\newcommand{\ac}[1]{
+	\ifthenelse{\boolean{acronym#1}}%
+	{\ignorespaces\printlongacronym{#1}{\csname%
+			acronym#1\endcsname}\ignorespaces%
+		\setboolean{acronym#1}{false}\ignorespaces}%
+	{\ignorespaces\printshortacronym{#1}}
+}
+
+\acronym{TPM}{Trusted Platform Module}
+\acronym{PUF}{Physically Unclonable Function}
+\newcommand{\puf}{\ac{PUF}}
+\newcommand{\tpm}{\ac{TPM}}
+
+\usepackage[unicode=true,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{pdftitle={Intellectual Property protection Mechanism adopting new low-cost hardware techniques},
+ pdfauthor={Domenico Amelino}}
+\usepackage{breakurl}
+
+\makeatletter
+
+\sloppy
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+
+\AtBeginDocument{\providecommand\figref[1]{\ref{fig:#1}}}
+\AtBeginDocument{\providecommand\subref[1]{\ref{sub:#1}}}
+%% A simple dot to overcome graphicx limitations
+\newcommand{\lyxdot}{.}
+\renewcommand{\arraystretch}{1.3}
+\newcommand{\xor}{\mathbin{\oplus}}
+
+\RS@ifundefined{subref}
+  {\def\RSsubtxt{section~}\newref{sub}{name = \RSsubtxt}}
+  {}
+\RS@ifundefined{thmref}
+  {\def\RSthmtxt{theorem~}\newref{thm}{name = \RSthmtxt}}
+  {}
+\RS@ifundefined{lemref}
+  {\def\RSlemtxt{lemma~}\newref{lem}{name = \RSlemtxt}}
+  {}
+
+
+\renewenvironment{figure}[1][]{%
+  \def\@captype{figure}%
+  \par\nobreak\begin{center}\nobreak}
+  {\par\nobreak\end{center}}
+  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+\@ifundefined{date}{}{\date{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+% INTESTAZIONI
+% -----------------
+
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\cfoot{\thepage}
+\chead{\includegraphics[width=\textwidth]{intestazione.pdf}}
+
+
+% SFONDO
+% ----------
+
+\usepackage{eso-pic,graphicx}
+\makeatletter
+\newcommand\BackgroundPicture[2]{
+\setlength{\unitlength}{1pt}
+\put(0,\strip@pt\paperheight){
+\parbox[t][\paperheight]{\paperwidth}{
+\vfill
+\centering\includegraphics[angle=#2]{#1}
+\vfill
+}
+}
+}
+\makeatother
+
+
+% AGGIUNGERE APPENDICE
+% -----------------
+\usepackage[titletoc]{appendix}
+
+
+%per i codici
+%-----
+
+%\usepackage[hang,small,bf]{caption}
+\usepackage{listings,xcolor,courier}
+
+\definecolor{Maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+\lstdefinelanguage{XML_android}
+{
+    alsoletter=-,
+    basicstyle=\ttfamily\footnotesize,
+    morestring=[b]",
+    moredelim=*[s][\color{Maroon}]{<}{\ },
+    moredelim=[s][\color{Maroon}]{</}{>},
+    moredelim=[l][\color{Maroon}]{/>},
+    moredelim=[l][\color{Maroon}]{>},
+    morecomment=[s]{<?}{?>},
+    morecomment=[s]{<!--}{-->},
+    morecomment=[s]{<!}{>},
+    commentstyle=\color{darkgreen},
+    stringstyle=\color{blue},
+    identifierstyle=\color{red}
+}
+
+\lstdefinelanguage{XML_SYNTAX}{%
+    morekeywords={id},
+    alsoletter=-,
+    morestring=[b]",
+    stringstyle=\color[rgb]{0,0,1},
+    morecomment=[s]{<?}{?>},
+    morecomment=[s]{<!--}{-->},
+    morecomment=[s]{<!}{>},
+    commentstyle=\color{darkgreen},
+    moredelim=[s][\color{black}]{![}{]]},
+    moredelim=*[s][\color{Maroon}]{<}{>},
+    keywordstyle=\color{red}
+}
+
+\lstset{
+    % Basic design
+    backgroundcolor=\color[rgb]{1.0,1.0,1.0},
+    basicstyle=\tiny,
+    breaklines=true,
+    frame=l,
+    tabsize=1,
+    % Line numbers
+    xleftmargin={0.25cm},
+    numbers=left,
+    stepnumber=1,
+    firstnumber=1,
+    numberfirstline=true,
+    % HTML formatting
+    language=XML_SYNTAX,
+}
+
+\lstset{inputpath=capitolo4/}
+
+
+% PER FORMATTARE CORRETTAMENTE LE LISTE DI FIGURE E TABELLE
+% -----------------
+\usepackage{titletoc}
+\dottedcontents{figure}[4.5em]{}{4em}{0.75em}
+
+%multi riga
+\renewcommand{\multirowsetup}{\centering}
+
+\makeatother
+
+%\captionsetup[figure]{aboveskip=20pt}
+%\captionsetup[figure]{belowskip=20pt}
+
+\begin{document}
+
+
+\begin{frontmatter}
+\pagenumbering{Roman}
+
+\includepdf[pages=-]{frontespizio}
+
+\AddToShipoutPicture{\BackgroundPicture{logo.png}{0}}
+\setcounter{page}{1}
+
+\tableofcontents{}
+
+\listoffigures
+
+
+\listoftables
+
+
+
+\end{frontmatter}
+
+\begin{mainmatter}
+
+
+
+\subfile{introduzione.tex}
+
+\subfile{introduction.tex}
+
+\subfile{capitolo1/capitolo1.tex}
+
+\subfile{capitolo2/capitolo2.tex}
+
+\subfile{capitolo3/capitolo3.tex}
+
+\subfile{capitolo4/capitolo4.tex}
+
+\subfile{"conclusioni e sviluppi futuri.tex"}
+
+\begin{appendices}
+\setcounter{figure}{0}
+\setcounter{section}{0}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\renewcommand{\thetable}{A.\arabic{table}}
+\renewcommand{\thesection}{A.\arabic{section}}
+
+\subfile{appendicea.tex}
+
+\end{appendices}
+
+%\input{ringraziamenti.tex}
+
+\end{mainmatter}
+
+\begin{backmatter}
+
+
+\cleardoublepage
+
+\phantomsection
+
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{IEEEabrv,bibliography}
+%%\input{bibliografia.tex}
+
+\end{backmatter}
+\end{document}

@@ -1,0 +1,30 @@
+size 11.5 6
+set font texcmr hei 0.4
+
+! set texlabels 1
+
+begin graph
+	scale auto
+	xtitle "Size (kB)"
+	ytitle "Latency (ms)"
+	key pos br hei 0.35
+	
+	xaxis nticks 4
+	xsubticks off
+	xaxis min 128 max 640
+	
+	yaxis min 100 max 1100 nticks 10
+	
+	yaxis grid dticks grid
+
+	x2axis off
+	y2axis off
+	
+	
+	data "aescbc.txt"
+	d1 lstyle 1 lwidth 0.05 color blue key "AES-128 (CBC)"
+	
+	data "aesgcm.txt"
+	d2 lstyle 1 lwidth 0.05 color red key "AES-128 (GCM)"
+	
+end graph

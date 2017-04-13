@@ -1,0 +1,38 @@
+size 11.5 6
+set font texcmr hei 0.4
+
+! set texlabels 1
+
+begin graph
+	scale auto
+	xtitle "Size"
+	ytitle "Latency (ms)"
+	key pos br hei 0.35
+	
+	xaxis nticks 5
+	xsubticks off
+	xaxis log min 100 max 10000
+	xplaces 100 1000 5000 10000
+    xnames "100 kB" "1 MB" "5 MB" "10 MB"
+	
+	yaxis log min 1 max 1000
+	yplaces 1 10 100 1000 1000
+    ynames "1" "10" "100" "1000"
+
+	x2axis off
+	y2axis off
+	
+	
+	data "md5.txt"
+	d1 lstyle 1 lwidth 0.02 color green key "MD5"
+	
+	data "sha1.txt"
+	d2 lstyle 1 lwidth 0.02 color blue key "SHA-1"
+	
+	data "sha256.txt"
+	d3 lstyle 1 lwidth 0.02 color red key "SHA-256"
+	
+	data "sha512.txt"
+	d4 lstyle 1 lwidth 0.02 color black key "SHA-512"
+	
+end graph

@@ -1,0 +1,15 @@
+tex {\small 100}
+tex {\small 200}
+tex {\small 300}
+tex {\small 400}
+tex {\small 500}
+tex {\small 600}
+tex {\small 700}
+tex {\large Latency (ms)}
+tex {\small 128}
+tex {\small 256}
+tex {\small 384}
+tex {\small 512}
+tex {\small 640}
+tex {\large Size (kB)}
+tex {\tiny 2 muxes}

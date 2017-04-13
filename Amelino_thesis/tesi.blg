@@ -1,0 +1,83 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: tesi.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: bibliography.bib
+Warning--string name "march" is undefined
+--line 382 of file bibliography.bib
+Warning--I didn't find a database entry for "maes2010intrinsic"
+Warning--I didn't find a database entry for "sumrall2003trusted"
+Warning--I didn't find a database entry for "brickell2004direct"
+Warning--I didn't find a database entry for "chaum1991group"
+Warning--I didn't find a database entry for "brickell2008new"
+Warning--I didn't find a database entry for "chen2009daa"
+Warning--I didn't find a database entry for "brickell2010pairing"
+Warning--I didn't find a database entry for "ge2007direct"
+Warning--I didn't find a database entry for "wachsmann2010lightweight"
+Warning--I didn't find a database entry for "zhang2014mdaak"
+Warning--I didn't find a database entry for "yang2014lightweight"
+Warning--I didn't find a database entry for "yang2015daa"
+Warning--I didn't find a database entry for "xi2014direct"
+Warning--I didn't find a database entry for "chen2010design"
+-- IEEEtran.bst version 1.12 (2007/01/11) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in herder2014physical
+Warning--empty journal in yu2010recombination
+Warning--empty journal in feitenanalysis
+Warning--empty year in feitenanalysis
+Warning--empty journal in su2007isscc
+Warning--empty author in globalplatform2011TEE
+Warning--empty booktitle in globalplatform2011TEE
+Warning--empty author in globalplatform2010TEE
+Warning--empty booktitle in globalplatform2010TEE
+Warning--empty journal in jonsson2003public
+
+Done.
+You've used 76 entries,
+            4024 wiz_defined-function locations,
+            1184 strings with 21943 characters,
+and the built_in function-call counts, 55492 in all, are:
+= -- 4226
+> -- 1418
+< -- 415
++ -- 753
+- -- 252
+* -- 2595
+:= -- 7994
+add.period$ -- 193
+call.type$ -- 76
+change.case$ -- 74
+chr.to.int$ -- 1014
+cite$ -- 86
+duplicate$ -- 4061
+empty$ -- 4971
+format.name$ -- 318
+if$ -- 12951
+int.to.chr$ -- 0
+int.to.str$ -- 76
+missing$ -- 731
+newline$ -- 251
+num.names$ -- 69
+pop$ -- 1915
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 4280
+stack$ -- 0
+substring$ -- 2458
+swap$ -- 3110
+text.length$ -- 77
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 76
+warning$ -- 10
+while$ -- 265
+width$ -- 78
+write$ -- 691
+(There were 25 warnings)

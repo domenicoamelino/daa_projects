@@ -1,0 +1,52 @@
+\documentclass[tesi.tex]{subfiles}
+\graphicspath{{/}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\begin{document}
+\chapter*{\addcontentsline{toc}{chapter}{Introduction}Introduction}
+
+The term \textit{intellectual property} (IP) refers broadly to the creations of the human mind for which exclusive rights are recognized. Formally, intellectual property is defined as any ``\textit{original creative work manifested in a tangible form that can be legally protected}'' \cite{ipdefinition}. The right to this property refers to controlling the way the IP is accessed, used and/or distributed, and it protects the interests of the creators by giving them the property rights over their creations. In addition to protecting their creations, IP owners can maximize the value of their IPs by licensing out or franchising them. Therefore, intellectual properties protection is a complex duty with aspects that may fall under various fields, such as legal law, information technology, and human resources.\\
+\indent
+With regard to computer technology, two major security threats are IP cores piracy and the production of counterfeit components. In particular, the term IP core is used to refer to software or hardware designs that can be executed or synthesized on integrated circuits (ICs). In this thesis, we refer to software IP cores as executable designs generated from programming language primitives and components, while hardware IP cores are in the form of synthesized gate-level designs directly implementable in hardware.\\
+\indent
+Traditionally, in order to protect intellectual properties great attention has been given to the problem of securing computing systems at the software level. Indeed, software piracy has always received more attention compared to hardware because it is more affordable in terms of costs, requiring low-cost resources that are available to the general public.
+%DA CAMBIARE
+%Moreover, a software application, even if it is produced by a third party, can be altered, elaborated and tested easier than a hardware component. Instead, the production of a hardware component is typically committed to third parties (foundries), which may slightly alter the original design in order to match their specific technologies.
+%
+However, since integrated circuits are used in every electronic device, the security threat, financial loss and economic impacts of hardware piracy and of production of counterfeit components, is even more dramatic than software \cite{Alkabani2007}. Protection of hardware is also crucially important since design houses go into contract with external foundries to fabricate their designs. The contract agreement between the foundry and design house is protected by IP rights, but this model creates a trust issue between the involved parties: an untrusted foundry can potentially make extra/overproduced ICs or clone the original design. Indeed, it is estimated that the computer hardware, computer peripherals, and embedded systems are the dominant pirated IP components \cite{alliance2002value}. For instance, according to a report by IHS \cite{counterfeit2012}, counterfeit electronic chips and semiconductors cause losses of up to \$ 169 billion a year to the electronic industry.\\
+\indent
+With the introduction and the growth of field-programmable gate arrays (FPGAs), new concerns about hardware security have been arised and IP protection has become even more crucial. Indeed, FPGA's reprogramming capability enables a system designer to reuse purchased third-party IP cores. Moreover, modern FPGAs have reduced the gap with application specific integrated circuits (ASICs), by embedding powerful processing systems, devising System on Programmable Chips (SoPCs). Thus, a new market segment has emerged, called reconfigurable computing, which exploits the reconfigurability of FPGA technology in order to provide hardware accelerators for software tasks. Therefore, both softwares IP cores, which run on SoPCs, and hardware IP cores, which are programmed in FPGAs, have to be protected. This problematic highlights the need of new additional protection schemes and defensive mechanism in order to guarantee the property rights to IP creators.\\
+\indent
+To prevent IP piracy, IP vendors enforce a binding licensing agreement with their customers by embedding a protection mechanism inside their designs or by providing their IPs in encrypted form. The latter approach is indeed the most prevalent in FPGA-based designs \cite{narasimhan2012hardware}, and is typically based on a trusted third party (TTP) which acts as a mandatory intermediary between the IP vendor and its customers. In fact, typically IP vendors sell and release their hardware IP cores as encrypted bitstream files, which contain the new FPGA configuration relative to the designed IP core. In this protection scheme, the TTP assumes the role of trusted authority, which has knowledge and embeds the cryptographic key inside the FPGA device.\\
+\indent
+Recently, an alternative approach has been introduced. Mainly, the idea is to implement a Digital Right Management (DRM) infrastructure in the software domain for the protection, distribution, modification and enforcement of the rights associated with the use of digital contents. DRM implementations are often based on trusted computing platforms, which provide the above benefits as a native feature. Such platforms mount an additional chip, the Trusted Platform Module (TPM), which provides security functions such as platform attestation, protected storage and sealing, to measure and validate the hardware and/or software configurations of the platform \cite{tpmspec}.\\
+\indent
+Security of the above IP protection mechanisms can be enhanced by means of Physically Unclonable Functions (PUFs), which provide unique digital signatures, generated from physical properties of the device in which they are embedded. Indeed, by exploiting their outstanding properties of unclonability and unpredictability, and since they are tamper-evident, it is possible to develop new and more secure IP protection mechanisms. Moreover, PUFs have become more attractive since they can be implemented on every device and they can be exploited in order to implement defensive schemes even on low-cost FPGAs that do not have built-in cryptography engines. Indeed, in the literature many PUF designs and IP protection protocols are available for both ASIC and FPGA technologies.
+
+
+\section*{Thesis Contribution}
+In this thesis, our aim is to provide an analysis of the available IP protection mechanisms, and to contribute with new solutions exploiting PUFs properties with SoPC and FPGA technologies.\\
+\indent
+Some of the work done during the thesis development has been published in academic conferences. In the following we list the papers developed during the thesis work:
+\begin{itemize}
+	\item M. Barbareschi, P. Bagnasco, and A. Mazzeo, ``Supply voltage variation impact on anderson puf quality'', in \textit{Design \& Technology of Integrated Systems In Nanoscale Era (DTIS). 2015 10th IEEE International Conference On.} IEEE, 2015, pp. 1--6.
+	\item M. Barbareschi, A. Mazzeo, and P. Bagnasco, ``Implementing reliable mechanisms for ip protection on low-end fpga devices'', March 2015. URL \url{http://www.date-conference.com/conference/workshop-w10}. DATE W10 TRUDEVICE 2015, online publication.
+\end{itemize}
+
+
+
+\section*{Manuscript Remainder}
+This thesis is structured as follows:
+\begin{itemize}
+	\item The Chapter 1 presents current hardware security threats which exploit FPGAs vulnerabilities, and the available countermeasures;
+	\item The Chapter 2 provides an extensive analysis on silicon PUFs, their properties and the available implementations using FPGA technology;
+	\item The Chapter 3 introduces security mechanisms and protection protocols exploiting PUFs documented in the literature;
+	\item In Chapter 4 we define and implement new solutions in order to provide IP protection by means of PUFs. We present licensing and defensive mechanisms for both low-end FPGAs and more complex SoPCs, by exploiting obfuscation, cryptography and TPM. Moreover, we present an innovative enrollment scheme, which allows to dynamically and remotely collect PUF's challenge-response pairs;
+	\item At the end, Chapter 5 concludes this thesis, and provides indications about future directions and developments;
+	\item Appendix A presents a detailed analysis on the Anderson PUF, describing its porting process for Xilinx Spartan-3E FPGAs, and experimental evaluating its qualities under different environmental conditions.
+\end{itemize}
+
+
+\end{document}

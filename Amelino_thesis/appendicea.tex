@@ -1,0 +1,39 @@
+\documentclass[tesi.tex]{subfiles}
+\graphicspath{{images/}{images/noChallenge/}{images/withChallenge/}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+\begin{document}
+\chapter*{\addcontentsline{toc}{chapter}{A: Direct Anonymous Attestation }Appendix A: Direct Anonymous Attestation}
+
+A few solutions are focused on integrating DAA in existing trusted platforms, like ARM TrustZone,
+supporting security-critical services in microprocessor platforms.
+TrustZone, in particular, provides a secure area in the main processor, the Trusted Execution Enviroment (TEE),
+guaranteeing that the code and data loaded inside that area are protected:
+when a user invokes a secure operation, the system switches from the normal environment, called Rich Execution Environment (REE), to TEE.
+%
+While TrustZone does not support the DAA in itself, a few DAA proposals for mobile devices are built on top ot its architecture.
+Wachsmann et al~\cite{wachsmann2010lightweight} propose a lightweight anonymous authentication scheme
+without linkability for embedded device exploiting TrustZone primitives.
+% However, it does not allow user to choice the level of required security.
+In~\cite{zhang2014mdaak} Zhang et al. proposed \emph{Mdaak}, a DAA framework for mobile platform
+and, similarly, Yang et al.~\cite{yang2014lightweight} propose a detailed infrastructure for four ECC-based DAA implementations.
+Nevertheless, neither work provides any protection mechanism for DAA data and, further,
+the overhead introduced by TrustZone TEE/REE context switching is ignored.
+
+In~\cite{yang2015daa} a DAA scheme based on TrustZone functionalities is realized.
+Additionally, this solution relies on SRAM PUF as a root of trust,
+considers the pre-computation of heavier setup values in order to realize a quite expensive execution,
+and further reduces the context switch overhead between TEE and REE.
+% However, the work does not describe any practical application context. 
+%
+In addition to the previous proposals, the technical literature offers several comparisons among different DAA schemes
+useful to identify the best DAA scheme choice for a specific infrastructure and domain~\cite{xi2014direct,chen2010design}.
+
+
+\end{document}

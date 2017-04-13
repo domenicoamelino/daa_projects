@@ -1,0 +1,441 @@
+\documentclass[../tesi.tex]{subfiles}
+\graphicspath{{../}}
+\lstset{inputpath=}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+\sloppy
+
+\begin{document}
+\chapter{Implementation of Reliable Mechanisms to Secure IP Cores}
+\begin{quotation}
+\emph{In this Chapter we discuss the implementation of IP protection mechanisms exploiting the Anderson PUF. In particular, we implemented a licensing mechanism to secure HWIPs even on low-end FPGAs. Moreover, by means of Trusted Platform Module, we implemented a secure platform capable of loading encrypted HWIPs using the FPGA partial reconfiguration capability. Based on TPM, we also modified Android OS such that it can run only external and certified SWIPs (applications). We conclude this Chapter by proposing a new lightweight mechanism to remotely extend the initial TTP's CRPs set.}
+\end{quotation}
+
+\section{FSM-Based IP Licensing Mechanism}
+In this Section we introduce an implementation of the IP licensing mechanism proposed in \cite{zhang2015puf}, which allows old and low-end FPGAs to protect external IP cores without the adoption of cryptographic primitives. In particular, we implemented the protection scheme using a 60-bit Anderson PUF (Appendix A) on Xilinx Spartan-3E and Zynq-7000 FPGAs. The mechanism was briefly described in Section \ref{subsec:zhang}, and this Section introduces a detailed analysis.\\
+\indent
+
+\subsection{Analysis of the Mechanism}
+With regard to Figure~\ref{fig:fsmaugmented}, the FSM of the original IP core consists of 6 states ($S_0,...,S_5$), and $S_0$ is called the reset state. To implement an IP protection mechanism, \textit{M}-layer (\textit{M} is an even number) states are added to the original FSM by the IP Core Vendor. Any even number layer consists of \textit{m} states and any odd layer only contains one state.\\
+\indent
+The first transition step begins from the $S_r$ state with \textit{m} transitional edges to each of the other \textit{m} states. The second transition step goes from each of these \textit{m} states to the next odd layer. This behavior is repeated for all \textit{M} states. Eventually, the $S_0$ state is reached after \textit{M} transitions. In particular, without the proper PUF response, the STG would reach a state different than $S_0$. Indeed, the circuit is kept locked until the correct license unlocks it, in which the correct PUF response is required.
+\begin{figure}[h]
+\begin{centering}
+\includegraphics[scale=0.7]{images/fsmaugmented}
+\par\end{centering}
+
+\protect\caption{\label{fig:fsmaugmented}The binding FSM structure.}
+\end{figure}
+%
+The parameters \textit{M} and \textit{m} are chosen at design-time, and determine:
+\begin{itemize}
+	\item the number of steps required to reach the $S_0$ state;
+	\item the number of bits of the PUF response;
+	\item the number of bits of the license.
+\end{itemize}
+%
+To clarify the mechanism's behavior, we propose the example of Figure~\ref{fig:fsmexample}. In this case, \textit{m} is set to 4, while \textit{M} is not of interest.
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.85]{images/fsmexample}
+  \figcaption{An example of the FSM-binding scheme.}
+  \label{fig:fsmexample}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+Since \textit{m} is equal to 4, every transition from an odd-layer state to an even one requires 2 bits of PUF response. Moreover, every transition from an even-layer state to an odd one requires 2 bits of PUF response and 2 bits of license. In fact, the 2 bits of license are XOR'd with the 2 bits of PUF response.\\
+\indent
+It follows that every state transition requires $log_2(m)$ bits of PUF response. Therefore, the length of required response bits can be formulated as:
+\begin{equation}
+L_{PUF}=M*log_2(m)
+\end{equation}
+In particular, since an even-layer transition requires $log_2(m)$ bits of license, the license bit length can be calculated as:
+\begin{equation}
+L_{license}=\frac{M}{2}*log_2(m)
+\end{equation}
+The length of $L_{PUF}$ and $L_{license}$ has to be large enough to meet the needed security requirements.
+
+
+\subsection{Binding Scheme Protocol}
+How licenses are calculated and distributed is up to the employed protocol. Authors in \cite{zhang2015puf} proposed a binding scheme (Figure~\ref{fig:zhangprotocol}) with four actors, which steps we briefly describe as it follows:
+\begin{enumerate}
+	\item \textbf{FPGA Device Enrollment:} the FV initially tests the PUF for every piece of FPGA chip to achieve their random challenge-response pairs (CRPs) before selling them. The FV also generates $ID(PUF_i)$, which is a public unique 
+serial number of the \textit{i}-th PUF of a specific FPGA chip, and sells it to the SD;
+
+	\item \textbf{HW-IP Core Enrollment and Distributing:} the CV creates the IP with $ID(HW\hbox{-}IP_j)$ by employing the PUF-binding FSM in it. Then the CV synthesizes the $HW\hbox{-}IP_j$ into the bitstream to generate the new version. The CV stores $ID(HW\hbox{-}IP_j)$ and $HW\hbox{-}IP_j$, and releases $ID(HW\hbox{-}IP_j)$ for sale;
+	
+	\item \textbf{HW-IP Core Licensing:} when the SD requires to unlock the purchased $ID(HW\hbox{-}IP_j)$, it sends $ID(PUF_i)$ and $ID(HW\hbox{-}IP_j)$ to the CV. The CV will send $ID(PUF_i)$ to the FV to obtain the corresponding CRPs and then calculate licenses based on received PUF responses and the modified FSM. Finally, the licenses to unlock $ID(HW\hbox{-}IP_j)$ are sent to the SD. It must be noted that the CRPs have be securely transferred from the FV to the CV or SD;
+	
+	\item \textbf{FPGA-based product Licensing:} otherwise, if the EU would like to buy the products developed by the SD which run on the specific $PUF_i$, they should send $ID(PUF_i)$ and $ID(Product_j)$ to the SD. The SD will send $ID(PUF_i)$ to the FV to  obtain the corresponding CRPs and then calculates licenses based on the FPGA-PUF responses and the modified FSM. Finally, the license is sent to the EU to unlock $ID(Product_j)$.
+\end{enumerate}
+It should be noted that the computed licenses can be public and each PUF response is used to calculate an independent license, as long as PUF responses are not public (this problematic is discussed in the next Section).\\
+\indent
+
+The biggest benefit of this binding scheme is that the bitstream containing the IP core is not customized for each issued device, hence there is only a single bitstream for all FPGAs (of the same family), and its activation depends on a valid license. Moreover, the mechanism uses few resource, as described later, and is simple to implement.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.78\columnwidth]{images/zhangprotocol.png}
+	\caption[Binding scheme protocol.]{Binding scheme protocol \cite{zhang2015puf}.}
+	\label{fig:zhangprotocol}
+\end{figure}
+
+\subsection{Security Analysis}
+To analyze the security of this method, we consider the following existing
+attacks:
+\begin{itemize}
+	\item \textbf{Brute-force:} the adversary tries to guess the correct license to unlock the IP core. Nevertheless, the space of the correct licenses is exponential and makes this attack infeasible in the short-term. For instance, when the license is composed of 128 bits, the search space is composed of $2^{128}$ licenses;
+	
+	\item \textbf{FSM reverse-engineering:} an adversary tries to extract the STG and separates/removes the added STG from the original FSM. However, extracting the STG representation from large sequential circuits is computationally intractable \cite{oliveira1999robust}, \cite{cui2011robust}. Moreover, there exist effective methods against such attacks such as creating black holes in the added FSM and merging the added FSM with the test and other FSMs \cite{Alkabani2007};
+	
+	\item \textbf{Simulating PUF:} according to the PUF properties, it is unfeasible to duplicate a PUF with functional characteristics identical to another PUF;
+	
+	\item \textbf{Simulating FSM:} if an adversary collects enough authorized licenses and corresponding PUF responses of a HW-IP, he can recover the STG of the binding FSM, and compute new licenses. Indeed, if an attacker can read PUF responses (or if they are public), only $(m-1)*\frac{L_{PUF}}{log_2(m)}$ licenses are needed to extract the full FSM's STG. For instance, with $m=4$ and $M=30$, only 90 licenses are required. This attack is extremely trivial due to the XOR license mechanism. For example, with regard to Figure~\ref{fig:fsmexample}, an attacker sends $0000$ as PUF response to the CV and requires the license for it ($00$). The first two bits of the PUF response determine the transition to the $S_9$ state. To know the STG of the transition from $S_9$ to $S_{10}$ the attacker XORs the license with the next two bits of the PUF response. In this case, the transition is derived from $00\mathbin{\oplus}00=00$. To know the full STG of the second step, only three others PUF responses are needed. Indeed, by varying only the first 2 bits of the PUF response, all the transitions can be known. In our example of attack, the next exploiting PUF responses would be $0100$, $1000$, $1100$, with their respective licenses. It must be noticed that the value of the response bits which are XOR'd with the license is not important because the consequent state transition can be recovered by the trivial XOR operation. Moreover, not all the 4 responses/licenses are needed. Indeed, it is possible to automatically obtain the fourth transition of a layer after using the first three responses/licenses. To counter this attack, the protocol described in the previous Section involves the use of $ID(PUF_i)$ by the SD/EU instead of public PUF responses.
+\end{itemize}
+
+\subsection{Implementation and Experimental Results}
+We successfully implemented both the generator of the Added FSM and the calculator of the licenses.\\
+\indent
+With regard to the former, we developed a Java application which takes as input \textit{M} and \textit{m}, and generates the VHDL code of the Added FSM. In particular, both the transitions from an odd-layer state to an even one and from an even-layer state to an odd one are random generated on each run. Therefore, it is unlikely that two FSMs with the same \textit{M} and \textit{m} values are equal. Furthermore, since PUF responses are not fully reliable, we designed the Added FSM such that when the PUF response XOR'd with the license does not give the desired value, it resets itself and restarts from the initial state (trial and error approach). Therefore, the FSM can be stimulated by repeated, varied attempts which are continued until success, or until the \textit{agent} stops trying.\\
+\indent
+Moreover, the FSM generator produces two files: one contains the FSM's VHDL code, and the other contains the STG of the genereated FSM.\\
+\indent
+With regard to the licenses calculator, it takes as input a PUF response and, using the file containing the STG produced previously by the FSM generator, calculates the corresponding license.\\
+\indent
+
+We implemented the discussed binding method on both Xilinx Spartan-3E (XC3S1200E) and Zynq-7000 (XC7Z020) FPGAs. The resource utilization with $M=30$ and $m=4$, hence 60 PUF response bits and 30 license bits, is summarized in Table~\ref{tab:fsmutilization}.
+\begin{table}[h]
+\centering
+\begin{tabular}{l|c|c|c|}
+\cline{2-4}
+\multicolumn{1}{c|}{}                                 & \textbf{Slices} & \textbf{LUTs} & \textbf{Flip-Flops} \\ \hline
+\multicolumn{1}{|l|}{\textbf{Spartan-3E (XC3S1200E)}} & 1.25\%          & 1.11\%        & 0.43\%              \\ \hline
+\multicolumn{1}{|l|}{\textbf{Zynq-7000 (XC7Z020)}}    & 0.26\%          & 0.19\%        & 0.07\%              \\ \hline
+\end{tabular}
+\caption{FSM resource utilization ($M=30$, $m=4$).}
+\label{tab:fsmutilization}
+\end{table}
+
+
+
+\section{Exploiting Trusted Platform Module Scheme\label{sec:tpmexploit}}
+The Trusted Platform Module (TPM) is a specification
+for a secure cryptoprocessor, which is a dedicated microprocessor designed to secure hardware by integrating cryptographic keys into devices. Specifications are in the ISO/IEC 11889 of the Trusted Computing Group (TCG) \cite{tpmspec}, which defines the components and operations that a cryptoprocessor has to implement in order to build a chain of trust.\\
+\indent
+Authors in \cite{barbareschi2014advancing} were able to partially implement the TPM specifications and to build a chain of trust where the Xilinx Zynq-7000 FPGA plays the role of the root-of-trust. In particular, the chain of trust allows a designer to build a trusted platform which boot is secure and verified. Furthermore, trusted primitives must be available in order to guarantee an interface between the TPM and the applications installed on the platform.
+
+\subsection{Implementing the TPM Chain of Trust}
+Figure~\ref{fig:zynq} represents the internal architecture of the Xilinx Zynq-7000 FPGA. It mainly includes a Programmable Logic (Artix-7 FPGA), a Processing System (dual core ARM Cortex\texttrademark -A9 processor), several BUSes and I/O systems. The blocks painted in orange reside in a secure hardware perimeter which guarantees the anti-tampering property, trustworthiness and integrity to protect the system from the power-up and throughout its life cycle. In particular, AES \cite{aes}, SHA \cite{sha256rfc} and RSA \cite{rsarfc} are trusted cryptoprocessors built-in on the FPGA, which are exploited to implement the chain of trust.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.70\columnwidth]{images/zynq.png}
+	\caption{Xilinx Zynq-7000 internal architecture.}
+	\label{fig:zynq}
+\end{figure}
+%
+The partially TPM implemented in \cite{barbareschi2014advancing} involve a secure boot procedure, shown in Figure~\ref{fig:tpm}. The ARM processor starts executing the code residing in the ROM, and checks that the key source specified in the eFUSE/BRAM matches with the key source specified in the boot header. Then, the First Stage Boot Loader (FSBL) partition header is parsed in order to retrieve the location of the boot code and the boot configuration. These information are stored with encryption enabled, hence the FSBL has to be decrypted and authenticated (with the keys stored in the eFUSE/BRAM) by the AES/SHA engine before it can be loaded in RAM. Once the FSBL is verified, it loads the bitstream and the user application, which are both encrypted and authenticated using the AES and RSA primitives. When the bitstream and the application are verified and programmed, the secure boot is completed and it is guaranteed that it has not been compromised.
+%
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.70\columnwidth]{images/tpm.png}
+	\caption{Xilinx Zynq-7000 TPM's chain of trust.}
+	\label{fig:tpm}
+\end{figure}
+
+
+\subsection{Dynamic HWIP Protection}
+We exploited the TPM trusted platform and secure boot procedure described in \cite{barbareschi2014advancing} in order to implement dynamic HWIP protection. The mechanism is based on a Security Module (or Loader), which includes a PUF, a decryption engine and a mechanism controller. In particular, the scheme consists of programming the device with a Security Module, which decrypts external and encrypted partial bitstreams (HWIPs) using as key a specific PUF response, and then partially re-configures the FPGA with the decrypted bitstreams.\\
+\indent
+This mechanism is similar to the scheme proposed in \cite{simpson2006offline} and discussed in Section~\ref{subsec:hwip}. Nevertheless, while in \cite{simpson2006offline} the Security Module is entirely hardware and is programmed into the Programmable Logic, in our implementation the Security Module is a hybrid of software and hardware, which results in the architecture shown in Figure~\ref{fig:platform}. In particular, solely the PUF resides into the Programmable Logic part and is programmed only when the secure boot is performed with success. Conversely, the decryption engine and the mechanism controller are both implemented in software and executed by the Processing System.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.98\columnwidth]{images/zynqplatform.png}
+	\caption{Zynq Architecture for Dynamic HWIP Protection.}
+	\label{fig:platform}
+\end{figure}
+
+\subsubsection{Programming Procedure and Implementation}
+Assuming that the TPM secure boot procedure has been carried out with success, hence the Security Module has been loaded, the following steps are applied each time an encrypted partial bitstream has to be programmed:
+\begin{enumerate}
+	\item The partial bitstream is read from a storage peripheral;
+	\item The mechanism controller stimulates the PUF with the user-specified challenge and temporarily stores its response;
+	\item The encrypted partial bitstream is decrypted using as key the PUF response;
+	\item The decrypted bitstream is fed into the reconfiguration controller;
+	\item The Programmable Logic is programmed with the new HWIP core.
+\end{enumerate}
+
+With regard to the storage peripheral, which contains encrypted partial bitstreams, we used the platform Flash of the ZedBoard (32MB), while as PUF we adopted the Enhanced Anderson PUF (Appendix A). It should be noted that other peripherals as source of encrypted partial bitstreams, such as Ethernet, UART, SD card, etc.\\
+\indent
+Furthermore, we used as FPGA reconfiguration controller the Device Configuration interface (DevC), which is seen by Linux kernel as an external device, and it is driven by a software driver running on the Processing System (CPU). The DevC module takes as input a partial bitstream and, if valid, re-configures the Programmable Logic by means of the Xilinx PCAP interface.\\
+\indent
+Since the partial bitstream has to be decrypted before it is fed into the DevC module, we implemented in software AES-CBC and AES-GCM decryption engines.\\
+\indent
+Along with the DevC driver and the decryption algorithm, an additional software, namely mechanism controller, has been developed, which is in charge of reading the encrypted partial bitstream from the external peripheral of storage. It also applies the user-defined challenge to the PUF and gets its response by means of the AXI interface. In fact, the embedded PUF includes the \textit{S\_AXI\_LITE} interface, which is used to export control (challenge stimuli) and data registers (response output).\\
+\indent
+
+With regard to FPGA resource utilization, the only overhead is due to the area used by the PUF implementation (Appendix A). In fact, the other components of the Security Module are implemented in software and their image memory size is of 10 and 20 KBytes depending on the adopted decryption algorithm, AES-CBC or AES-GCM respectively. Therefore, due to its small size, the Security Module resides into the trusted On-Chip (OCM) Memory.\\
+\indent
+
+Since the programming procedure of an encrypted bitstream is composed of the five steps described above, it is interesting to evaluate how much time is required to perform each FPGA reconfiguration. Therefore, we performed experimental measurements to mainly estimate the latency introduced by the DevC module, by the decryption procedure and by the bitstream loading from the platform Flash. Moreover, we considered negligible the latency introduced to extract the PUF response since it is of only few microseconds (considering the Enhanced Anderson PUF implemented as strong PUF, Appendix A).\\
+\indent
+Figure~\ref{fig:devbench} reports the reconfiguration latency against the decrypted bitstream size, which is determined by the performance of the DevC module. As shown, the reconfiguration time linearly varies with the bitstream size, and the reconfiguration speed is of about 500Mbit\textbackslash s.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.85\columnwidth]{images/devbench.png}
+	\caption[ZedBoard reconfiguration delay.]{ZedBoard reconfiguration delay \cite{barbareschi2014mobile}.}
+	\label{fig:devbench}
+\end{figure}
+
+Furthermore, in Fig~\ref{fig:zynqaes} we report the latency introduced by the two AES decryption algorithms, implemented using the C programming language, and running on a 667 MHz dual ARM Cortex\texttrademark -A9. Their code is not optimized and may be eventually parallelized, but they can be used as valid indicator of performance.\\
+\indent
+The key size is of 128 bits for both algorithms. With regard to AES-GCM, the additional authenticated data size is of 128 bit, and both the initialization vector (IV) and the authentication tag are 96 bits long, while for the CBC mode the IV is 128 bits long.\\
+\indent
+As shown in Fig~\ref{fig:zynqaes}, AES in CBC mode is about twice faster than AES-GCM. However, AES-GCM provides additional security features, such as authentication and integrity verification of the decrypted data.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.90\columnwidth]{images/aestime.pdf}
+	\caption{AES performance (software).}
+	\label{fig:zynqaes}
+\end{figure}
+
+The last measure involved the time required to read an encrypted bitstream from the platform Flash. Nevertheless, since the flash on the ZedBoard can be read up to 400Mbit\textbackslash s, the latency introduced is about the same of the DevC module.\\
+\indent
+
+The total FPGA reconfiguration time can be calculated by adding all the delays summarized in Table~\ref{tab:delays}. In particular, we considered as best and worst case a bitstream size of 150 and 600 kBytes, respectively. With the use of AES-GCM, the best and the worst case are characterized by a latency of 280 and 1122 milliseconds, respectively.
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c|}
+\cline{2-3}
+\multicolumn{1}{c|}{}                                  & \textbf{Best case (150 kBytes)} & \textbf{Worst case (600 kBytes)} \\ \hline
+\multicolumn{1}{|l|}{\textbf{Reconfiguration}} & 2                               & 9                                \\ \hline
+\multicolumn{1}{|l|}{\textbf{AES-CBC}}    & 138                             & 553                              \\ \hline
+\multicolumn{1}{|l|}{\textbf{AES-GCM}}    & 248                             & 993                              \\ \hline
+\multicolumn{1}{|l|}{\textbf{Flash read}}              & 30                              & 120                                 \\ \hline
+\end{tabular}
+\caption{Delays involved during the dynamic HWIP protection procedure.}
+\label{tab:delays}
+\end{table}
+
+
+\subsubsection{Security Analysis}
+With regard to the architecture and the mechanism proposed above, the platform integrity and trustworthiness is guaranteed using the secure TPM boot procedure. Indeed, since the boot is performed using encrypted bitstreams and softwares, the Security Module can be considered as trusted and secure.\\
+\indent
+Furthermore, HWIP cores (partial bitstreams) are protected by means of cryptography, hence an attacker might only apply a bruteforce attack to retrieve in plain-text the original bitstreams. Additionally, the keys are the result of PUF outputs, thus they inherit most of their security properties. Moreover, a decrypted bitstream is not stored anywhere inside the platform, but it only temporarily resides in its volatile memory (RAM) during the reconfiguration process, which typically lasts for less than one second. However, even if the bitstream has been decrypted, an attacker has to reverse-engineer it before it can be used. \\
+\indent
+Additional security is provided by means of the OCM, which is part of the TPM security perimeter. In fact, all software modules and drivers reside inside it such that OCM security properties are automatically inherited and guaranteed trough the whole platform life-cycle.
+
+
+
+
+\subsection{Implementation of a Trusted Platform Exploiting Android OS\label{sec:tpmandroid}}
+The TPM implementation described above can be further exploited in order to build a trusted platform which is configured to install and to run only secured SWIPs (applications). In this case, the System Developer builds the platform and sells it to the End User. In particular, while the trusted platform may already integrate HWIPs instantiated by the SD, the EU is able to install additional and verified, i.e. bought, SWIPs purchased from IP Vendors.\\
+\indent
+Based on the scheme described above, the protection of the SWIPs sources is not strictly required. In fact, while an attacker might be able to run a SWIP on a non-trusted platform, it can not run it on a trusted platform. Moreover, the binding between a SWIP and a trusted platform can be enforced if a SWIP exploits, hence requires, an HWIP built-in inside the platform. Therefore, while the SWIP source code can be read and cloned, its execution might be vain on a non-trusted platform. However, if the SD/IV also wants to protect the source code of IP cores, cryptographic primitives or additional hypotheses have to be involved, as discussed further.\\
+\indent
+
+In order to implement the mechanism described above, we developed a modified version of Android Operating System \cite{android} which runs on the ZedBoard board (Xilinx Zynq-Z7020 SoC). The OS, based on specific PUF responses, performs the validation of external applications installed on the device. To this aim, we exploited the secure boot mechanism alongside with the TPM discussed in Section~\ref{sec:tpmexploit}. In particular, the secure boot procedure loads the modified version of Android and any HWIP cores integrated by the SD. After the boot procedure has been carried out with success, the trusted platform is secured, and additional software applications (files with \textit{.apk} extension) can be eventually installed.\\
+\indent
+
+It should be noted that the mechanism described above does not strictly define the parties involved. Therefore, any IP protection protocol can be adapted to be used with the proposed mechanism.\\
+\indent
+Further, we will address the IP Vendor as App Vendor (AV).\\
+
+
+\subsubsection{Android OS Architecture}
+We first briefly describe the Android stack architecture shown in Figure~\ref{fig:androidarchitecture}. The following analysis is referred to Android 4.2.2\_r1.2 (JellyBean MR1, vanilla version), and it is valid for Android versions up to 4.4.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.99\columnwidth]{images/androidarchitecture.jpg}
+	\caption{Stack architecture of Android Operating System.}
+	\label{fig:androidarchitecture}
+\end{figure}
+The basic layer is a patched version of the Linux Kernel. The whole Android OS is built on top of the Linux Kernel with some further architectural changes. On top of the Linux Kernel, there is the Hardware Abstraction Layer, which provides a level of abstraction of the device hardware by translating higher-level APIs in underlying hardware-specific drivers.\\
+\indent
+The next layer is composed of Android's native libraries, which are written in C or C++ programming language and are specific for a particular hardware. This is this layer that enables the device to handle different types of data. Additionally, on the same level there is the Android Runtime, which consists of the Dalvik Virtual machine and Core Java libraries.\\
+\indent
+The Application Framework layer, which is mostly written in Java, is a set of services that collectively form the environment in which Android applications run and are managed. In particular, this layer contains all the modules that applications directly interacts with.\\
+\indent
+The last layer is composed of third party user applications, which may interact with the device using the services offered by the underlying layer.
+
+
+\subsubsection{Application Compilation and Installation Procedure}
+An Android application is typically written with the Java programming language\footnote{However, Android applications can be also written using other languages, such as C/C++, at the expense of simplicity.}, and is formed of one or more Java classes, and one or more additional resources (such as XML files of the application layout, application images, etc.). Applications can also include external Java libraries, or they can use Java Native Interface (JNI) that enables Java code to interact with native code, hence they can implement programs specific to a hardware and operating system platform. In order to be executed, sources files of an Android application are compiled and packaged in an Android Package file (\textit{.apk}), as shown in Figure~\ref{fig:android}.\\
+\indent
+Android applications are executed by the Dalvik Virtual Machine (DVM), which is a Java virtual machine designed and optimized for systems that are constrained in terms of memory and processor speed. In particular, an application is first compiled to bytecode for the Java virtual machine, which is then translated to Dalvik bytecode and stored in \textit{.dex} files.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.95\columnwidth]{images/androidapk.png}
+	\caption{Compilation and packaging process of an Android application.}
+	\label{fig:android}
+\end{figure}
+
+An \textit{apk} package mainly presents the following structure (Figure~\ref{fig:apkstructure}):
+\begin{itemize}
+	\item \textit{AndroidManifest.xml} (file): essential information about the app to the Android system;
+	\item \textit{classes.dex} (file): merged Java classes compiled such that they can run on the DVM;
+	\item \textit{resources.arsc} (file): compiled resources;
+	\item \textit{META-INF} (directory): contains additional information, such as the hash of the files inside the package;
+	\item \textit{res} (directory): contains uncompiled resources (images, XML layouts, etc.).
+\end{itemize}
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.98]{images/apkstructure.png}
+  \figcaption{Internal structure of an \textit{apk} package.}
+  \label{fig:apkstructure}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+Based on the described Android architecture, we proceed by discussing the \textit{apk} installation procedure.\\
+\indent
+When an \textit{apk} has to be installed, the Package Manager service of the Application Framework handles the request. In particular, it verifies the \textit{apk} validity, by checking the permissions required by the application, the integrity of the files, if there is free space on the storage media, etc., and eventually installs the application. When an application is successfully installed, a copy of the original \textit{apk} is stored inside the \textit{/data/app/} folder, with the file name \textit{"package.of.application.apk"}. Furthermore, the Package Manager service tries to optimize the \textit{classes.dex} file, which can be thought as the \textit{executable of the application}. The optimization procedure involves the invocation of a specific command (\textit{dexopt}) implemented by the DVM, and the eventually optimized \textit{dex} assumes the file name of \textit{"data@app@package.of.application.apk@classes.dex"} and is stored inside the \textit{/data/dalvik-cache/} folder.
+
+
+\subsubsection{Execution of an Application}
+When an application has to be executed, its start-up request is handled by the Activity Manager service of the Application Framework, which mainly checks if the associated optimized \textit{dex} file exists inside the \textit{/data/dalvik-cache/} folder. In the negative case, it calls the Package Manager service of the Application Framework, which in turn calls the \textit{dex} optimization procedure. Eventually, the application, if valid, is run.
+
+
+\subsubsection{Adapting Android as Trusted Platform}
+In order to build the trusted platform described in Section~\ref{sec:tpmandroid}, we have modified few Android mechanisms and OS files. In particular, Figure~\ref{fig:androidprocedure} depicts the procedures and the files involved during the installation or the execution of a certified Android application. The detailed mechanism is described in the following.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.99\columnwidth]{images/androidprocedure.pdf}
+	\caption{Modified Android application installation/execution procedures.}
+	\label{fig:androidprocedure}
+\end{figure}
+
+As first step, we implemented the Enhanced Anderson PUF inside the Programmable Logic section of the device, including the \textit{S\_AXI\_LITE} interface, which is used to export control (challenge stimuli) and data registers (response output). The PUF is seen by Android OS as an external device with restricted permissions (only the root can access its registers). In particular, in order to stimulate the PUF and to get its response, a PUF driver has been written in C, and it has been compiled as a native shared library using the name \textit{"libpuf.so"}. Therefore, as described further, a system service with the right permissions first has to load the library before it can interacts with the PUF.\\
+\indent
+
+Moreover, to bind an application to a specific platform, we customized the structure of the \textit{AndroidManifest.xml} file.
+
+\lstinputlisting[label=manifest,caption=Example of a customized AndroidManifest.xml.,language=XML_android,captionpos=b]{manifest.xml}
+
+In particular, two \textit{meta-data} elements have been added (Listing~\ref{manifest}): the first one, named \textit{pufchallenge}, contains the hexadecimal (or binary) value of the PUF challenge; the second one, named \textit{encryptedHash}, contains the hexadecimal value of an encrypted hash digest. Its value is the hash digest of the \textit{classes.dex} file's content, which is encrypted by the App Vendor using as key the response given by the PUF when stimulated with the challenge \textit{pufChallenge}. It must be noted that the \textit{"x"} character before the actual challenge and hash values is mandatory, since without it the Android \textit{apk} packager might think that the values are integers and might transform them.\\
+\indent
+The primitives for both the encryption and the hash algorithms are not well-defined, and their adoption depends on the required security level. However, it is fundamental that the adopted cryptographic primitives are not vulnerable to know-plaintext attacks, as discussed in the next Section. With regard to the hash algorithm, it should be as simple and as fast as possible, since the hash digest is protected by encryption. Nevertheless, the produced digest has to be as unique as possible in order to be used as file/application identifier. Based on these considerations, for instance, AES-GCM is not required to verify the app integrity since there is already the hash digest which performs the same functionality. Indeed, since the hash digest is encrypted with a key which only the App Vendor knows about, it binds the application to the AV and to a specific platform. Furthermore, since it can not be modified, it also verifies the application integrity.
+\\
+\indent
+
+Along with the customized manifest, we also modified the \textit{PackageParser} class (\textit{android.content.pm} package, of the Package Manager service) such that, during the \textit{apk} installation, it can parse the two additional XML elements. In particular, the method \textit{parseMetaData()} has been modified such that it reads the challenge value specified inside the application manifest, and temporarily stores it. Then, the procedure continues by stimulating the PUF with the challenge value, reading the PUF response and using it as key to decrypt the \textit{encryptedHash} value of the application manifest. Eventually, it calculates the hash digest of the the \textit{classes.dex} file and compares it with the previously decrypted digest. If the two digests are equal the installation continues, otherwise it is aborted, returning a "parse error" (Figure~\ref{fig:androiderror}).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.80\columnwidth]{images/androiderror.png}
+	\caption{Parse error during the installation validation process.}
+	\label{fig:androiderror}
+\end{figure}
+
+After the installation has been carried out with success, a copy of the original application \textit{apk} is stored inside the \textit{/data/app/} folder, and the application executable (\textit{classes.dex} file) has to be optimized. Therefore, the \textit{dexopt} command is called by the invocation of the method \textit{performDexOptLI()} of the PackageManagerService class (\textit{com.android.server.pm} package). We modified this method such that it executes the same procedure performed by the \textit{parseMetaData()} method described above. Therefore, the method \textit{performDexOptLI()} reads the challenge value specified inside the application manifest of the original \textit{apk} file (inside the \textit{/data/app/} directory), and temporarily stores it. The procedure continues by stimulating the PUF with the challenge value, reading the PUF response and using it as key to decrypt the \textit{encryptedHash} value of the application manifest. Then, it compares the decrypted hash with the one of the \textit{classes.dex} file (the original \textit{dex}, not the optimized one).\\
+\indent
+While this procedure is the same that has been performed during the first step of the installation, it is not redundant. Indeed, as detailed further, this procedure addresses some security vulnerabilities.\\
+\indent
+However, after the check described above has been done with success, the \textit{classes.dex} is optimized and is stored inside the \textit{/data/dalvik-cache/} directory. Moreover, its new hash digest is calculated with the same \textit{performDexOptLI()} method. Then, the procedure performs the encryption of the new digest using as key the PUF response resulting from the challenge specified in the original manifest. Both the challenge and the encrypted digest values are written inside a \textit{"package.of.application"} text file stored inside the \textit{/data/} directory.\\
+\indent
+
+The application installation is now complete and it can be launched. The Activity Manager service of the Application Framework is in charge of handling applications execution requests. In particular, the method \textit{performLaunchActivity()} of the \textit{ActivityThread} class (\textit{android.app} package) is in charge of launching the main activity of an application. Therefore, we modified its code such that it can read the content of \textit{/data/package.of.application} text file (generated during the installation), which contains a challenge value and the encrypted hash digest of the optimized application's \textit{dex} file. Consequently, the modified \textit{performLaunchActivity()} decrypts the encrypted hash digest using as key the PUF response resulting from the read challenge value, and compares it with the digest of the optimized \textit{dex} file stored inside the \textit{/dalvik/cache/} directory. If the two digest values match, then the application is executed; otherwise an exception is thrown and the execution is immediately stopped.\\
+\indent
+It must be noted that since the associated ActivityThread process is executed with lower permissions compared to the ones of the Package Manager service process, when the Package Manager service creates the \textit{/data/package.of.application} file, it also has to associate to it appropriate read permissions.
+
+
+\subsubsection{Security Analysis}
+We provide a security analysis about the proposed mechanism by considering the following attacks:
+\begin{itemize}
+	\item \textbf{Altering the OS:} using the secure boot implemented alongside with the TPM, at the end of the boot process it can be trusted that the platform has not been altered. Therefore, the modified version of Android is exactly the one that has been designed by the SD;
+	
+	\item \textbf{Reading PUF responses:} theoretically, a user application might load the library containing the PUF driver in order to interact with it. However, the library can be associated with appropriate permissions such that only root users can read, hence load, it. If these permissions can be altered externally to the OS (e.g. by reading/modifying from another PC the Android OS files stored in an external storage device), then the Android OS initialization file can be programmed in order to re-associate at the start-up the appropriate permissions to the library file. Moreover, since the PUF is seen as an external Linux device, additional permissions can be set to it to restrict accesses from user applications;
+	
+	\item \textbf{Reverse engineering of the PUF:} assuming that it is possible to reverse engineer the library containing the PUF driver, since it does not contain any information about the PUF behavior or architecture, it does not reveal any secret about the embedded PUF. Moreover, since the the boot is performed using an encrypted bitstream, the embedded PUF architecture can not be discovered;
+	
+	\item \textbf{Altering the user application:} in order to alter the manifest associated to an application, the attacker has to specify a challenge and encrypt the hash digest of the \textit{dex} file using the associated response. However, the attacker does not know the PUF CRPs set. Therefore only a brute-force attack can be done. The same analysis applies even when \textit{dex} files are altered;
+	
+	\item \textbf{Altering the /data/package.of.application file:} if the file is altered, the same analysis of the point described above is applied;
+	
+	\item \textbf{Removing interested files:} if some file used by the trusted OS is missing during any phase of either the application installation or the application launching process, the validation procedure is stopped and the application is not installed/launched. It must be noted that if the optimized \textit{dex} file is missing, and if the associated \textit{apk} file is still inside \textit{/data/app/}, on the next boot the optimized \textit{dex} files is recreated after the associated validation process has been carried out with success;
+	
+	\item \textbf{Cloning the content of the storage peripheral:} all the files (apps, data, etc.) residing on the storage peripheral can be cloned and be executed on a non-trusted platform. However, they can not be executed on another trusted platform, which may not embed the HWIPs which the SWIPs interact with. Additionally, the HWIP residing inside the bitstream (programmed during the secure boot) can not be cloned without knowing the key used to encrypt it;
+	
+	\item \textbf{Cloning the SWIP:} as pointed out in the previous paragraph, this behavior is part of working as intended by design. However, to protect the source code of the user application, the encryption/decryption procedure can be applied to the entire \textit{apk} and \textit{dex} files. An alternative is to use a storage peripheral which is strictly bound to the device (FPGA) implementing the trusted platform. Furthermore, if the SWIP is small enough, the OS can store (temporarily) the user application inside the secure On-Chip Memory, which resides inside the TPM secure perimeter;
+	
+	\item \textbf{Malicious IP Vendor:} since the IP Vendor knows (possibly from the TTP) the key used to encrypt its IPs, it might maliciously sell the key to potential attackers. Therefore, an attacker could alter any application at his will in order to bypass the validation process. To address this issue, the operating system must be modified such that it keeps in memory all the challenges used for the installed applications, and it avoids that two applications can be installed with a same challenge. The challenges already used can be stored in an encrypted file using as key a PUF response which is never used but by the SD of the platform.
+\end{itemize}
+
+
+
+\subsubsection{Performance and Resource Utilization}
+The approach described above is lightweight and not particularly invasive. In fact, only 3 files of Android OS have to be modified. Moreover, if both the cryptographic primitives and the hashing algorithm are implemented in software using the Processing System, the resource utilization is only determined by the area occupied by the PUF embedded inside the Programmable Logic section\footnote{We considered as negligible the cryptographic primitives image memory size since Android systems typically run on platform coupled with big storage devices.}. Moreover, since encryption and decryption procedures have to be applied only on few bytes of hash digests, e.g. SHA-256 digest is of 32 bytes, it would be a waste of resource to implement hardware accelerated cryptographic primitives, unless they are also used for other purposes.\\
+\indent
+However, more interesting is the analysis of the latency caused by the adopted hashing algorithm. In fact, while crytographic primitives are used on few bytes, the hash operation is usually performed on relatively big \textit{dex} files. Therefore, a slow hashing algorithm might result in a slow installation and in a delayed application execution. In this case one might consider to implement an hardware accelerated hash engine.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.90\columnwidth]{images/hashtime.pdf}
+	\caption{Latency introduced by hashing operations (logarithm scales).}
+	\label{fig:benchmark}
+\end{figure}
+To estimate the delay impact of the hash procedure, in Figure~\ref{fig:benchmark} we report the latency of the most common hashing algorithms, implemented using Java primitives and running in the Android environment on a 667 MHz dual ARM Cortex\texttrademark -A9. Depending on the algorithm, the latency might vary between 2 and less than 1000 milliseconds.
+
+
+
+\section{Remote Dynamic Enrollment}
+Most security protocols, such as the ones described in Chapter 3, involve an enrollment phase in which typically a TTP collects and stores in a secure database a \textit{large} number of PUF CRPs before the protection protocol can transition to the successive phase. In particular, the protection mechanisms that we proposed in this Chapter are designed to comply with this scheme. For instance, with regard to the mechanism described in Section~\ref{sec:tpmandroid}, the App Vendor encipher its application with a key before selling it to a EU. The key is a PUF response of a specific challenge generated by the PUF embedded in the EU's FPGA. However, since the App Vendor does not own the EU's FPGA, it can not know in advance the challenge-key pair of the PUF embedded in the EU's FPGA. Therefore, the App Vendor requires a key and the related challenge to the TTP, which is the trusted party that during the enrollment phase has collected a \textit{large} number of PUF CRPs of the EU's FPGA.\\
+\indent
+How much \textit{large} depends on the protection mechanism adopted and on what is the target application. However, a \textit{CRPs collector} should always overestimate the CRPs needed in order to not run short in case of needing.\\
+\indent
+Of course, larger is the CRPs set required and slower is the enrollment phase. This introduces a new problematic regarding the time required to enroll a PUF.\\
+\indent
+We propose a solution to these problems using a simple and innovative scheme which involves a TTP and a FPGA Owner (FO) on which a PUF is embedded. In particular, the FO can be either a SD, a IV or a EU.\\
+\indent
+Using the scheme described further, a TTP is able to remotely and securely obtain new CRPs to extend the original set. The same goal could be achieved by using cryptographic primitives, but they are certainly more expensive in terms of resource and time. Therefore, the proposed scheme is simple and efficient.\\
+\indent
+
+We assume that the enrolled CRPs set is composed of $i$ CRPs. Of these, one CRP, defined as $CRP_r$ and associated with the response $R_r$ and the challenge $C_r$, is reserved to the TTP which uses it to obtain new ones. The scheme is represented in Figure~\ref{fig:remotedynamicenrollment}, and involves the following steps:
+\begin{enumerate}
+	\item The TTP chooses a random \textit{salt} of the same bit's length of PUF responses, and applies the following:
+		\begin{equation}
+			Salted=Salt \xor R_r
+		\end{equation}
+		Then, it sends the Salted response with the associated challenge $C_r$, which produced the response $R_r$, to the FO;
+		
+	\item The FO calculates $R_r$ using the received $C_r$, and applies the following:
+		\begin{equation}
+			Salt=Salted \xor R_r
+		\end{equation}
+		Using this equation, the FO is able to retrieve the salt generated by the TTP. Moreover, the FO is the only one that can retrieve it, because it is the only one that owns the PUF which has the $CRP_r$ behavior. Then, the FO stores the Salt in an appropriate and temporary register;
+		
+	\item Now the TTP can send to the FO the challenges of which the associated responses are needed. For instance, the TTP sends the challenge $C_{i+1}$ to the FO and awaits for the answer.
+	
+	\item The FO, which receives the new challenge, calculates the response and sends it to the TTP after applying the following:
+		\begin{equation}
+			Salted_{R_{i+1}}=Salt \xor R_{i+1}
+		\end{equation}
+		Where the Salt is the value calculated and stored in step 2.
+	
+	\item The TTP can now retrieve the response $R_{i+1}$ associated to the challenge $C_{i+1}$ by applying:
+		\begin{equation}
+			R_{i+1}=Salt \xor Salted_{R_{i+1}}
+		\end{equation}
+		And stores the CRP $\left\lbrace C_{i+1},R_{i+1}\right\rbrace$.
+\end{enumerate}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.98\columnwidth]{images/remotedynamicenrollment.pdf}
+	\caption{Remote Dynamic Enrollment scheme.}
+	\label{fig:remotedynamicenrollment}
+\end{figure}
+While steps from 3 to 5 can be repeated in order to obtain more CRPs, the execution of the first two steps allow the two actors (TTP and FO) to share a secret (Salt), such that a third (an attacker) is not able to retrieve it. The goal is similar to the Diffie–Hellman scheme, but the proposed mechanism is faster and is based on physical properties. Indeed it is very efficient and secure. The efficiency is achieved by involving only simple XOR operations, hence no cryptographic primitives are used. At the same time the CRP exchange is secure. In fact, if an attacker is able to listen any of the messages exchanged between the TTP and the FO, he can not retrieve any of the new responses because he would have to know the original Salt chosen by the TTP. Therefore, any trusted and secure communication channel is not required.\\
+\indent
+However, this scheme can not be used in authentication protocols which requires the CRPs exchange to be in plain text. In fact, in such a mechanism where the responses are sent to the TTP as plain text, an attacker can retrieve the original Salt by trivially XORing the Salted response produced by a specific challenge, and sent previously by the FO, with the one resulting from the same challenge and just sent by the FO to the TTP.\\
+\indent
+Nevertheless, the proposed scheme might be very useful in all of the security solutions which do not require PUF responses to be publicly exchanged.
+
+
+
+\end{document}

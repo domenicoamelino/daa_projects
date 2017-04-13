@@ -1,0 +1,1661 @@
+\documentclass[../tesi.tex]{subfiles}
+\graphicspath{{../}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\makeatletter% Set distance from top of page to first float
+\setlength{\@fptop}{5pt}
+\makeatother
+
+\sloppy
+
+\begin{document}
+\chapter{Research Efforts on Physically Unclonable Functions}
+\begin{quotation}
+\emph{Physically Unclonable Function (PUF) is a promising technique to enhance the security of Integrated Circuits by providing unique digital signatures, generated from physical properties of the device in which it is embedded. In this Chapter, we introduce PUFs properties, their quality and how to estimate them. Furthermore, we present a detailed analysis on several PUFs implemented with FPGA technology.}
+\end{quotation}
+
+\section{Concept}
+
+Physically unclonable function (PUF) is a hardware security primitive that exploits some physical randomnesses, introduced explicitly or indirectly into a device, to generate device-unique information used to address security related problems. Basically, a PUF is a function that one-way maps a set of inputs, namely challenges, to a set of outputs, defined as responses, forming a set of challenge-response pairs (CRPs) that are unique for each device where the PUF has been implemented \cite{suh2007physical}\footnote{Not all the PUFs function in a challenge-response paradigm. Instead, they produce a single response which can be used as an intrinsic device signature.}. Moreover, PUFs should be unclonable and tamper-evident, meaning that it is unfeasible for an attacker to build another PUF that provides the same original CRPs set, and that invasive attacks destroy the PUF, as they can be easily detected. Furthermore, PUF responses should be persistent and unpredictable, and, given its output response, it should not be possible to discover the applied challenge.\\
+\indent
+Physically unclonable functions (PUFs) were first introduced in 2001 by Pappu et
+al \cite{pappu2002physical}, proposing an optical PUF which uses the speckle patterns of optical medium for laser light. While PUFs can be implemented with various physical systems, in this thesis our focus is on silicon PUFs, introduced by Gassend et al. [1], which exploit variation in manufacturing, defined as intrinsic randomness, across different dies and wafers to generate robust, unclonable, unpredictable, and chip-specific outputs. Process variation is the main phenomenon on which silicon PUFs are based, and it has two major components: systematic process variation, which occurs in relation to the location and patterns of the transistors within the chip, and random process variation, which occurs independently of the previous factors \cite{lofstrom2000ic}. These processes make PUFs physically unclonable, even given complete mask information of the circuit. Additionally, due to their underlying mechanism, silicon PUFs do not require any alteration of manufacturing processes, and several designs are available for both Field Programmable Gate Arrays (FPGAs) and Application Specific Integrated Circuits (ASICs).
+
+%Additionally, a type of PUF is said to be \textit{manufacturer resistant} if it is technically impossible to produce two identical PUFs of this type given only a polynomial amount of resources \cite{gassend2002silicon}. Then, by exploiting the mentioned random variations, it is possible to create a manufacturer resistant PUF, meaning that the circuit characteristics are beyond the control of the fabrication process.
+
+
+\section{PUF Properties}
+
+Using the notation $\Pi:X\rightarrow Y:\Pi(x)=y$, to denote the challenge-response
+functionality of a PUF $\Pi$ \cite{maes2010physically}, $\Pi$ could
+be described using the following properties \cite{gassend2002silicon}:
+\begin{itemize}
+\item \textbf{evaluable:} given $\Pi$ and $x$, it is possible to evaluate
+$y$ within polynomial time;
+\item \textbf{unique:} $\Pi$ can uniquely identify the device embedding $\Pi$;
+\item \textbf{reproducible:} $y=\Pi(x)$ is reproducible up to a small error%
+\footnote{Reproducibility is the property which distinguishes PUFs from True
+Random Number Generators.%
+};
+\item \textbf{unclonable:} in order to be truly unclonable, $\Pi$ has to
+be:
+
+\begin{itemize}
+\item \textit{physically unclonable}: if it is hard to build a device containing
+another PUF $\Pi_{2}\neq\Pi$ such that $\Pi_{2}(x)\approx\Pi(x)$,
+$\forall x$;
+\item \textit{mathematically unclonable}: if it is hard to build a mathematical
+procedure $f_{r}$ such that $f_{r}(x)\approx\Pi(x)$, $\forall x$;
+\end{itemize}
+\item \textbf{unpredictable:} given only a set $\Phi=\{(x_{i},y_{i}=\Pi(x_{i}))\}$,
+it is hard to predict $y_{c}\approx\Pi(x_{c})$ up to a small error,
+$\forall x_{c}$ being a random challenge $\notin\Phi$;
+\item \textbf{one-way:} given $y$ and $\Pi$, it is hard to find $x$ such
+that $\Pi(x)=y$;
+\item \textbf{tamper-evident:} altering the device containing $\Pi$ transforms
+$\Pi\rightarrow\Pi^{\prime}$, such that $\Pi(x)\neq\Pi^{\prime}(x)$,
+$\forall x$.
+\end{itemize}
+
+\section{Quality Metrics}
+
+To be eligible in applications, PUFs have to be characterized by some properties, which can be grouped in the following quality metrics \cite{maiti2011improved}:
+\begin{itemize}
+\item \textbf{uniqueness} (or inter-PUF variation)\textbf{:} the variation
+of the PUF responses to the same set of challenges on different devices. Uniqueness
+can be obtained by calculating the Hamming Distance (HD) between all the pairs of PUFs responses extracted from the combination of different devices, FPGA regions, and challenges (if any).\\
+\indent
+For a set of \textit{k} chips implementing the same PUF design \textit{P},
+with each pair of chips, \textit{i} and \textit{j}, having \textit{n}-bit
+responses $R_{i}$ and $R_{j}$, respectively, the percentage measure of uniqueness
+for \textit{P} is defined as:
+\begin{equation}
+U=\frac{2}{k(k-1)}\sum_{i=1}^{k-1}\sum_{j=i+1}^{k}\frac{HD(R_{i},R_{j})}{n}\cdot100\%
+\end{equation}
+Its ideal value is 50\%.
+\item \textbf{reliability} (or robustness, or intra-PUF variation)\textbf{:}
+the number of bits in a response that change value between repeatedly
+applied challenges, possibly under different environmental conditions
+(temperature, voltage, humidity, aging, etc.).\\
+\indent
+Let $R_{i}$ be the \textit{n}-bit baseline reference response of the PUF design \textit{P}, and \textit{k} be the number of measurements that generate $R_{i,j}^{'}$
+($j=1,2,...,k$) under different operating conditions. The reliability can be defined from the average intra-chip Hamming Distance, which is calculated as:
+\begin{equation}
+HD_{intra}=\frac{1}{k}\sum_{j=1}^{k}\frac{HD(R_{i},R_{i,j}^{'})}{n}\times100
+\label{eq:hdintra}
+\end{equation}
+The percentage measure of reliability is defined as:
+\begin{equation}
+	Reliability=100-HD_{intra}
+	\label{eq:reliability}
+\end{equation}
+A reliable PUF achieves a high value of reliability, thus its value should be as close as possible to 100\%.
+\item \textbf{uniformity} (or randomness \cite{Hori2010})\textbf{:} represents the distribution of 0 and 1 in a PUF response or in a set of PUFs responses.\\
+\indent
+Let \textit{n} be the number of response bits, and \textit{i} be the \textit{i}-th response, the percentage measure for uniformity is defined as:
+\begin{equation}
+\nonumber
+RU(i)=\frac{1}{n}\sum_{t=1}^{n}R_{i,t}\times100
+\end{equation}
+A value of 100\% means that all $R_{i}$ response bits are 1. For true random bits, uniformity should be as close as possible to its ideal value of 50\%.\\
+\indent
+Let \textit{R} be the number of the considered responses, the average uniformity can be calculated as:
+\begin{equation}
+RU=\frac{1}{R}\sum_{i=1}^{R}RU(i)
+\end{equation}
+\item \textbf{bit-aliasing:} indicates that some response bits are biased
+towards either 0 or 1 on all devices.
+Let \textit{t} be the t-th response bit, \textit{k} be the number
+of devices, and $R_{i,t}$ the t-th response bit of the i-th device.
+Bit-aliasing is defined as:
+\begin{equation}
+BA(t)=\frac{1}{k}\sum_{i=1}^{k}R_{i,t}\times100
+\end{equation}
+A value of 100\% means that bit \textit{t} is 1 for all devices. The ideal value is 50\%.\\
+\indent
+Moreover, bit-aliasing is tightly coupled with uniformity, but even if BA of each response bit is around 50\% it could be that the bits are not independent from each other. On the other hand, if they are independent also the uniformity is equal to 50\%.
+\item \textbf{security/attack resiliency:} ability of the PUF to prevent
+an adversary from revealing the PUF characteristic or CRPs, including
+the unclonability.
+\end{itemize}
+
+\section{Post-processing}
+PUF responses are often noisy and not fully random. However, for cryptographic
+algorithms uniformly random and perfectly reliable keys (PUF responses)
+are required. This achievement can be reached using various techniques.\\
+\indent
+The post-processing methods described further require either redundant PUF information (e.g. response bits) to be saved as public data, or extra resources in hardware or software or in terms of time, depending on the implementation.
+
+
+\subsection{Majority Voting}
+Majority voting is a convenient method to transform poorly uniform
+and noisy measurements into more random distributions with less noise.
+It consists of collecting multiple measurements, either through repeated
+measurements (temporal) or by considering multiple PUFs at once (spatial),
+and determining one output value based on the individual values or
+votes of the single measurements. When the number of positive votes
+exceeds a certain threshold the majority is reached, and the output
+is said to be 1, otherwise is 0.
+
+
+\subsubsection*{Temporal Majority Voting (TMV)}
+During a TMV, a number $N_{T}$ of consecutive measurements of a single
+PUF are considered. The threshold $M_{T}$ is usually set to $\frac{N_{T}-1}{2}$
+(when $M_{T}$ is odd).\\
+\indent
+TMV can decrease the noise of PUFs responses, but it requires
+$N_{T}$ times more time due to the repeated measurements needed.
+
+
+\subsubsection*{Spatial Majority Voting (SMV)}
+
+During a SMV, a number of $N_{S}$ simultaneously measured values
+are considered (usually coming from neighboring PUFs). The threshold
+$M_{S}$ has to be chosen to compensate for the imbalance (bias) in
+the original values.\\
+\indent
+Using this method it is possible to produce an output closer to the
+uniform distribution. However, it requires $N_{S}$ more PUFs.
+
+
+\subsection{Fuzzy Extractor\label{sub:Fuzzy-Extractor}}
+
+Majority Voting is indeed not perfect. Since SMV is a discrete
+algorithm, it is not always capable to reach a perfect uniform distribution.
+On the other hand, TMV's capability of decreasing noise rises exponentially
+in terms of number of repeated measurements (due to the Chernoff Bound
+\cite{maes2008intrinsic}). Therefore, a Fuzzy Extractor can be used in
+conjunction with MV to produce completely noise-free response with
+a perfect uniform distribution \cite{dodis2004fuzzy}. It consists
+of two basic primitives described further.
+
+
+\subsubsection*{Information Reconciliation (Error Correction)}
+
+It makes use of error correcting codes (usually BCH) to correct possible
+bit errors in the PUF response.\\
+\indent
+The probability that a string of $S$ bits will have more than $t$
+errors is equal to: 
+\begin{equation}
+P_{total}=1-\sum_{i=0}^{t}\tbinom{S}{i}p_{b}^{i}(1-p_{b})^{S-i}
+\label{eq:ptotal}
+\end{equation}
+where $p_{b}$ denotes the bit error probability \cite{bosch2008efficient}.\\
+\indent
+This primitive determines an increasing number of PUFs depending on
+the key length and on $P_{total}$ (and $p_{b}$).
+
+
+\subsubsection*{Privacy Amplification (Randomness Extraction)}
+
+A Strong Extractor is used to extract random bits that are very close
+to uniformity from random responses that could be not uniformly distributed.
+Strong Extractors can be implemented using a set of universal hash
+functions with a uniform random seed. The achieving of the uniform
+distribution strongly depends on the min-entropy present in the PUF
+responses, and on the compression ratio of the hash functions\footnote{The
+amount of compression that is needed should be estimated from elaborate
+measurements on a large number of devices \cite{maes2008intrinsic}.}.
+
+
+\subsubsection*{Fuzzy Extractor Phases}
+
+A Fuzzy Extractor works in two phases:
+\begin{itemize}
+\item \textbf{Generation phase:} a robust and uniform random bit-string
+is extracted from the PUF response. Additionally, an amount of \textit{Helper
+Data} is produced in both steps of the Fuzzy Extractor.
+\item \textbf{Reproduction phase:} \textit{Helper Data} is combined with
+the same (noisy) PUF responses to extract the identical bit-string
+of the first phase. This phase uses the two primitives described above.
+\end{itemize}
+The \textit{Helper Data} should be stored and made available during
+the \textit{Reproduction phase}. If the noise is small enough, the
+Fuzzy Extractor construction guarantees a perfect reconstruction of
+the extracted random bit-string. It must be noted that the \textit{Helper
+Data} does not contain any information about the PUF response, nor
+about the extracted bit-string, hence it does not need to be kept confidential.
+
+
+\section{Silicon PUFs}
+
+A distinction is made between PUFs in which physical randomness is
+explicitly introduced and PUFs that use randomness that is intrinsically
+present in a physical system.\\
+\indent
+PUFs using explicitly-introduced randomness can have a much greater
+ability to distinguish devices from one another and have minimal environmental
+variations compared to PUFs that utilize intrinsic randomness. This
+is due to the use of different underlying principles and the ability
+for parameters to be directly controlled and optimized.\\
+\indent
+PUFs using intrinsic randomness, on which this work is focused, are
+inherently present in a device due to its manufacturing process, that
+does not need any modification. Therefore intrinsic PUFs are easier
+to construct and highly attractive \cite{guajardo2007fpga}.\\
+\indent
+Additionally, another distinction is made between PUFs that need a
+quantization process to produce a response bit and PUFs that do not.
+A quantization process is a procedure that converts an analog measurement
+to a digital one, for example comparing two frequencies (identified
+as 0 and 1) and choosing the faster one.
+
+
+\subsection{Memory-based PUFs}
+
+A memory-based PUF uses the random initial state of memory bits on
+device start-up as PUF signature \cite{su2007isscc}.
+
+
+\subsubsection{SRAM PUF}
+
+This type of PUF was first introduced by \cite{guajardo2007fpga},
+and its implementation is based on SRAM cells embedded inside the
+FPGA. Its structure is based on CMOS SRAM cells (Figure~\ref{fig:SRAM-cell-(6}),
+formed by six transistors (6T) elements. Four transistors
+(\textit{M1}, \textit{M2}, \textit{M3}, \textit{M4}) form two
+cross-coupled inverters and store a bit, and two access transistors,
+M5 and M6, connect the data bit-lines ($BL$ and $\overline{BL}$)
+based on the word-line signal ($WL$). The transistors \textit{M1},
+\textit{M2}, \textit{M3}, \textit{M4 }are vulnerable to atomic level
+intrinsic variations because they are purposely constructed as weak
+entities to allow driving them easily to 0 or 1 during a write operation.
+This vulnerability is exploited during the SRAM cell power-up. In
+particular, the physical mismatch between the two symmetrical halves
+of the circuit causes a voltage difference on the transistors, which
+will store a 0 or a 1 depending on the sign of the mismatch. It follows
+that, with high probability, a SRAM cell will start storing the same
+bit upon power-up, and that different cells will behave randomly and
+independently from each other. Then, reading power-up values equals
+to reading the PUF response%
+\footnote{A SRAM PUF does not need any quantization process to produce the response
+since the value read upon the cells power-up is already a 1 or a 0.%
+}.
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.55]{images/sram6t}
+  \figcaption{SRAM cell (6 transistors).}
+  \label{fig:SRAM-cell-(6}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+In \cite{guajardo2007fpga} the authors used FPGAs with embedded block RAM
+memories which are not reset at power-up, and they considered as challenge
+a range of memory locations within a SRAM memory block, and as response
+the start-up values at those locations. After many experiments they
+collected the power-up state of 8190 bytes of SRAM from different
+FPGAs. For a fixed environment (20\textdegree C), the average inter-PUF
+variation is $\mu_{inter}=49.97\%$, and the average intra-distance
+within multiple measurements of a single block is $\mu_{intra}=3357\%$
+. When the temperature varies from -20\textdegree C to 80\textdegree C
+the maximum inter-PUF variation is 12\%.\\
+\indent
+The authors in \cite{guajardo2007fpga} also estimated the entropy
+to be 0.76 bit per SRAM cell, meaning that to derive a secret key
+of size $N$ at least $\left\lceil 1.32N\right\rceil $ source bits
+are required.\\
+\indent
+Since the maximum number of errors measured is about 12\%, and considering
+Equation~\ref{eq:ptotal}, it follows that $p_{b}=0.15$.\\
+\indent
+Therefore to derive a 128 bits key, $S=\left\lceil 1.32\cdot128\right\rceil =171$
+bits are needed. Assuming a maximum failure rate of $P_{total}=10^{-6}$,
+and using Equation~\ref{eq:ptotal}, $t$ is 119.\\
+\indent
+Using the BCH(511, 19) code to correct up to 119 bits, $9\cdot511=4599$
+bits are requested to generate 171 information bits%
+\footnote{The general (n, k) BCH encoder encodes k m-bit symbols into blocks
+consisting of $n=2^{m}-1$ symbols of total $m(2^{m}-1)$ bits.%
+}. From this result it is possible to derive the number of CRPs. For
+example, if the used memory block is about 512 kbits, there are $\frac{512000}{4599}\approx110$
+CRPs.\\
+\indent
+An analogous work has been done in \cite{holcomb2009power}, in which
+the authors studied the uniqueness and the reliability using actual SRAM
+ICs, yielding to $\mu_{inter}=43.16\%$ and $\mu_{intra}=3.8\%$,
+values quite close with the ones described above.
+
+
+However, the biggest drawback of SRAM based PUFs is that they require
+a device power-up to generate a response. Furthermore, on the most
+common FPGAs all SRAM cells are hard-resetted to zero upon the power-up,
+hence they cannot work as PUFs. Authors in \cite{wildenabling} addressed these
+problems using the \textit{power-gating} feature in Xilinx FPGAs,
+in combination with partial reconfiguration. The steps proposed are
+the following:
+\begin{enumerate}
+\item the FPGA is powered and automatically hard-resetted;
+\item a bitstream, running a design to read BRAM content, is loaded into
+the FPGA;
+\item a partial bitstream with BRAM instances and initialization values
+(random values can be chosen) is loaded into the FPGA. This bitstream
+set the BRAMs with the initialization values;
+\item a different partial bitstream is loaded into the FPGA. This bitstream
+uses the power-gating feature to disconnect the BRAMs instances from
+the power supply network;
+\item a third different and partial bitstream is loaded into the FPGA. This
+bitstream instantiates the BRAMs and connects them to the power supply
+network, but does not set their initialization value.
+\end{enumerate}
+After the $5^{th}$ step, it is possible to read the random BRAMs
+values. Moreover, the steps 3-5 can be used and repeated every time
+one has to generate a PUF response.
+\\
+\indent
+However, even this solution has a drawback: the power-gating feature
+became available only with the Xilinx 7 series.
+
+
+\subsubsection{Butterfly PUF}
+
+To address SRAM based PUFs drawbacks, \cite{kumar2008butterfly} introduced
+butterfly PUFs (BPUFs) that are based on cross-coupled circuits.\\
+\indent
+A cross-coupled circuit is a block used to build storage elements
+such as latches, flip-flops and SRAM cells. An example of circuit
+is a simple latch built using two cross-coupled inverters (Figure~\ref{fig:Cross-coupled-inverter}).
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.75]{images/cross-coupled}
+\par\end{centering}
+
+\protect\caption{\label{fig:Cross-coupled-inverter}Cross-coupled inverter.}
+\end{figure}
+Such a circuit allows two stable operating points and one unstable
+operating point, as shown in Figure~\ref{fig:Cross-coupled-inverter-operating}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.85]{images/cross-coupled-points}
+\par\end{centering}
+
+\protect\caption{\label{fig:Cross-coupled-inverter-operating}Cross-coupled inverter
+operating points.}
+\end{figure}
+The circuit is capable to transition from an unstable state to a stable
+state applying an external signal on the input or due to the physical
+mismatch between the two inverters. These two elements are built as
+symmetrically as possible and all variations are due to intrinsic-randomness.\\
+\indent
+The physical mismatch is exploited initially leaving the circuit at
+an unstable operating point, and then waiting the achieving of a stable
+one (1 or 0) without exerting any external signal. With high probability
+the circuit will reach more often one of the two stable states.\\
+\indent
+Following this idea, the authors in \cite{kumar2008butterfly} introduced
+the butterfly PUF, which is built using two cross-coupled transparent
+latches (Figure~\ref{fig:Butterfly-PUF}). Each latch has a preset (PRE) signal
+(if high it turns the output Q to 1) and a clear (CLR) signal (if
+high it turns the output Q to 0). \textit{PRE} of Latch 1 and \textit{CLR}
+of Latch 2 are always set to low. The input \textit{D} is transferred
+to the output \textit{Q} when the signal \textit{CLK} is high. Setting
+the \textit{CLK} being always high, it is possible to simulate a combinatorial
+loop, as it follows:
+\begin{itemize}
+\item the excite signal, when high, brings the circuit to an unstable state
+due to the latches each having an opposite input/output signal;
+\item after a few clock cycles the \textit{excite} signal is set to low
+and the PUF circuit will attain one of the two possible stable states
+due to the physical mismatch, that cause slight differences in the
+delays of the connecting wires.
+\end{itemize}
+Therefore it is possible to generate a PUF response each time the
+\textit{excite} signal is exerted.\\
+\indent
+Following this idea, theoretically a butterfly PUF can be embedded on all types of FPGA. However, it must be noted that the butterfly
+PUF requires layout symmetry. It means, for example, that the wire
+connecting X to Y must have the same length of the wire connecting
+Z to W. Hence any delay difference is only caused by the intrinsic-randomness
+introduced by the manufacturing process. However, the perfect symmetry
+is not reachable on FPGA: two identical elements inside a logic block
+might be connected to the routing matrix using routes with different
+lengths. Furthermore, the routing tracks near the corner of a FPGA
+may be different from those in the middle part.\\
+\indent
+Since the symmetry condition is quite hard to satisfy, the circuit
+will exhibit a biased behavior towards one of the two states, reducing
+the entropy PUF response bit and the general inter-device uniqueness.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{images/butterfly}
+\par\end{centering}
+
+\protect\caption{\label{fig:Butterfly-PUF}Butterfly PUF.}
+\end{figure}
+
+In \cite{kumar2008butterfly} 64 PUF cells on 36 FPGAs (Xilinx Virtex-5)
+were tested. Experimental measurements yield to $\mu_{inter}\approx45\%$
+and $\mu_{intra}<6\%$ (varying the temperature from -20\textdegree C
+to 80\textdegree C), and to an estimate of 0.78 bits of entropy
+for every BPUF output bit. Therefore, following the same logic described
+for the SRAM PUFs, about 1500 PUF cells are needed to derive a uniformly
+distributed random 128-bit key with a failure rate of $10^{-6}$.
+
+
+\subsubsection{Flip-flop PUF}
+
+Equivalently to SRAM PUFs, the power-up values of regular flip-flops has been
+studied in \cite{maes2008intrinsic}. Basically it has
+been noted that flip-flops of a Xilinx FPGA are set to an initial
+value specified by one of the settings contained in the configuration
+data of bitstream. However, this value is not immediately stored in
+the flip-flop, but only after all the configuration data is loaded
+into FGPA's memory. When this happens, the \textit{global restore
+line} (\textit{GRESTORE} command) is asserted, resetting all the flip-flops
+with the value previously specified. It follows that, in order to
+leave the flip-flops in their random power-up state, the \textit{GRESTORE}
+command at the end of the bitfile has to be removed. Once the flip-flops
+are free to assume one of the two possible values (1 or 0), it is
+possible to read their values using the readback functionality and
+asserting the \textit{global capture line} (\textit{GCAPTURE} command).\\
+\indent
+In \cite{maes2008intrinsic} experimental measurements on 4096 flip-flops
+from 3 different Xilinx Virtex-II FPGAs yield to $\mu_{inter}\approx11\%$
+and $\mu_{intra}<1\%$. However, using post-processing (consisting
+of a majority voter) the results yield to $\mu_{inter}\approx50\%$
+and $\mu_{intra}<5\%$.
+
+
+\subsection{Delay-based PUFs}
+
+Delay PUFs exploit random variations in delays of wires and gates
+on silicon.
+
+
+\subsubsection{Uniformity for Delay-based PUFs}
+
+Uniformity relates the input challenge with the output response, thus
+represents the ability of a PUF to produce 0 or 1, depending on its
+input value.\\
+\indent
+Let $D=\{d_{i}|i=1,2,...,2^{n}\}$ be a set of random variables where
+$d_{i}$ represents the delay difference of the delay paths%
+\footnote{A delay path is formed by one or more delay elements.%
+} in a pair of PUFs, and \textit{n} be the challenge size%
+\footnote{We are assuming that the number of responses (or pairs) is exponential
+with the challenge size.%
+}.\\
+\indent
+Assuming that the whole chip area is partitioned into several small
+regions, in each of these regions the delays of the delay elements
+have similar (negligible) systematic process variation \cite{sahoo2014composite}.
+It follows that their variation is only caused by random process variation
+that follows a normal distribution $\mathcal{N}(\mu_{r},\sigma_{r}^{2})$,
+where \textit{r} denotes each region. Since a delay path is formed
+by one or more delay elements, one can assume that the delay of a
+delay path is represented by a random variable, consisting of some
+(possibly linear) function of the described element delay distributions.\\
+\indent
+Then $d_{i}=f_{i}^{1}-f_{i}^{2}$, where $f_{i}^{1}$ and $f_{i}^{2}$
+are the path delay random variables representing the delays of the
+delay paths in the i-th pair. Assuming that $f_{i}^{1}$ and $f_{i}^{2}$
+are linear functions of element delay random variables, $f_{i}^{1}\sim\mathcal{N}(\mu_{1},\sigma_{1}^{2})$
+and $f_{i}^{2}\sim\mathcal{N}(\mu_{2},\sigma_{2}^{2})$, and that
+they are mutually independent, it follows that $d_{i}\sim\mathcal{N}\left((\mu_{1}-\mu_{2}),(\sigma_{1}^{2}+\sigma_{2}^{2})\right)$.
+Let \textit{Y} be the random variable denoting the 1-bit PUF output
+response, and \textit{$d\in D$} be the random variable denoting the
+delay difference of the constituent delay paths in a pair. Then:
+\begin{equation}
+\nonumber
+\begin{split}
+Pr(Y=0)& =Pr(d<0)=\int_{-\infty}^{0}\frac{1}{\sqrt{2\pi(\sigma_{1}^{2}+\sigma_{2}^{2})}}e^{-\frac{(x-(\mu_{1}-\mu_{2}))^{2}}{2(\sigma_{1}^{2}+\sigma_{2}^{2})}}dx=\\
+& =\frac{1}{2}\left[1+erf\left(\frac{-(\mu_{1}-\mu_{2})}{\sqrt{2(\sigma_{1}^{2}+\sigma_{2}^{2})}}\right)\right]
+\end{split}
+\end{equation}
+and $Pr(Y=1)=1-Pr(d<0)$.\\
+\indent
+There are two possible cases%
+\footnote{The following considerations are based on the assumption that one
+can partition the whole chip area in $\sim\infty$ regions, and accurately
+characterize each region. This is indeed a strong assumption.%
+}:
+\begin{enumerate}
+\item $\mu_{1}=\mu_{2}=\mu$, $\sigma_{1}^{2}=\sigma_{2}^{2}=\sigma^{2}$,
+then $d_{i}\sim\mathcal{N}(0,\sigma^{2})$
+\item $\mu_{1}\neq\mu_{2}$, $\sigma_{1}^{2}\neq\sigma_{2}^{2}$
+\end{enumerate}
+The first case implies that the delay elements of the two delay paths
+are selected from the same region. It follows:
+\[
+Pr(Y=1)=Pr(d>0)=\frac{1}{2}\left[1-erf\left(\frac{0}{\sqrt{2\sigma}}\right)\right]=\frac{1}{2}=Pr(Y=0)
+\]
+The second case states that delay elements from different regions
+produce a biased output towards 0 or 1, which has to be avoided.\\
+\indent
+Now, assume that the \textit{n}-bit challenge consists of \textit{n}
+i.i.d. binary random variables $X_{1},...,X_{n}$ with $Pr(X_{i}=1)=p,\:\forall i$.
+Then the probability of occurrence of a challenge is defined as $Pr(X_{1}=x_{1},...,X_{n}=x_{n})=p^{k}(1-p)^{n-k}$,
+where $x_{i}\in\{0,1\},\,\forall i$ and \textit{k} is the number
+of times that $x_{i}=1,\,\forall i$.\\
+\indent
+Let \textit{I} be the random variable denoting the input challenge,
+for a challenge set $C\subseteq\{0,1\}^{n}$.\\
+\indent
+Uniformity of a PUF is expressed relating the probability distribution
+of the challenge space with the one of the response space, as it follows%
+\footnote{$Pr(Y=1|I=i)=Pr(d_{i}>0)$, since the i-th input challenge that produces
+1 as response also determines the i-th delay path.%
+}:
+\begin{equation}
+\nonumber
+\begin{split}
+Pr(Y=1) & =\sum_{i\in C}Pr(Y=1|I=i)Pr(I=i)=\\
+& = \sum_{i\in C}Pr(d_{i}>0)Pr(I=i)=\\
+& = \sum_{i\in C}Pr(d_{i}>0)p^{h(i)}(1-p)^{n-h(i)}
+\end{split}
+\end{equation}
+where $h(i)$ is the Hamming weight, denoting the number of 1's in
+the challenge \textit{i}.
+
+
+\subsubsection{Arbiter PUF}
+
+The arbiter PUF was first introduced by \cite{lim2005extracting}.
+Its circuit is based on multiple pairs of multiplexers, called \textit{switch
+blocks}, and an arbiter (Figure~\ref{fig:Arbiter-PUF}). Each switch block
+has two inputs and two outputs, and depending on the selection bit
+(i-th challenge bit) they are connected \textit{straight} or \textit{switched}.
+Therefore the input challenge determines the two paths of the circuit.
+Nominally, the two paths should have the same delay; however, they
+present a different delay due to intrinsic randomness introduced during
+the manufacturing process. The arbiter exploits this delay difference
+to produce the output, as following:
+\begin{itemize}
+\item a specific input (challenge) determines a specific delay path for
+both the two paths;
+\item a rising signal is given to both paths at the same time;
+\item the arbiter (latch or flip-flop) decides the winner of the \textit{race:
+}the output is 1 if the signal to the latch data input (D) is faster,
+otherwise is 0.
+\end{itemize}
+It must be noted that if the offset of the two paths is too small,
+the setup/hold time of the arbiter is violated and its output does
+not depend on the outcome of the race anymore, but on random noise.
+This phenomenon is called \textit{metastability} and generates noise
+in the PUF responses \cite{maes2010physically}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.40]{images/arbiter}
+\par\end{centering}
+
+\protect\caption{\label{fig:Arbiter-PUF}Arbiter PUF.}
+\end{figure}
+Using the structure described above, it follows that the number of
+possible challenges is exponential in the number of switch blocks
+used, e.g. for \textit{n=}8 switch blocks there are $2^{n}=2^{8}=256$
+challenges.\\
+\indent
+The researchers in \cite{gassend2004identification} achieved from
+23 FPGAs $\mu_{inter}\approx23\%$ and $\mu_{intra}\approx99\%$. The
+high reliability is due to the poor level of uniqueness, which is
+highly biased from the lack of low level control over routing of the
+delay lines and the long length of the switches. This is further compounded
+by the asymmetric nature of the arbiter; edge triggered flip-flops
+are not fair arbiters due to the fact that routing to a clock input
+of a flip-flop requires sending the signal through multiple additional
+segments to reach the clock port, whereas the route to the D input
+of the flip-flop is relatively simple \cite{gu2014unique}.\\
+\indent
+Indeed, authors in \cite{morozov2010analysis} showed that delays are not equal
+between the two paths (Figure~\ref{fig:Components'-delay})%
+\footnote{\textit{Switch Nominal} is the delay of the signals when the paths
+are straight, while \textit{Switch Crisscross} is the delay of the
+signal when the paths are crossed.%
+}, since a FPGA is constrained by its rigid fabric and interconnections
+structure.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.35]{images/arbiterdelay}
+\par\end{centering}
+
+\protect\caption{\label{fig:Components'-delay}Components' delay.}
+\end{figure}
+
+\subsubsection*{Programmable Delay Lines}
+
+To address the routing problems described above, \cite{majzoobi2010fpga}
+introduced a high resolution \textit{programmable delay logic} (PDL)
+implemented by the internal structure of a lookup table (LUT). Using
+the PDLs, it is possible to remove delay skews caused by asymmetries
+in routing and systematic variations.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.60]{images/pdl}
+\par\end{centering}
+
+\protect\caption{\label{fig:Programmable-Delay-Logic}Programmable Delay Logic.}
+\end{figure}
+For example, the LUT in Figure~\ref{fig:Programmable-Delay-Logic} is configured
+so that the inputs $A_{2}$ and $A_{3}$ act as \textit{don't-care}
+bits; the LUT output is the inverted value of $A_{1}$, and it is
+not a function of $A_{2}$ and $A_{3}$. However, the signals $A_{2}$
+and $A_{3}$ determine the signal propagation path inside the LUT;
+the blue path ($A_{2}A_{3}=0$) is slightly longer than the red one
+($A_{2}A_{3}=1$), causing a larger propagation delay.\\
+\indent
+To measure the LUT delay changes, it was used a delay characterization
+circuit (Figure~\ref{fig:Delay-characterization-circuit}). The characterization
+circuit consists of a \textit{launch} flip-flop, a \textit{sample}
+flip-flop, a \textit{capture} flip-flop, a \textit{XOR} gate, and
+the \textit{Circuit Under Test} (CUT) whose delay is to be measured.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.6]{images/delaycharacterization}
+\par\end{centering}
+
+\protect\caption{\label{fig:Delay-characterization-circuit}Delay characterization
+circuit.}
+\end{figure}
+At the rising edge of the clock a signal is sent through the CUT by
+the launch flip-flop. At the falling edge of the clock, the output
+of the CUT is sampled by the sample flip-flop. If the signal arrives
+at the sample flip-flop well before the sampling takes place, the
+correct value is sampled. The XOR compares the sampled value with
+the steady state output of the CUT and produces a zero if they are
+the same. Otherwise, the XOR output rises to \textquoteleft 1\textquoteright ,
+indicating a timing violation. By sweeping the clock frequency and
+monitoring the rate at which timing errors happen, the CUT delay can
+be measured with a very high accuracy. \cite{majzoobi2010fpga}, using
+a Xilinx Virtex-5 FPGA implementing a PDL with 5 control bits (since
+there are 6-input LUTs), measured a maximum delay difference between
+the paths of 9ps. The structure of the new arbiter PUF presented by \cite{majzoobi2010fpga}
+is still based on switch blocks. However, as stated above, they require
+a perfect layout symmetry (for example the paths \textit{a} and \textit{d}
+or \textit{b} and \textit{c} should be of the same length, as shown
+in Figure~\ref{fig:Switch-blocks-and} (a) and (b)).
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.7]{images/delayabstraction}
+\par\end{centering}
+
+\protect\caption{\label{fig:Switch-blocks-and}Switch blocks and their delay abstraction.}
+\end{figure}
+To mitigate this issue, \cite{majzoobi2010fpga} introduced a non-swapping
+switch block, Figure~\ref{fig:Switch-blocks-and} (c) and (d).\\
+\indent
+The resulting system consists of \textit{N} non-swapping switches
+and \textit{K} PDLs (Figure~\ref{fig:Arbiter-based-PUF}). The PDLs determine
+the \textit{tuning level}, and insert extra delays into either the
+top or bottom path based on their selector inputs to cancel out the
+delay bias caused by routing asymmetry. Furthermore, to improve the
+arbiter's accuracy, a Majority Voting system has been used.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.70]{images/pdlsystem}
+\par\end{centering}
+
+\protect\caption{\label{fig:Arbiter-based-PUF}Arbiter based PUF.}
+\end{figure}
+Moreover, to reach better performance results, PDLs blocks can be
+used to distinguish the challenges that cause a larger delay difference
+under each different temperature or voltage, and mark them as robust
+challenges. The basic idea is that if the resulting delay difference
+by the applied challenge is large enough, it is not likely to be affected
+by small environment variations. On the other hand, a drawback is
+that the responses from robust challenges are more likely to have
+lower entropy.\\
+\indent
+It must be noted that the system described above should be the same
+on different devices (from the definition of PUF). However, the PDLs,
+thus their tuning levels, are much likely to vary between different
+chips. Nevertheless, the tuning bits can be treated as a separate
+set of challenges.
+
+
+\subsubsection{Ring Oscillator PUF}
+
+A RO PUF was first presented by Suh et al. in 2002 \cite{suh2007physical}.
+A ring oscillator (Figure~\ref{fig:5-stage-Ring-Oscillator}) is a circuit
+composed of an odd number of inverting stages that maintain a continuous
+oscillation, and its frequency is determined by the delay introduced
+by each inverting stage.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{images/ringoscillator}
+\par\end{centering}
+
+\protect\caption{\label{fig:5-stage-Ring-Oscillator}5-stage Ring Oscillator.}
+\end{figure}
+A Ring Oscillator PUF is composed of many identically laid-out ring
+oscillators. Measuring the frequency of a RO is equivalent to measuring
+the delay, and due to random manufacturing variations on the delay,
+the exact frequency will also be partially random and device-dependent.
+Therefore the oscillators must have an identical layout on the IC,
+such that any frequency differences between each pair of RO are strictly owed to intrinsic process variations. The basic idea is to evaluate
+the frequency difference between a pair of RO using two counters,
+and depending on their value a 1-bit output is generated (Figure~\ref{fig:Ring-Oscillator-PUF}).
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.8]{images/ringoscillatorpuf}
+  \figcaption{Ring Oscillator PUF.}
+  \label{fig:Ring-Oscillator-PUF}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+More formally, a pair of frequencies, $f_{a}$ and $f_{b}$ ($a\neq b$),
+out of \textit{n} ring oscillator outputs, are selected using a pair
+of multiplexers with the PUF challenge as the select bits of the multiplexers.
+A response bit $r_{ab}$ is produced using the following comparison
+method (quantization process):
+\[
+r_{ab}=\begin{cases}
+1 & if\hspace{5bp}f_{a}>f_{b}\\
+0 & otherwise
+\end{cases}
+\]
+One pairing strategy is that, given \textit{N} ring oscillators, $\frac{N(N-1)}{2}$
+distinct pairs can be compared. However, the entropy of the circuit,
+which corresponds to the number of independent bits that can be generated
+from the circuit, is less than $\frac{N(N-1)}{2}$, because the bits
+obtained from pair-wise comparisons are correlated. Moreover, to maximize
+the entropy there are only $\frac{N}{2}$ independent comparisons,
+hence response bits, yielding to a limit upper bound of $O(N)$ challenges.\\
+\indent
+Another pairing strategy is the \textit{chain-like neighbor coding}
+\cite{yin2013improving}, which consists of two design principles:
+\begin{enumerate}
+\item place ROs as close as possible to minimize the systematic variation;
+\item pair ROs located adjacent to each other.
+\end{enumerate}
+The above strategy, given \textit{N} ROs, will generate $N-1$ bits,
+thus still yielding to a limit upper bound of $O(N)$.\\
+\indent
+\cite{komurcu2013ring} tested both the strategies on FPGAs, yielding
+to the following results:
+\begin{itemize}
+\item using $\frac{N}{2}$ independent comparisons, $\mu_{inter}=49.05\%$
+and $\mu_{intra}=0.89\%$;
+\item using the \textit{chain-like neighbor coding}, $\mu_{inter}=49.55\%$
+and $\mu_{intra}=1.31\%$.
+\end{itemize}
+In addition to the regular RO PUFs, grouping based RO PUFs have been
+proposed \cite{yin2010lisa}, which offer much higher rate of entropy
+extraction, yielding to a CRP limit upper bound of $O(\left\lfloor Nlog_{2}N\right\rfloor )$.\\
+\indent
+Another proposal has been done by \cite{yu2010recombination} introducing
+the so-called Ring Oscillator Sum PUFs. ROs are subdivided into \textit{k}
+pairs, with each pair having a certain frequency difference $\delta f_{i}$
+(digitized using counters, like the output of regular ROs). All $\delta f_{i}$
+are summed, with challenge bits determining the individual signs as
+shown in Figure~\ref{fig:Ring-Oscillator-Sum}. A last block compares the
+result of the sum with zero and produce a response bit. Using this
+structure, the number of CRPs increases to $2^{k}$.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.88]{images/rosum}
+\par\end{centering}
+
+\protect\caption{\label{fig:Ring-Oscillator-Sum}Ring Oscillator Sum PUF.}
+\end{figure}
+However, besides the challenge size problem, RO's frequencies are very
+susceptible to environmental changes, such as temperature and voltage.
+The solution to mitigate this effect is based on the following idea:
+ring oscillators whose base frequencies are far apart are much less
+likely to flip a response bit than ring oscillators whose frequencies
+are close together, as shown in Figure~\ref{fig:Relationship-between-ring}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.88]{images/ringoscillatorfar}
+\par\end{centering}
+
+\protect\caption{\label{fig:Relationship-between-ring}Relationship between ring oscillator
+frequencies.}
+\end{figure}
+Thus, it is possible to remove a significant portion of errors if
+only ring oscillator pairs whose frequencies are far apart are compared.
+To achieve this objective, a \textit{1-out-of-k} masking scheme can
+be used. This method requires the sequence of ring oscillators to
+be \textit{k} times longer than the desired number of bits to be generated.
+Then, for each \textit{k} ring oscillator pairs, the pair that has
+the maximum distance is chosen.\\
+\indent
+Other masking schemes such as \textit{picking n out of m}, or using
+a distance threshold are also possible.
+In \cite{suh2007physical} a \textit{1-out-of-k} masking scheme, with
+$k=8$, has been used. Experiments on 15 Xilinx Virtex-4 LX25 FPGAs
+and 1024 ROs yield to $\mu_{inter}=46.15\%$ and $\mu_{intra}=0.48\%$.
+This comes to a price of an higher resource utilization factor, calculated
+as: $\frac{2}{k}\cdot100\%=25\%$, thus only 2 of 8 ROs are effectively
+used to generate a response bit.\\
+\indent
+Instead, \cite{maiti2011improved} showed that redundancy can still
+be achieved maintaining a 100\% utilization factor using a configurable
+RO structure. In a configurable RO structure (CRO, Figure~\ref{fig:Configurable-Ring-Oscillator}), a 2:1 multiplexer is inserted at each delay stage of the RO to select one delay element out of the two. Using a RO with \textit{m} stages,
+$2^{m}$ distinct ring oscillators can be configured.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.8]{images/ringoscillatorconfigurable}
+\par\end{centering}
+
+\protect\caption{\label{fig:Configurable-Ring-Oscillator}Configurable Ring Oscillator.}
+\end{figure}
+Using this method with $m=3$, \cite{maiti2011improved} showed that
+it is possible to synthesize this structure on the Xilinx Spartan-3E
+FPGA using only a single CLB. Thus, it is possible to evaluate eight
+pairs of frequency comparisons between two CLBs instead of just a
+single pair in a simple RO (Figure~\ref{fig:ROs-comparisons}). The RO-pair,
+for which $\Delta f$ is maximum, is stored as the challenge during
+the PUF enrollment.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.8]{images/ringoscillatorcro}
+\par\end{centering}
+
+\protect\caption{\label{fig:ROs-comparisons}ROs comparisons.}
+\end{figure}
+Furthermore, \cite{maiti2011improved} also modeled the total delay
+in a ring oscillator as follows:
+\[
+d_{LOOP}=d_{AVG}+d_{RAND}+d_{SYST}
+\]
+where $d_{AVG}$ is the nominal delay that is the same for all identical
+ROs, $d_{RAND}$ is the delay due to the random process variation,
+and $d_{SYST}$ is the delay due to the systematic variation.\\
+\indent
+The difference between two ROs, \textit{a} and \textit{b}, is determined
+as follows:
+\[
+\nabla d_{LOOP}=(d_{AVG}+d_{RANDa}+d_{SYSTa})-(d_{AVG}+d_{RANDb}+d_{SYSTb})=\nabla d_{RAND}+\nabla d_{SYST}
+\]
+Thus, the response bit between the same pair of ROs is determined
+as follows:
+\[
+r_{ab}=\begin{cases}
+1 & if\hspace{5bp}\nabla d_{LOOP}<0\\
+0 & otherwise
+\end{cases}
+\]
+\cite{maiti2011improved} showed that two closely located ROs have
+similar $d_{SYST}$ resulting in a negligible value of $\nabla d_{SYST}$.
+Therefore $\nabla d_{RAND}$ becomes a huge factor that determines
+the random frequency variation between a pair of ROs.\\
+\indent
+Placing the group of ROs as close as possible to each other (such
+as in a 2-dimensional array, to reduce $d_{SYST}$) and comparing
+physically adjacent pair of ROs, it is possible to improve the PUF
+uniqueness. Measurement results, achieved testing 512 ROs on 125 Spartan-3E
+FPGAs, yield indeed to $\mu_{inter}=47.31\%$.\\
+\indent
+Authors in \cite{maiti2010large} implemented an array of 512 ROs,
+each with 5 stages loop, on the Spartan-3E S500 FPGA, and analyzed
+the data collected from 125 chips. Moreover, for each of the 512 ROs
+100 frequency samples have been collected at normal operating condition.
+The global average frequency among all the FPGAs was of 205.1MHz,
+as shown in Figure~\ref{fig:Average-RO-frequency}. The standard deviation
+of the frequency's distribution, thus the inter-die variation, was
+of 13.54MHz. The authors also demonstrated that a large scale experiment
+is better in accuracy compared to smaller dataset. In fact, using
+several groups of 16 FPGAs, they stated that the frequency average
+was less accurate of about 6\% compared to the global average of 205.1MHz.
+Additionally, they estimated the uniqueness and the reliability of
+the RO PUF based on a 511-bit key extracted from the array of 512
+ROs. The uniqueness was of 47.31\% and the reliability was of 0.86\%.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.9]{images/rofrequency}
+\par\end{centering}
+
+\protect\caption{\label{fig:Average-RO-frequency}Average RO frequency of individual
+FPGAs.}
+\end{figure}
+Regarding ROs FPGA implementation, all oscillators must be identical,
+but unlike the butterfly PUF and the arbiter PUF, the layout and routing
+requirements are less restrictive. For example, the paths from oscillator
+outputs to counter do not need to be symmetric. Moreover, by using
+many clock cycles, the difference in oscillator frequencies can be
+amplified and will dominate any skews in routing. Therefore, RO PUFs
+are FPGA-independent and allow an easier implementation for FPGAs,
+an easier evaluation of the entropy, and higher reliability than the
+arbiter PUF. On the other hand, the RO PUF is slower, larger and consumes
+more power to generate bits (due to the continuous oscillation) than
+the arbiter PUF \cite{suh2007physical}.\\
+\indent
+As a matter of fact, \cite{feitenanalysis} implemented 64 ROs on
+20 Altera Cyclone IV FPGAs. Instead of using a chain of \textit{N}
+inverter as delay elements, a chain composed of only one inverter
+and many delaying drivers was used. This type of RO has a lower frequency,
+but it does not change its behavior. \cite{feitenanalysis} obtained
+128 response bits comparing the first 64 ROs using the \textit{chain-like
+neighbor coding}, and the last 64 ROs comparing pairs having an index
+difference of 4 among each others (e.g. {[}1,5{]}, {[}2,6{]} etc.).
+Furthermore, for each PUF a different number of delay elements were
+tested. The best PUF resulted to be the one with 16 delay elements,
+yielding to $\mu_{inter}=46.25\%$ and $\mu_{intra}=1.18\%$%
+\footnote{$\mu_{intra}$ was measured applying the same challenge multiple times,
+and seeing if responses were stable. Therefore it was not measured under
+different noticeable environmental conditions.}.\\
+\indent
+The authors of \cite{merli2010improving} proposed a strategy to improve
+the RO PUF by studying the effect of the surrounding logic on the
+ROs' frequencies. First of all they experimentally demonstrate a relation
+between the spatial frequency distrubtion and the position of surrounding
+logic to read-out the oscillators' frequency. In particular they placed
+\textasciitilde{}3000 RO by means of hard macro, in order to fit only
+one CLB on a Spartan3E architecture, such that they roughly cover
+half a die, and additionally they repeated the experiments by placing
+the surrounding logic in 4 different ways (Figure \ref{fig:spatial-frequency}).
+As one can notice, the read-out logic deeply alters the intra-die
+conditions in a circular way such that the lowest frequencies are
+located in the center and highest frequencies are disposed on concentric
+circles all around. The authors claimed that this phenomenon is generated
+by local condition, such as the temperature, and the related logic
+could change these conditions due to their intrisic characteristic,
+such as the flowing current, signal paths, and so on.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[width=0.75\textwidth]{images/spatial_frequency_RO}
+\par\end{centering}
+
+\protect\caption{\label{fig:spatial-frequency}Spatial distribution of frequencies
+over a Spartan3E die, changing the shape and the position of the surrouding
+logic elements.}
+\end{figure}
+In order to have a good list of comparable RO for the CRPs, the ROs
+pairs should be chosen by spatial criteria. This method allows the ROs
+pairs to have the same conditions.\\
+\indent
+Also, given a RO pair, the other ROs have to be considered sorround
+logic. In order words, a RO depends on neighbouring ROs. For this
+reason, \cite{merli2010improving} proposed an enable/disable RO architecture
+which allows to keep on the only ROs which are using for the measurement.
+
+
+\subsubsection*{Temperature-Aware Cooperative}
+
+The linear dependency between frequency and temperature has been reported
+in many empirical studies \cite{boemo1997thermal,lopez2002dynamically}:
+a 15\textdegree C increase will cause a 10-15\% delay increase.\\
+\indent
+Assuming to be able to detect the on-chip temperature, the idea is
+to define \textit{temperature-aware bit generation rules} \cite{qu2009temperature}.\\
+\indent
+For example, for a pair of ring oscillators RO1 and RO2, if RO1 is
+faster than RO2 when the temperature is below $k_{low}{^\circ}C$
+but slower than RO2 when the temperature is above $k_{high}{^\circ}C$,
+then this pair cannot generate a reliable bit (Figure~\ref{fig:Relationship-between-ring}).
+However, it is possible to correct the pair behavior using the following
+rules:
+\begin{itemize}
+\item R1: if the operating temperature is lower than $k_{low}$ ($k_{low}<k\text{\textdegree C}$),
+the generated bit is 0 if RO1 is faster, and 1 if RO1 is slower;
+\item R2: if the operating temperature is lower than $k_{high}$ ($k_{high}<k\text{\textdegree C}$),
+the generated bit is 0 if RO2 is faster, and 1 if RO2 is slower.
+\end{itemize}
+The pair is now capable of generating the correct response bit, but
+only when the temperature is outside the $[k_{low},k_{high}]$ interval,
+called \textit{undecided temperature gap}. Basically, $[k_{low},k_{high}]$
+is the range of temperature where the delay difference of the two
+ROs is not sufficiently large enough to determine which one is faster
+than the other. Thus, when the temperature falls in that gap, it is
+possible to use another pair of ROs with a different interval to generate
+the response bit.\\
+\indent
+This idea was described by \cite{qu2009temperature}, that introduced
+the following classification:
+\begin{itemize}
+\item \textbf{A good pair:} if RO1 (or RO2) is sufficiently faster than
+RO2 (or RO1) for the entire range of the operating temperature, we
+define this to be a bit 1 (or 0), respectively. This is a reliable
+bit.
+\item \textbf{A bad pair:} if the delay of RO1 and RO2 are not sufficiently
+apart to define a reliable bit at any temperature. This pair of ring
+oscillator is unusable, thus it has to be removed.
+\item \textbf{A contributing pair:} if the delay difference of RO1 and RO2
+is sufficiently large to define a bit only in a certain range of the
+operating temperature, bit generation rules R1 and R2 are used to
+generate a reliable bit in this range. The generation of the same
+bit outside this temperature range is based on the cooperation with
+other ring oscillator pairs.
+\end{itemize}
+For example, considering Pair 1 (Figure~\ref{fig:RO's-pairs'-range}), if
+its temperature \textit{k} (obtained from on-chip temperature sensors)
+is outside of $[k_{low1},k_{high1}]$ range, we can use rule R1 or
+R2 to determine the response bit; otherwise, we will look up the output
+of Pair 6 and use its complement as the output bit as the substitute
+for Pair 1. On the other hand, it is easy to notice that we can use
+Pair 4, but not Pair 2, Pair 3 and Pair 5.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.5]{images/temperatureaware}
+\par\end{centering}
+
+\protect\caption{\label{fig:RO's-pairs'-range}RO's pairs' range of temperatures (V:
+first ring oscillator in the pair is sufficiently faster than
+second; X: second ring oscillator in the pair is sufficiently
+faster than first).}
+\end{figure}
+Therefore, this temperature-aware cooperative RO PUF introduce an
+additional step before the so-called \textit{system enrollment}. The
+step consists of selecting the good and the contributing pairs, and
+of measuring the undecided temperature gap for the latter. The measurements
+are then stored into a non-volatile memory; if the probability for
+one ring oscillator to be faster than another one is perfectly \textit{0,5},
+then the non-volatile memory does not reveal the secret hidden in
+the PUF hardware structure.
+
+
+\subsubsection{Transient Effect Ring Oscillator}
+
+The authors of \cite{varchola2010new} introduced new entropy elements
+in order to design a robust TRNG, based on a transient metastability
+behavior. The circuit they designed is called Transient Effect Ring
+Oscillator, TERO (Figure~\ref{fig:Transient-Effect-Ring}), and exploits a
+loop between 2 XOR gates. In fact XORs work as controlled inverter,
+which means that if \emph{ctrl} is '0' the gates operate as a buffer,
+else they function as inverter. In steady state \emph{rst} and \emph{ctrl}
+are set to '0'. If the circuit is stimulated by a rising edge on\emph{
+ctrl}, the XORs invert their actual output level. Such action disturbs
+the steady state of the loop due to the fact that the new XORs\textquoteright{}
+output levels begin to circulate through the loop, but not infinitely. The pulse will disappear after a variable amount of oscillations.
+\begin{figure}
+\begin{centering}
+\includegraphics[width=1\textwidth]{images/tero}
+\par\end{centering}
+
+\protect\caption{\label{fig:Transient-Effect-Ring}Transient Effect Ring Oscillator
+Architecture.}
+\end{figure}
+In \cite{bossuet2013puf} a new TERO architecture has been proposed,
+but with the aim to obtain a circuity able to extract not only a random
+number, but also to obtain a PUF. They changed the gates into the
+TERO loop and exploited the number of oscillations to obtain the PUF
+response.\\
+\indent
+This new architecture seems to be very promising in terms of reliability
+($\mu_{inter}=48\%$) and bias, but the area that it requires is quite
+big if compared with other architectures. Nevertheless, the authors claimed
+that they never attempted to reduce the area utilization. Moreover this
+kind of circuit allows to have an inner TRNG.\\
+\indent
+This is possible taking into account all the counter's bit. In fact
+the first 3 bits of the counters instantiated by the circuit seem
+to keep the same values over successive trials ($\mu_{intra}=1.7\%$)
+and on the same chip, but the LSB have a random behavior, that can
+be successfully exploited in number generation.
+\begin{figure}
+\begin{centering}
+\includegraphics[width=0.5\textwidth]{images/tero_bousset}
+\par\end{centering}
+
+\protect\caption{\label{fig:Transient-Effect-Ring-Bous}Transient Effect Ring Oscillator
+implemented by Bousset et al.}
+\end{figure}
+
+
+\subsubsection{Loop PUF}
+
+The RO PUF is basically composed of ring oscillators, that are chains
+of inverters in which the last inverting stage's output is the input
+of the first stage. As said, the number of stages is a quite sensitive
+parameter because it can deeply affect the PUF quality.\\
+\indent
+In \cite{cherif2012easy}, the authors proposed a PUF architecture
+based only on one inverting stage. The main component is a chain of
+delay components, which receive a control word $C_{i}$ of $M$ bits.
+The LPUF structure is a compound of $N$ delay chains, closed by only
+one inverter (Figure~\ref{fig:LPUF}). The LPUF always oscillates when the
+AND gate is activated, but the frequency at which it produces the pulses
+depends on the input challenge.
+
+\vspace{\abovedisplayskip}
+\begin{minipage}{\textwidth}
+  \centering
+  \includegraphics[scale=0.15]{images/delay_elem}
+  \figcaption{The delay element.}
+  \label{fig:Delay-Elem-Cherif}
+\end{minipage}
+\vspace{\belowdisplayskip}
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=1\textwidth]{images/lpuf}
+\par\end{centering}
+
+\protect\caption{\label{fig:LPUF}Architecture overview of a Loop PUF.}
+\end{figure}
+The architecture is very simple as there is no need to cross signals
+in the delay elements and extra logic to balance the chains. The only
+design constraint needed in order to build the LPUF is to duplicate
+the delay chain N times with an exact reproduction of the placing
+and routing.\\
+\indent
+Let $C_{1}^{j}$ and $C_{2}^{j}$ two control words for the LPUF.
+If an oscillation period measurement is done with the combination
+$C_{1}^{j}=0$ and $C_{2}^{j}=1$, then with $C_{1}^{j}=1$ and $C_{2}^{j}=0$,
+the difference of the two measured delays is: $D^{j}=\left(d_{1,0}^{j}+d_{2,1}^{j}\right)-\left(d_{1,1}^{j}+d_{2,0}^{j}\right)$.
+Since the delay elements are all the same, $D^{j}$ should be equal
+to 0. Of course this is never the case because of the process dispersion.
+Hence for \textbf{N = 2}, if we consider the control words C1 and
+C2, the PUF identity ID can be expressed by:
+\[
+ID=sign\left(D_{C_{1}C_{2}}-D_{C_{2}C_{1}}\right)=sign\left(\sum_{j=1}^{M}\left(d_{1,C_{1}^{j}}^{j}+d_{2,C_{2}^{j}}^{j}\right)-\left(d_{1,C_{1}^{j}}^{j}+d_{2,C_{2}^{j}}^{j}\right)\right)
+\]
+The experimental results also demonstrated the effectiveness of the
+approach.
+
+
+\subsubsection{Anderson PUF}
+
+This type of PUF is based exclusively on the logic offered natively
+by FPGAs, such as LUTs, multiplexers, flip-flop etc. Therefore, it
+is not FPGA-independent, but it has the advantage of being very efficient
+in terms of resource utilization because it is designed for specified
+FPGA fabrics.\\
+\indent
+The Anderson PUF \cite{anderson2010puf} is a concatenation of some primitives,
+so called Anderson PUF cells, that, by means of manufacture
+variations, produce logic-0 or logic-1 as output. By duplicating
+the PUF cell, a multi-bit PUF signature can be generated.\\
+\indent
+The Anderson PUF does not work in a challenge-response paradigm since it
+does not require inputs to generate a response, hence it can be mainly
+used as one signature generator.\\
+\indent
+The structure of the Anderson PUF Cell is shown in Figure~\ref{fig:simpleanderson}:
+it is composed of two 16-bit shift registers, two 2-to-1 multiplexers and one D flip-flop. Both shift registers are driven
+by the same clock signal and are properly initialized in order
+to produce two signals in opposite phase (i.e. 0x5555 and
+0xAAAA), and to indefinitely generate these output sequences.
+Outputs of shift-registers A and B drive the select pin of
+multiplexers A and B, respectively. Both the multiplexers have
+their 0 data input tied to logic-0; multiplexer B has its 1 data
+input tied to logic-1 and its output drives the 1 data input of
+multiplexer B. The output N2 of multiplexer B is connected to
+the preset input of the D flip-flop, which is initialized to logic-0
+and it has its output fed back into its input. The flip-flop holds
+the response bit, and outputs a logic-0 until a logic-1 signal
+reaches its preset input, which is asynchronous and active high.
+Outputs of the two shift-registers are complementary
+to each other, hence N2 is always logically tied to the
+logic-0 value. However, although the two pairs of shift-register/multiplexer should be physically identical, their delays
+are different due to intrinsic manufacturing imperfections.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.15]{images/simple_anderson_cell}
+\par\end{centering}
+
+\protect\caption{\label{fig:simpleanderson}Anderson PUF Cell.}
+\end{figure}
+Indeed, we can list two cases:
+\begin{itemize}
+	\item if the delay of the A pair is shorter than the B pair, when
+shift-register A shifts from logic-0 to logic-1, multiplexer A
+selects the 1 data input, but signal N1 has not yet transitioned
+from logic-1 to logic-0. Therefore, signal N2 is determined by
+the value of signal N1, which is logic-1 until it transitions to
+logic-0. During this time interval, a glitch will appear on N2;
+	\item if the delay of the A pair is greater than the B pair,
+when shift-register B shifts from logic-0 to logic-1, the A
+multiplexer has not yet selected the 0 data input. Again, signal
+N2 is determined by the value of N1, which is logic-1, and
+a glitch will appear on N2 until the A pair transitions from
+logic-1 to logic-0.
+\end{itemize}
+The glitch shape, in particular its width, is determined by
+the difference of involved delays. Anderson claimed that if the
+glitch is too short, the routing network might be able to filter
+it before it reaches the preset input of the flip-flop.
+But to be effective the glitch width has also to be greater than the amount of time required to effectively preset the flip-flop (time
+constraint). Hence, a glitch appearing on N2, and consequently
+on the preset input of the flip-flop, does not directly imply that
+the PUF cell response is logic-1. Therefore, a glitch tuning
+process is required during the PUF design. Indeed, if the cell
+inherently generates too wide or too narrow glitches, the PUF
+response might turn out to be biased.\\
+\indent
+The Anderson PUF was designed to work only on Xilinx Virtex-5 65 \textit{n}m FPGAs; afterwards, further designs for different Xilinx FPGA families have been proposed. Indeed, authors in \cite{zhang2013design} demonstrated that the same Anderson PUF architecture can also be synthesized on Xilinx Zynq-7000 28 \textit{n}m FPGAs, achieving high uniqueness and reliability values. Authors in \cite{huang2013delay} reached analogous results on Xilinx Virtex-6 40 \textit{n}m FPGAs, and they also proposed a method to directly incorporate some challenge bits for each Anderson cell. Moreover, authors in \cite{diaz2014puf} presented an implementation of the Anderson PUF on Xilinx Spartan-3E 90 \textit{n}m FPGAs, but they do not give detailed analysis on the specific architecture. Nevertheless, we successfully implemented the Anderson PUF on Xilinx Spartan-3E 90 \textit{n}m FPGAs, as detailed in Appendix A.\\
+\indent
+As for the original Virtex-5 implementation, the FPGA, similarly to other Xilinx FPGAs' architectures, is based on Configurable Logic Blocks (CLBs) arranged in a two-dimensional array (Figure~\ref{fig:virtex5}). A CLB comprises a pair of slices, each containing four 6-input look-up-tables (LUTs), four flip-flops and other logic elements. Slices can be of two types: (i) \textit{SLICEL}, which provides logic, arithmetic, and ROM functions; (ii) \textit{SLICEM}, which includes the \textit{SLICEL} functions, and also implements memory functions, such as distributed RAM and shift-registers. Each CLB can contain either two \textit{SLICEL}s or one \textit{SLICEM} and one \textit{SLICEL}.
+Both slices are equipped with a carry chain structure which can be used to propagate carry signals only through column-aligned slices.
+\begin{figure}[H]
+\begin{centering}
+			\includegraphics[width=0.55\columnwidth]{images/virtex5structure.pdf}
+			\caption{High level view of Xilinx Virtex-5 architecture.}
+			\label{fig:virtex5}
+			\end{centering}
+\end{figure}
+Shift operations of the Anderson PUF are implemented using two \textit{SLICEM} LUTs, configured as 16-bit shift-registers. The two multiplexers are interconnected using the carry chain, and the flip-flop can be located in the same slice of the other elements. Therefore, the Anderson PUF cell could be theoretically implemented using only one slice, but glitch modulation has to be considered. To this aim, Anderson increased the glitch pulse width by varying the distance between the two multiplexers. The best tuning was shown to be composed of 5 intermediate carry chain multiplexers (Figure~\ref{fig:Distance-between-the}). In fact, Anderson stated that this configuration produced the best results in terms of responses quality. Experimental measurements of a 128-bit PUF implemented on 6 FPGAs
+and in 6 different regions yield to $\mu_{inter}=48.28\%$ and $\mu_{intra}=3.6\%$
+(varying only the temperature).
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{images/andersonpufdisposition}
+\par\end{centering}
+
+\protect\caption{\label{fig:Distance-between-the}Implementation of the Anderson PUF cell on Virtex-5.}
+\end{figure}
+These results were disputed by \cite{grabher2013re} stating that:
+\begin{enumerate}
+\item the PUF cannot function in a challenge-response paradigm, due to the
+fact that the PUF design does not permit an input. However the PUF
+can still work as signature generator;
+\item the value held by the flip-flop may be changed to 1 from 0 by a glitch
+on its preset input, but there is no complementary operation.
+\end{enumerate}
+A consequence of the second point is that even if glitches are
+filtered, one will eventually reach the preset input, setting permanently
+the flip-flop output to 1 instead of 0. \cite{grabher2013re} called
+this phenomenon \textit{saturation}, and demonstrated that, as time
+progresses, the number of output bits switching to 1 increases, causing
+$\mu_{intra}$ to be of about 30\% after only 50s from the start-up.
+However, \cite{grabher2013re} also proposed a solution, which consists
+of sampling the PUF response at a later and fixed time, such that
+the response is as close as possible to being uniformly distributed.\\
+\indent
+Instead, the first point was addressed by \cite{huang2013delay}
+that proposed an improved Anderson PUF equipped with a challenge input.
+However, it must be noted that the enhanced
+PUF cannot work in a public challenge-response paradigm using only
+one challenge bit per cell, because it would be extremely susceptible
+to modeling attacks. Indeed, since the Anderson PUF's response is a concatenation of PUF's cells, it is possible to derive a model of the
+challenge-response pairs by simply applying two challenges, one configured
+with all 1 and the other with all 0, and by sampling the two PUF responses.
+Therefore, to allow the PUF to work in a challenge-response paradigm, its responses must not be public, or a higher number of challenge bits, thus of multiplexers, is required. Further improvements are discussed in Chapter 4.
+
+
+\subsection{Composite PUFs}
+
+PUF composition uses a set of smaller component PUFs to design a larger
+PUF, named \textit{Composite PUF}, by applying a set of simple composition
+rules. This is motivated by the observation that it is relatively
+easier to achieve good uniqueness and uniformity for a small PUF on
+a FPGA and it becomes gradually difficult with the increase of PUF
+size \cite{sahoo2014composite}. Combining multiple component PUFs,
+it is possible to generate a PUF with a larger challenge space and
+better quality metrics, starting with constituent PUFs of smaller
+challenge space and inferior quality metrics.\\
+\indent
+Its formal definition is the following \cite{sahoo2014composite}:
+\begin{verse}
+A composite PUF ($\zeta$) over a given set of PUFs $\Gamma=\{\gamma_{i}\;|\;\gamma_{i}:C_{i}\rightarrow R_{i},\; C_{i},R_{i}\subseteq\{0,1\}^{+},\; i=1,...,m\}$
+is a PUF that is defined by repeatedly applying one or more of the
+following rules:
+\begin{verse}
+a. $(\gamma_{i}\vartriangleleft\gamma_{j})(x)=\gamma_{i}(\gamma_{j}(x))$,
+where $x\in C_{j}$.
+
+b. $(\gamma_{i}\parallel\gamma_{j})(x,y)=\gamma_{i}(x).\gamma_{j}(y)$,
+where $x\in C_{i}$, $y\in C_{j}$, and \textit{``$.$''} is the
+binary string concatenation operator.
+
+c. $(\gamma_{i}\oplus\gamma_{j})(x,y)=\gamma_{i}(x)\oplus\gamma_{j}(y)$,
+where $x\in C_{i}$, $y\in C_{j}$, and \textit{``$\oplus$''} is
+the bit-wise exclusive-OR operator.
+\end{verse}
+\end{verse}
+The advantages of the above operators are the following:
+\begin{verse}
+a. it is a randomness enhancing operator.
+
+b. if some inputs of $\parallel$ are biased towards 0 and some towards
+1, it constructs a combined bit string which is less biased.
+
+c. if at least one of the $\oplus$ inputs is unbiased, then the output
+is also unbiased.
+\end{verse}
+However, to find the optimal composition, one has to explore the entire
+\textit{composite PUF space} and to quantitatively measure each composite
+PUF. Of course this is an unlikely and exhaustive process to do when
+the composite PUF space is huge, especially because each composite
+PUF has to be physically implemented and characterized.\\
+\indent
+Therefore \cite{sahoo2014composite} introduced a a theoretical quality
+evaluation framework. Given a-priori quality metrics of component
+PUFs, it is possible to deduce the quality metrics of composite PUFs
+in terms of component PUFs, assuming individual PUF outputs to be
+statistically independent.\\
+\indent
+Let $\gamma_{1}$ and $\gamma_{2}$ be two component PUFs with uniformity
+uniqueness $u_{1}$ and $u_{2}$, and reliability $R_{1}$ and $R_{2}$,
+respectively. Let $Y_{1}$ and $Y_{2}$ be two random variables corresponding
+to the outputs of $\gamma_{1}$ and $\gamma_{2}$, respectively. Let
+$Pr(Y_{i}=1)$ be the probability that $\gamma_{i}$ produce 1 as
+output response. The following metrics are defined.
+
+\paragraph*{Metrics for $\oplus$:}
+Let $\gamma_{i}^{1}$ and $\gamma_{i}^{2}$ be two instances of the
+component PUF $\gamma_{i}$. Let $\gamma_{\oplus}^{1}=\gamma_{1}^{1}\oplus\gamma_{2}^{1}$
+and $\gamma_{\oplus}^{2}=\gamma_{1}^{2}\oplus\gamma_{2}^{2}$ be two
+instances of the composite PUF $\gamma_{\oplus}$. Its uniqueness
+$u_{\oplus}$ is the probability that $\gamma_{\oplus}^{1}$ and $\gamma_{\oplus}^{2}$
+produce different output bits:
+\[
+u_{\oplus}=Pr(Y_{\oplus}^{1}\neq Y_{\oplus}^{2})=Pr(Y_{1}^{1}=Y_{1}^{2}\wedge Y_{2}^{1}\neq Y_{2}^{2})+Pr(Y_{2}^{1}=Y_{2}^{2}\wedge Y_{2}^{1}\neq Y_{1}^{2})=u_{1}+u_{2}-2u_{1}u_{2}
+\]
+since $Pr(A\oplus B)=Pr(A)(1-Pr(B))+Pr(B)(1-Pr(A))=Pr(A)+Pr(B)-2Pr(A)Pr(B)$,
+meaning that exactly one of two independent events can happen.\\
+\indent
+Reliability of $\gamma_{\oplus}$ is:
+\[
+R_{\oplus}=R_{1}+R_{2}+(1-R_{1})(1-R_{2})
+\]
+
+\paragraph*{Metrics for $\parallel$:}
+
+Uniqueness is defined as the average of uniqueness of component PUFs:
+\[
+u_{\parallel}=\frac{1}{2}[u_{1}+u_{2}]
+\]
+Reliability is defined as:
+\[
+R_{\parallel}=R_{1}\cdot R_{2}
+\]
+implying that a fault in one component PUF results as faulty response for
+composition.
+
+\paragraph*{Metrics for $\vartriangleleft$:}
+
+In composition $\gamma_{\vartriangleleft}=\gamma_{2}\vartriangleleft\gamma_{1}$,
+response of PUF $\gamma_{1}$ is fed as challenge of PUF $\gamma_{2}$.
+So the challenge space of $\gamma_{2}$ is controlled by $\gamma_{1}$,
+thus challenges of $\gamma_{2}$ might not be equally probable. However,
+$q$ PUFs can be connected serially. Let $C_{q}$ be the challenge
+space of the component PUF at the q-th stage. In the serialization
+operation for every challenge $i\in C$ to the \textit{q} serially
+connected PUFs, there is a set of possible intermediate challenges
+to the component PUFs at the q-th stage. The uniqueness parameter
+is evaluated based on the probability that the responses of q-th stage
+differ at different instances. It is then evaluated with respect to
+one such instance $l_{1}\in\mathcal{L}$ which creates an intermediate
+challenge \textit{j} at the q-th stage corresponding to the input
+challenge \textit{i}. However, there is a pool of instances $\mathcal{L}-\{l_{1}\}$
+with several intermediate challenges (denoted by \textit{k}) at the
+q-th stage with different probabilities. Therefore the probability
+of the pairs $l_{1}$ and $l_{2}\in\mathcal{L}-\{l_{1}\}$ possessing
+different outputs scaled by the probability of the \textit{k-th} intermediate
+challenge is considered to calculate the uniqueness of the $\vartriangleleft$
+operation, as it follows:
+\[
+u_{q,\vartriangleleft}=\frac{2}{|\mathcal{L}|(|\mathcal{L}|-1)}\sum_{l_{1}\neq l_{2}}\left[\frac{1}{|C|}\sum_{j=1}^{|C|}\sum_{k\in C_{q}}\left[1-Pr(Y_{j}^{l_{1}}=Y_{k}^{l_{2}})\right]\cdot p_{q-1}^{h(k)}(1-p_{q-1})^{n-h(k)}\right]
+\]
+where $p_{q-1}$ represents the output probability of the \textit{(q-1)-th}
+stage, and $h(k)$ denotes the Hamming weight of challenge \textit{k}
+for $\gamma_{q}$, i.e. the number of 1's in the challenge \textit{k}.
+Reliability is simply defined as:
+\[
+R_{\vartriangleleft}=R_{1}\cdot R_{2}
+\]
+However this is a probabilistic lower bound of reliability. It can
+be higher because intermediate component PUFs might eliminate faulty
+CRPs from the CRP space of PUF next to it in chain.
+
+~
+
+In \cite{sahoo2014composite} six different composite PUFs were built
+on the Spartan-3 FPGA using Ring Oscillator and Arbiter as component
+PUFs, as shown in Figure~\ref{fig:Composite-PUF-designs}.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.33]{images/composite}
+\par\end{centering}
+
+\protect\caption{\label{fig:Composite-PUF-designs}Composite PUF designs.}
+\end{figure}
+Out of the six compositions, the composite PUF (f) resulted the best
+in terms of uniqueness, reliability and resource utilization, yielding
+to $\mu_{inter}=49.04\%$ and $\mu_{intra}=97.48\%$.\\
+\indent
+\cite{sahoo2014composite} also demonstrated that the theoretical
+quality metrics described above are a good estimation of experimental
+metrics. For example, the theoretical $\mu_{inter}$ and $\mu_{intra}$
+for (f) were estimated to be 49.46\% and 96.82\%, respectively.
+
+
+\section{Known Attacks and Countermeasures}
+
+PUFs are susceptible of attacks if their usage is as a CPRs provider.
+In fact some pairs could be predicted in order to emulate the behaviour
+of an attacked PUF.\\
+\indent
+To this aim, the authors of \cite{guajardo2007fpga} introduced the
+concept of \textbf{strong PUF}, which is a PUF that has a huge number
+of CRPs. Formally, a strong PUF is a PUF that has \textit{N} CRPs
+such that an attack, based on exhaustively measuring the CRPs, has
+a low probability of success of $\frac{1}{N}\approx2^{-k}$, for large
+$k\approx100$. It follows that a PUF is \textbf{weak} if it is not
+a strong PUF.\\
+\indent
+Based on these concepts, \cite{zhang2014survey} summarized all the
+implemented PUFs as following%
+\footnote{The categorization also includes non-silicon PUFs, but this work does not consider this type of PUFs.%
+}:
+\begin{itemize}
+\item Strong PUFs: Arbiter PUF, Ring Oscillator Sum PUF.
+\item Weak PUFs: Ring Oscillator PUF, SRAM PUF, Butterfly PUF, Flip-Flop
+PUF.
+\end{itemize}
+Additionally, \cite{gassend2002controlled} introduced the concept
+of \textbf{controlled PUF}, which is a PUF that can only be accessed
+via an algorithm that is physically linked to the PUF in an inseparable
+way, i.e. any attempt to circumvent the algorithm will lead to the
+destruction of the PUF. This could be done by layering PUF delay wires
+over the algorithm circuitry, such that if an adversary tries to attack
+the control algorithm would have to damage a PUF wire, which would
+change the PUF and then its responses \cite{gassend2002silicon}.
+Indeed this method is not applicable on FPGAs, but only on ICs.
+
+
+\subsection{Modeling Attacks}
+
+The strong PUF seems to provide an high level of security, because
+a huge amount of CPRs are available. Counterintuitively this is not
+entirely true, because strong PUFs are the best target of modeling
+attacks. As a matter of fact, modeling attacks are exclusively applicable
+to strong PUFs. The weak ones are not so susceptible because they lack in
+providing enough CPRs to succeded an attack.\\
+\indent
+Modeling attacks involve Machine Learning (ML), which is a process
+that gives an entity (e.g. an algorithm) the ability to learn a complex
+behavior from a limited number of observations. Its objective is to
+generalize (i.e. predict) a behavior from the learned experience,
+deriving a numerical model from the input data applied during the
+learning phase. \\
+\indent
+Assuming that CRPs can be obtained by anyone with an unlimited physical
+access to the chip, and because strong PUFs have many CRPs, a relatively
+large subset of them can be applied to the machine during its learning
+phase%
+\footnote{Indeed, this is not true for weak PUFs due to the fact that they have
+few CRPs, from which the machine cannot accurately generalize. Nevertheless, due to their nature, the responses of weak PUFs can be easily discovered without any modeling attack.%
+}. During its operative phase, the machine will try to predict the
+response of the model, thus the targeted PUF, depending on new CRPs.
+This concept is based on the idea introduced by \cite{ruhrmair2012security}
+that the overall number of possible CRPs of many PUFs is larger than
+their entropy.\\
+\indent
+Indeed, to be successful a machine has to determine a polynomial-sized
+timing model that is accurate to within measurement errors. Once a
+model has been derived, it constitutes a digital clone of the original
+PUF.\\
+\indent
+Without loss of generality, we assume that we want to modeling a delay-based
+PUF%
+\footnote{This is a valid example since modeling attacks are exclusively applicable to a strong PUF,
+and since a strong PUF is for example an Arbiter PUF, which is a delay-based
+PUF.%
+}.
+
+
+\subsubsection{Linear Delay Models}
+
+Assuming that the element delays that make up a path add up themselves
+to the total path delay, an adversary can apply input (challenge)
+to the PUF and obtain a system of equations, relating measured path
+delays to element delays. In this case, a path delay equation is only
+dependent on the delays of the elements on its path. Moreover, the
+number of equations depends only on the number of the total delay
+elements, which is linear in the size of the considered PUF. Solving
+this system is relatively simple, since it is a set of linear equations
+in the continuous domain. Consequently, the model's input space is
+linearly separable, hence \textit{Support Vector Machines} are a good
+candidate to be used \cite{ruhrmair2013puf}.\\
+\indent
+However, this kind of attack is based on the following assumptions:
+\begin{itemize}
+\item the delays are additive, meaning that a total path delay is the exact
+sum of delay elements;
+\item the path delay is only dependent on the delays of the delay elements
+on the path. This assumption is not always true, because the path
+delay may be dependent on the state of neighboring elements, thus
+on the applied challenge;
+\item there is a set of paths that cover all the delay elements, and each
+path has to be \textit{single event sensitizable} \cite{devadas1992synthesis}.
+\end{itemize}
+The reported assumptions are quite strong, and practically they are
+extremely unlikely to be satisfied.
+
+\subsubsection{Nonlinear Delay Models}
+
+This type of models is used when either the assumptions of linear
+delay models are not satisfied or an input challenge actuates multiple
+paths.\\
+\indent
+Even if it is possible to assume that elements delays (gates) are
+additive, a more complex set of non-linear equations has to be considered.
+Their complexity depends on the fact that the delay of each element
+delay is a (non-linear) function of the previous element delay, whose
+delay strongly depends on the order of the transitions converging
+on it. For example, considering an AND gate, two transitions of opposite
+polarity ($1\rightarrow0$, \textit{falling transition}, and $0\rightarrow1$,
+\textit{rising transition}) converges at different times. If a falling
+transition arrives before a rising transition, the AND output will
+be a constant 0, implying a path delay of 0. On the other hand, if
+a rising transition arrives before a falling transition, the AND output
+will be $0\rightarrow1\rightarrow0$, and the delay of the paths through
+the gate will become non-zero.\\
+\indent
+These situations can be modeled using a set of non-linear equations,
+and machine learning can still be used. However, now the training
+set is non-linearly separable, meaning that a learning algorithm is
+not likely to find the global optimum on its first trial \cite{russell1995modern}.
+The number of trials strongly depends on the cardinality of the model
+parameters, such as the number of delay stages, the challenge size,
+etc. \cite{ruhrmair2010modeling}.
+
+~
+
+As a matter of fact, Arbiter PUFs show additive linear behavior which
+makes them vulnerable to modeling attacks. Moreover, \cite{delvaux2013fault}
+demonstrated that a single stage can be described by only two parameters,
+one for each challenge bit state, and that the whole arbiter PUF can
+be modeled using only $k+1$ parameters, where \textit{k} is the number
+of the stages.\\
+\indent
+To strengthen the resilience of arbiter architectures against machine
+learning, in \cite{suh2007physical} an obfuscation technique, based
+on XORing multiple oututs, is proposed. The authors of \cite{majzoobi2008lightweight}
+followed this idea and built a more complex circuit called Lightweight
+Secure PUF, that comprises \textit{l} parallel arbiter PUFs, whose
+individual outputs are XORed to produce a multi-bit response. Another
+attempt to introduce non-linearities in delay lines was done in \cite{gassend2004identification},
+by using a Feed-Forward arbiter PUF. Basically it is a regular arbiter
+PUF with an increased number of arbiters, but some challenge bits
+are not set by the user, but are the outcomes of intermediate arbiters
+evaluating the race at some intermediate point in the delay lines
+(Figure~\ref{fig:Feed-Forward-arbiter-PUF}).
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.65]{images/feedforward}
+\par\end{centering}
+
+\protect\caption{\label{fig:Feed-Forward-arbiter-PUF}Feed-Forward arbiter PUF.}
+\end{figure}
+However, all these types of arbiter PUFs have been demonstrated to
+be vulnerable to modeling attacks. In the literature successful attacks
+have been reported for arbiter PUFs of 64-bit, 128-bit, 256-bit responses
+\cite{ruhrmair2010modeling,majzoobi2008testing,ruhrmair2009foundations,hospodar2012machine,mahmoud2013combined}.
+In particular, a prediction accuracy of $>90\%$ was reached in most
+cases with just 1000-9000 training CRPs entries.\\
+\indent
+Furthermore, a side channel attack was proposed in \cite{delvaux2013fault},
+in order to achieve a simple equations system. The basic idea is the
+following: CMOS PUF circuits are affected by both variability and
+noise, with the latter producing unstable (not reliable) CRPs. However,
+while measurements of variability are reproducible (otherwise a PUF
+response would always be unreliable), noise measurements are not.
+Nevertheless, in \cite{delvaux2013fault} was discovered the repeatability
+of these imperfections using unstable CRPs, which were identified
+and selected using a fault injection method consisting of varying
+environmental conditions (voltage and temperature). Using these unstable
+CRPs, it was possible to use a more accurate model that lead to a
+prediction accuracy exceeding 97\%.\\
+~
+Modeling attacks are extremely effective for arbiter PUFs,
+but they can be applied even for Ring Oscillator Sum PUFs%
+\footnote{Regular RO PUFs are not considered, because their number of CRPs is
+equal to $\frac{N(N-1)}{2}$, with \textit{N} denoting the number
+of ROs. Thus, a brute force attack is able to construct in polinomial
+time a complete CRP table, without even collect all CRPs since they
+are interdependent.%
+}.
+
+
+\subsection{Side-channel Attacks}
+
+A side-channel attack is a type of attack based on physical information, which are inherently produced by the hardware, leaked during an execution of a procedure that can be either software
+algorithms or hardware computations. Typically the physical measurements
+that can be exploited are the power consumption, electromagnetic emanation,
+sound, temperature, and so on. Both strong PUFs and weak PUFs can
+be victims of side-channel attacks.\\
+\indent
+The authors of \cite{merli2011side,merli2011semi} performed and documented
+two types of side-channel attacks on fuzzy extractors associated to
+a RO PUF. They first pointed out that the frequencies of ROs on FPGA
+can be measured using electro-magnetic equipment, hence it is possible
+to clone the PUF. Then, they successfully extracted the key (response)
+generated by the PUF and used by the fuzzy extractor.\\
+\indent
+A similar work has been done in \cite{dai2009study}, demonstrating
+that the security of PUFs can be breached performing side-channel
+attacks on ECCs of weak PUFs. One of the countermeasures is to use
+codeword masking to protect PUFs error correction \cite{merli2013protecting}.
+In particular, the Helper Data codeword \textit{w} is masked by XORing
+it with the masking codeword $c_{m}$, which is derived from encoding
+a random mask \textit{m}. The random mask \textit{m} is encoded using
+the same encoding function used for error correction.\\
+\indent
+Other side-channel attacks were performed on embedded SRAMs, such
+as Photonic Emission Analysis (PEA) \cite{schlosser2012simple}, successfully
+extracting the full content of the memory.
+
+
+\subsection{Physical Cloning Attacks}
+
+The only successful physical cloning attack was performed by \cite{helfmeier2013cloning},
+which consisted of cloning a SRAM PUF based on the phenomenon that
+memory cells emit near infrared light when they are read, thus the
+cells' power-up value can be obtained from Photonic Emission Analysis.
+
+
+\subsection{Countermeasures}
+
+As stated above, the most successful and critical attacks are represented by the
+modeling attacks. In order to counter their success, and the feasibility of other attacks, \cite{gassend2002controlled}
+proposed a post-composition process that consists of improving the
+original PUF combining its response with an hash function.\\
+\indent
+Let \textit{f} be the PUF that has to be improved, \textit{h} a random
+hash function, \textit{x} a random challenge, then:
+\[
+g(x)=h(x,\: f(x))
+\]
+where \textit{g} denotes the improved PUF.\\
+\indent
+The use of the hash function is fundamental, because it ensures that
+nearby outputs of \textit{f} will lead to completely different outputs
+of \textit{g}. Furthermore, its one-way property assures that to set
+up a system of equations the adversary has to invert \textit{h}, which
+is computationally very hard.\\
+\indent
+To make the adversary efforts even harder, it is possible to use the
+PUF response multiple times, such that the response of $round_{i}$
+is fed as a challenge of $round_{i+1}$. When enough rounds are done,
+the last response is hashed using the above post-composition method.
+
+\end{document}

@@ -1,0 +1,46 @@
+\documentclass[tesi.tex]{subfiles}
+\graphicspath{{/}}
+
+%\usepackage[english]{babel}
+\selectlanguage{english}%
+
+\begin{document}
+\chapter{Conclusions and Future Work}
+
+The adoption of FPGAs as in-field device technology has led to numerous advantages, mainly related to the low-cost and to the shorter time-to-market compared to the ASIC devices competitors. However, FPGAs have also introduced new security threats and issues due to their inherently in-field reconfiguration capability. Furthermore, FPGA-based design methodology is characterized by the reuse of third-party IP components. Thus, potential FPGA vulnerabilities may undermine the rights of IP creators.\\
+\indent
+In this thesis, we have proposed and implemented security solutions in order to protect third-party IP cores by means of PUF technology. In particular, in order to develop secure protection schemes even on low-end FPGAs that do not present built-in cryptography primitives, we implemented and exploited the Anderson PUF on Xilinx Spartan-3E. The Anderson PUF is both resource and power efficient compared to other PUF designs, hence it is characterized by great scalability and can be adopted in several applications. Its implementation is based on a complicated porting process from different FPGA families, such as Xilinx Virtex-5 and Virtex-6. In order to be used in security solutions, we deeply analyzed our implementation quality, mainly in terms of uniqueness and reliability, under different environmental operating conditions. Experimental measurements showed that the Anderson PUF on Spartan-3E is a valid alternative to the already available PUFs implementations. Furthermore, we addressed some shortcomings of the Anderson PUF, such as the lack of a valid and secure challenge-response paradigm.\\
+\indent
+Using our design of the Anderson PUF we implemented a resource efficient licensing mechanism, devising an IP protection scheme for low-cost FPGAs. Furthermore, we exploited both the the TPM chain of trust and the Anderson PUF on Xilinx Zynq-7000 FPGAs family to implement dynamic hardware and software IP cores protection. The former consists of decrypting at run-time enciphered partial bitstream files and to use them to dynamically reconfigure specific sections of the FPGA. Even if this solution is already known in the literature, our implementation is based on exploiting SoPC Processing System to implement the decryption primitives, in order to reduce the Programmable Logic resource utilization. The latter solution consists of exploiting Android OS such that it can install and execute only certified third-party software applications.\\
+\indent
+However, PUFs are characterized by an enrollment phase during which a trusted third party collects PUF's challenge-response pairs that will be used in the adopted protection protocols. Nevertheless, this procedure may be time consuming and introduces the issue of how a TTP can extend in future the original challenge-response pairs set. To this aim, we presented an innovative and lightweight scheme which is technology independent, thus it can be implemented with few resources on both FPGAs and ASICs.\\
+\indent
+
+As part of future work, there are some security issues that need to be addressed, and some new and interesting security mechanisms to implement. We list our proposals as follows:
+\begin{itemize}
+	\item There is a lack of model for the Anderson
+PUF which can explain the behavior of the cell output when
+the voltage changes. As indeed, the knowledge that we have
+on the Anderson PUF is about the glitch generation, and that
+such glitch is generated accordingly to the delay difference
+between the two pairs of shift-registers and multiplexers.
+For sure, this is not enough to explain the results that we have
+reported in this thesis. Indeed, our future scope is to try to
+define a model which aim is twofold: on one hand, it should
+be able to explain transitions observed under different voltage
+values; on the other hand, it might be helpful to define some
+techniques to mitigate the effect of voltage variation on PUF
+responses. Such model can be also a first attempt to try to
+model the voltage effect for the PUFs based on the glitch;
+
+	\item In Appendix~\ref{sec:surrounding} we showed that the surrounding logic plays a crucial role in PUFs test and in determining the reliability of their responses. Our intention is to deeply investigate, with more detailed test campaigns, the surrounding logic effect in order to find the underlying causes and try to mitigate it, enhancing the PUF reliability;
+
+	\item The protection mechanism based on Android OS exploits the Dalvik Virtual Machine, which is the default run-time environment up to Android 4.4. However, starting from Android 5.0 ART has become the default run-time environment. Therefore, the proposed mechanism may be ported to the new Android environment. Furthermore, it might be useful to adapt the protection mechanism even for other operating systems, mainly based on Linux kernel;
+	
+	\item The proposed mechanism for the dynamic remote enrollment of a PUF can not be used in authentication protocols which requires the CRPs exchange to be in plain text. Therefore, the proposed mechanism should be expanded in order to address this security functionality;
+	
+	\item PUFs responses are not perfectly reliable since they inherently exploit imperfections introduced during chips manufacturing process. The available reliability improvement mechanisms offer a trade-off between 100\% reliability of PUF responses and resource utilization. Therefore, a solution with a better trade-off might be useful in many applications.
+\end{itemize}
+
+
+\end{document}

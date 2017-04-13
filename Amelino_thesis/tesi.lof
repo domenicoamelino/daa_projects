@@ -1,0 +1,55 @@
+\select@language {american}
+\select@language {italian}
+\select@language {american}
+\select@language {english}
+\select@language {american}
+\select@language {english}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1.1.1}{\ignorespaces A logical PUF example\relax }}{4}{figure.1.1.1}
+\contentsline {figure}{\numberline {1.1.2}{\ignorespaces Arbiter PUF example circuit\relax }}{11}{figure.1.1.2}
+\contentsline {figure}{\numberline {1.1.3}{\ignorespaces Programmable Delay Lines Example\relax }}{13}{figure.1.1.3}
+\contentsline {figure}{\numberline {1.1.4}{\ignorespaces Delay Characterization Circuit\relax }}{13}{figure.1.1.4}
+\contentsline {figure}{\numberline {1.1.5}{\ignorespaces Path Swapping Switch with their delay abstraction (a)(b), PDL based switch and its delay abstraction (c)(d)\relax }}{14}{figure.1.1.5}
+\contentsline {figure}{\numberline {1.1.6}{\ignorespaces Arbiter-based PUF proposed by Manjzoobi et al\relax }}{15}{figure.1.1.6}
+\contentsline {figure}{\numberline {1.1.7}{\ignorespaces An example of Ring Oscillator composed of 5 stages\relax }}{15}{figure.1.1.7}
+\contentsline {figure}{\numberline {1.1.8}{\ignorespaces Ring Oscillator PUF\relax }}{16}{figure.1.1.8}
+\contentsline {figure}{\numberline {1.1.9}{\ignorespaces Ring Oscillator Sum PUF\relax }}{17}{figure.1.1.9}
+\contentsline {figure}{\numberline {1.1.10}{\ignorespaces Anderson Cell\relax }}{17}{figure.1.1.10}
+\contentsline {figure}{\numberline {1.1.11}{\ignorespaces Anderson PUF on Virtex-5\relax }}{19}{figure.1.1.11}
+\contentsline {figure}{\numberline {1.1.12}{\ignorespaces Enhanced Anderson PUF Architecture\relax }}{20}{figure.1.1.12}
+\contentsline {figure}{\numberline {1.1.13}{\ignorespaces ALU PUF example\relax }}{21}{figure.1.1.13}
+\contentsline {figure}{\numberline {1.1.14}{\ignorespaces Details of SRAM implementation and input-output characteristic.\relax }}{23}{figure.caption.18}
+\contentsline {figure}{\numberline {1.1.15}{\ignorespaces Cross-Coupled Inverter\relax }}{25}{figure.1.1.15}
+\contentsline {figure}{\numberline {1.1.16}{\ignorespaces Butterfly PUF\relax }}{25}{figure.1.1.16}
+\contentsline {figure}{\numberline {1.1.17}{\ignorespaces Composite PUF examples \relax }}{27}{figure.1.1.17}
+\contentsline {figure}{\numberline {1.1.18}{\ignorespaces Controlled PUF generic scheme\relax }}{28}{figure.1.1.18}
+\contentsline {figure}{\numberline {1.2.1}{\ignorespaces Hardware Architectural View of REE and TEE\relax }}{32}{figure.1.2.1}
+\contentsline {figure}{\numberline {1.2.2}{\ignorespaces TEE System Architecture\relax }}{33}{figure.1.2.2}
+\contentsline {figure}{\numberline {1.2.3}{\ignorespaces Simplified TEE Boot Sequence\relax }}{34}{figure.1.2.3}
+\contentsline {figure}{\numberline {1.2.4}{\ignorespaces TPM component structure\relax }}{35}{figure.1.2.4}
+\contentsline {figure}{\numberline {1.2.5}{\ignorespaces FPGA Trusted Architecture proposed by Eisenbarth et al\relax }}{41}{figure.1.2.5}
+\contentsline {figure}{\numberline {1.2.6}{\ignorespaces Xilinx Zynq-7000 Architecture\relax }}{42}{figure.1.2.6}
+\contentsline {figure}{\numberline {1.2.7}{\ignorespaces Xilinx Zynq-7000 Chain of Trust with TPM\relax }}{43}{figure.1.2.7}
+\contentsline {figure}{\numberline {1.2.8}{\ignorespaces TPM on FPGA with Trust Block\relax }}{44}{figure.1.2.8}
+\contentsline {figure}{\numberline {1.2.9}{\ignorespaces Choi's TPM architecture using PUF\relax }}{46}{figure.1.2.9}
+\contentsline {figure}{\numberline {1.2.10}{\ignorespaces PUF Supported Crypto-engine\relax }}{46}{figure.1.2.10}
+\contentsline {figure}{\numberline {1.2.11}{\ignorespaces TrustZone Zone Structucture\relax }}{49}{figure.1.2.11}
+\contentsline {figure}{\numberline {1.2.12}{\ignorespaces TrustZone Software Architecture\relax }}{50}{figure.1.2.12}
+\contentsline {figure}{\numberline {1.2.13}{\ignorespaces TrustZone Software Architecture\relax }}{51}{figure.1.2.13}
+\contentsline {figure}{\numberline {1.2.14}{\ignorespaces Building block-based Chain of Trust\relax }}{52}{figure.1.2.14}
+\select@language {american}
+\select@language {english}
+\addvspace {10\p@ }
+\select@language {american}
+\select@language {english}
+\addvspace {10\p@ }
+\select@language {american}
+\select@language {english}
+\addvspace {10\p@ }
+\select@language {american}
+\select@language {english}
+\addvspace {10\p@ }
+\select@language {american}
+\select@language {english}
+\select@language {american}
+\contentsfinish 
